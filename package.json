@@ -1,0 +1,21 @@
+{
+  "name": "elbuensabor-backend",
+  "version": "0.1.0",
+  "description": "TP Final para Laboratorio IV",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git remote add origin https://github.com/juanpanasiti/ElBuenSabor-Backend.git"
+  },
+  "author": "Juan Marcelo Panasiti",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
