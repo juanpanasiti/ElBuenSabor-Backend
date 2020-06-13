@@ -6,9 +6,13 @@ const Rubro = require('../models/Rubro')
 router.get('/', async (req, res) => {
     try {
         const rubros = await Rubro.find()
+        
+        console.log("Todos los rubros encontrados");
         res.json(rubros)
-    } catch (error) {
-        res.json({message: error})
+    } catch (err) {
+        
+        console.log("Error al traer todos los rubros");
+        res.json({message: err})
     }
 })//Get all
 

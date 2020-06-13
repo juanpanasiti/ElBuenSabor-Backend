@@ -27,3 +27,5 @@ const ArticuloInsumoSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('ArticuloInsumo', ArticuloInsumoSchema)

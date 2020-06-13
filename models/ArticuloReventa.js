@@ -30,3 +30,5 @@ const ArticuloReventaSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('ArticuloReventa', ArticuloReventaSchema)

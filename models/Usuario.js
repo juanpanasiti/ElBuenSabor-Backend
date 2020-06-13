@@ -21,3 +21,5 @@ const UsuarioSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('Usuario', UsuarioSchema)

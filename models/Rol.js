@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
-const RolSchema = mongoose.Schema({
+//Definición del SCHEMA
+const rolSchema = new mongoose.Schema({
     usuarioID: {
         type: String
     },
@@ -15,3 +16,7 @@ const RolSchema = mongoose.Schema({
         default: false
     }
 })
+
+//Definición del Modelo
+mongoose.model('Rol', rolSchema)
+

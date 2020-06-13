@@ -15,3 +15,5 @@ const DetalleIngredienteSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('DetalleIngrediente', DetalleIngredienteSchema)

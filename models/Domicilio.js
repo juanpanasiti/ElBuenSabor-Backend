@@ -21,3 +21,5 @@ const DomicilioSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('Domicilio', DomicilioSchema)

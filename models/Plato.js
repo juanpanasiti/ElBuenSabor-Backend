@@ -21,3 +21,5 @@ const PlatoSchema = mongoose.Schema({
         default: false
     }
 })
+
+module.exports = mongoose.model('Plato', PlatoSchema)
