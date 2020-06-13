@@ -15,5 +15,9 @@ const UsuarioSchema = mongoose.Schema({
     },
     telefono: {
         type: Boolean
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })

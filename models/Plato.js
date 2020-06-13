@@ -15,5 +15,9 @@ const PlatoSchema = mongoose.Schema({
     },
     rubroId: {
         type: String
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })

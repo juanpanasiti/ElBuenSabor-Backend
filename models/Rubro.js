@@ -9,5 +9,9 @@ const RubroSchema = mongoose.Schema({
     },
     rubroPadreId: {
         type: String
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })

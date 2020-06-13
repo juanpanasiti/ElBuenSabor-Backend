@@ -9,5 +9,9 @@ const RolSchema = mongoose.Schema({
     },
     activo: {
         type: Boolean
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })

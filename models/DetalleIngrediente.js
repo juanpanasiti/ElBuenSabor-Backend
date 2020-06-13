@@ -9,5 +9,9 @@ const DetalleIngredienteSchema = mongoose.Schema({
     },
     cantidad: {
         type: mongoose.SchemaTypes.Decimal128
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })

@@ -15,5 +15,9 @@ const DomicilioSchema = mongoose.Schema({
     },
     localidad: {
         type: String
+    },
+    borrado: {
+        type: Boolean,
+        default: false
     }
 })
