@@ -8,13 +8,13 @@ const ArticuloInsumoSchema = mongoose.Schema({
         type: mongoose.SchemaTypes.Decimal128
     },
     stockActual: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     stockMinimo: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     stockMaximo: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     unidadMedida: {
         type: String
