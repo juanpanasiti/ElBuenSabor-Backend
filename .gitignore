@@ -1,2 +1,5 @@
 # Dependencias
 /node_modules
+
+# Secrets
+.env
