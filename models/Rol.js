@@ -2,8 +2,10 @@ const mongoose = require('mongoose')
 
 //Definición del SCHEMA
 const rolSchema = new mongoose.Schema({
-    usuarioID: {
-        type: String
+    usuario: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
+        //required: true
     },
     nombreRol: {
         type: String

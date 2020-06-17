@@ -19,7 +19,13 @@ const UsuarioSchema = mongoose.Schema({
     borrado: {
         type: Boolean,
         default: false
-    }
+    },
+    roles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Rol'
+        }
+    ]
 })
 
 module.exports = mongoose.model('Usuario', UsuarioSchema)

@@ -11,8 +11,11 @@ app.use(bodyParser.json())
 //Rutas
 const RubrosRoutes = require('./routes/rubro')
 app.use('/api/rubros', RubrosRoutes)
+//Rol
+const RolRoutes = require('./routes/rol')
+app.use('/api/roles', RolRoutes)
 
-//Conección a la BD
+//Conexión a la BD
 mongoose.connect(
     process.env.DB_CONN,
     { useNewUrlParser: true},
