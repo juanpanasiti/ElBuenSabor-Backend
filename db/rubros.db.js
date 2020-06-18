@@ -83,21 +83,15 @@ exports.updateRubro = (id, rubroData) => {
 }; //exports.updateRubro
 
 exports.setBorradoRubro = (id, borrado) => {
-    return new Promise((resolve, reject) => {
-        Rubro.findByIdAndUpdate(
-            id,
-            {
-                borrado: borrado,
-            },
-            { new: true }
-        )
-            .then((rubro) => {
-                resolve(rubro);
-            })
-            .reject((err) => {
-                reject(err);
-            });
-    });
+  return new Promise((resolve, reject) => {
+    Rubro.findByIdAndUpdate(id, {borrado: borrado}, { new: true })
+        .then((rubro) => {
+            resolve(rubro);
+        })
+        .reject((err) => {
+            reject(err);
+        });
+});
 };
 
 exports.hardDeleteRubro = (id) => {

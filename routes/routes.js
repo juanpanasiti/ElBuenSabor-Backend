@@ -28,8 +28,8 @@ exports.assignRoutes = (app) => {
     app.get(URL_RUBROS + '/:id', rubrosRoutes.getRubro) //obtener un rubro
     app.put(URL_RUBROS + '/:id', rubrosRoutes.updateRubro) //actualizar un rubro
     app.put(URL_RUBROS + '/softdelete/:id', rubrosRoutes.softDeleteRubro) //borrado lógico de un rubro
-    app.put(URL_RUBROS + '/softundelete/:id') //restaurado lógico de un rubro
-    app.delete(URL_RUBROS + '/harddelete/:id') //borrado fisico de un rubro
+    app.put(URL_RUBROS + '/softundelete/:id',rubrosRoutes.softUndeleteRubro) //restaurado lógico de un rubro
+    app.delete(URL_RUBROS + '/harddelete/:id', rubrosRoutes.hardDeleteRubro) //borrado fisico de un rubro
 
     //Usuarios
     
