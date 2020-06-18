@@ -1,19 +1,26 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const RubroSchema = mongoose.Schema({
-    denominacion: {
-        type: String
-    },
-    esRubroInsumo: {
-        type: Boolean
-    },
-    rubroPadreId: {
-        type: String
-    },
-    borrado: {
-        type: Boolean,
-        default: false
-    }
-})
+//Definición del Schema
+const rubroSchema = new mongoose.Schema({
+  denominacion: {
+    type: String,
+    required: true
+  },
+  esRubroInsumo: {
+    type: Boolean,
+    default: false
+  },
+  rubroPadre: {
+    type: String,
+    ref: "Rubro",
+    required: false,
+    default: ""
+  },
+  borrado: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-module.exports = mongoose.model('Rubro', RubroSchema)
+//Definición del modelo Rubro
+mongoose.model("Rubro", rubroSchema);
