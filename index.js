@@ -1,25 +1,30 @@
 const express = require('express')
 const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-require('dotenv/config')
+const db_tools = require('./tools/db_tools')
+const cors = require('cors')
+const config = require('./config.json')
 
-app.use(cors())
-app.use(bodyParser.json())
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
+app.use(cors(corsOptions))
 
-//Rutas
-const RubrosRoutes = require('./routes/rubro')
-app.use('/api/rubros', RubrosRoutes)
-//Rol
-const RolRoutes = require('./routes/rol')
-app.use('/api/roles', RolRoutes)
+db_tools.DBConnectMongoose()
+    .then(() => {
+        const routes = require('./routes/routes') //Acá se definen los endpoints de la api-rest
 
-//Conexión a la BD
-mongoose.connect(
-    process.env.DB_CONN,
-    { useNewUrlParser: true},
-    () => console.log(`Conectado a la base de datos ${process.env.DB_NAME}`)
-)
-const PORT = process.env.DEF_PORT || 3001
-app.listen(PORT, () => console.log(`Server listo y escuchando en el puerto ${PORT}!!`))
+        //Configurar body-parser
+        app.use(bodyParser.urlencoded({extended: true}))
+        app.use(bodyParser.json())// podria ser .json({limit: '10mb'}) ???
+
+        routes.assignRoutes(app)
+
+        app.listen(config.server_config.port)
+        console.log(`${config.server_config.name} listo en el puerto: ${config.server_config.port}`);
+        
+    })
+    .catch(err => {
+        console.log(`Error: ${err}`);   
+    })

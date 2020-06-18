@@ -1,0 +1,11 @@
+{
+    "db_config": {
+        "host": "localhost",
+        "port": 27017,
+        "name": "ElBuenSaborDB"
+    },
+    "server_config": {
+        "name": "ElBuenSabor-Server",
+        "port": 3033
+    }
+}
