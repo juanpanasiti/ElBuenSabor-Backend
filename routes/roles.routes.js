@@ -1,11 +1,34 @@
-const express = require('express')
-const router = express.Router()
-const mongoose = require('mongoose');
-require('../models/Rol')
+//const express = require('express')
+//const router = express.Router()
+//const mongoose = require('mongoose');
+//require('../models/Rol')
 
-const Rol = mongoose.model('Rol')
+//const Rol = mongoose.model('Rol')
+const rolesDomain = require("../domain/roles.domain");
+
+exports.getRoles = (req, res) => {
+  rolesDomain.getRoles()
+    .then(roles => {
+        res.json(roles)
+    })
+    .catch( err => {
+        res.status(400).json(err)
+    })
+  /*
+    Rol.find({borrado: false})//Entre llaves van los filtros
+    .then( docs => {
+        console.log("Buscando roles.");
+        res.json(docs)
+    }).catch( err => {
+        console.log("Error al buscar roles.");
+        res.json(err)
+    })
+    */
+};//exports.getRoles
+
+
 //Rutas dentro de '/api/roles'
-
+/*
 //Contar registros
 router.get('/contar', (req, res) => {
     Rol.countDocuments().then(c => {
@@ -84,3 +107,4 @@ router.put('/delete/:id', (req, res) => {
 
 
 module.exports = router;
+*/

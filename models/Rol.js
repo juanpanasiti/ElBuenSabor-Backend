@@ -5,13 +5,11 @@ const rolSchema = new mongoose.Schema({
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
-        //required: true
+        required: true
     },
     nombreRol: {
-        type: String
-    },
-    activo: {
-        type: Boolean
+        type: String,
+        required: true
     },
     borrado: {
         type: Boolean,
