@@ -73,4 +73,9 @@ Se utiliza la siguiente estructura de carpetas:
 **URL_USUARIOS:** `URL_BASE + "/rubros"`  
 
 *GET*: **URL_USUARIOS** + `"/"` -> Obtener todos los usuarios (borrados o no). Esto solo lo debería acceder el admin  
-*GET*: **URL_USUARIOS** + `"/:email"` -> Obtener usuario por email  
+*GET*: **URL_USUARIOS** + `"/check/:email"` -> Obtener usuario por email  
+*GET*: **URL_USUARIOS** + `"/:id"` -> Obtener usuario por ID  
+*PUT*: **URL_USUARIOS** + `"/:id"` -> Actualizar un usuario  
+*PUT*: **URL_USUARIOS** + `"/softdelete/:id"` -> Borrado lógico de un usuario  
+*PUT*: **URL_USUARIOS** + `"/softundelete/:id"` -> Restaurado lógico de un usuario  
+*PUT*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario  

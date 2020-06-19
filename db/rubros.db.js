@@ -108,7 +108,7 @@ exports.setBorradoRubro = (id, borrado) => {
         reject(err);
       });
   });
-};
+};//exports.setBorradoRubro
 
 exports.hardDeleteRubro = (id) => {
   return new Promise((resolve, reject) => {

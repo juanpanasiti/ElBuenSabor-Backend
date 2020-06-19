@@ -42,4 +42,54 @@ exports.getUsuarioByEmail = (email) => {
         reject(err);
       });
   });
-};
+}; //exports.getUsuarioByEmail
+
+exports.getUsuarioById = (id) => {
+  return new Promise((resolve, reject) => {
+    usuariosDB
+      .getUsuario(id)
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.domain -> getUsuarioById -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getUsuarioById
+
+exports.updateUsuario = (id, usuarioData) => {
+  usuariosDB
+    .updateUsuario(id, usuarioData)
+    .then((usuario) => {
+      resolve(usuario);
+    })
+    .catch((err) => {
+      console.log("Error -> usuarios.domain -> updateUsuario -> " + err);
+      reject(err);
+    });
+}; //exports.updateUsuario
+
+exports.setBorradoUsuario = (id, borrado) => {
+  usuariosDB
+    .setBorradoUsuario(id, borrado)
+    .then((usuario) => {
+      resolve(usuario);
+    })
+    .catch((err) => {
+      console.log("Error -> usuarios.domain -> setBorradoUsuario -> " + err);
+      reject(err);
+    });
+}; //exports.setBorradoUsuario
+
+exports.hardDeleteUsuario = (id) => {
+  usuariosDB
+    .hardDeleteUsuario(id)
+    .then((usuario) => {
+      resolve(usuario);
+    })
+    .catch((err) => {
+      console.log("Error -> usuarios.domain -> hardDeleteUsuario -> " + err);
+      reject(err);
+    });
+}; //exports.hardDeleteUsuario
