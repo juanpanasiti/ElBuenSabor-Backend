@@ -13,8 +13,8 @@ const rubroSchema = new mongoose.Schema({
   rubroPadre: {
     type: String,
     ref: "Rubro",
-    required: false,
     default: ""
+
   },
   borrado: {
     type: Boolean,

@@ -5,18 +5,19 @@ const db_tools = require('./tools/db_tools')
 const cors = require('cors')
 const config = require('./config.json')
 
-const corsOptions = {
-    origin: true,
-    credentials: true
-}
-app.use(cors(corsOptions))
+// const corsOptions = {
+//     origin: true,
+//     credentials: true
+// }
+//app.use(cors(corsOptions))
+app.use(cors) 
 
 db_tools.DBConnectMongoose()
     .then(() => {
         const routes = require('./routes/routes') //Acá se definen los endpoints de la api-rest
 
         //Configurar body-parser
-        app.use(bodyParser.urlencoded({extended: true}))
+        //app.use(bodyParser.urlencoded({extended: true}))
         app.use(bodyParser.json())// podria ser .json({limit: '10mb'}) ???
 
         routes.assignRoutes(app)

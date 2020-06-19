@@ -2,9 +2,9 @@
   "name": "elbuensabor-backend",
   "version": "0.1.0",
   "description": "TP Final para Laboratorio IV",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",

@@ -2,16 +2,39 @@ const rubrosDomain = require("../domain/rubros.domain");
 
 exports.createRubro = (req, res) => {
     const rubroData = req.body;
-
+    
     rubrosDomain
         .createRubro(rubroData)
         .then((rubro) => {
             res.json(rubro);
         })
         .catch((err) => {
+            console.log("Error en rubro.routes -> createRubro " + err);
             res.status(400).json(err);
         });
 }; //exports.createRubro
+
+exports.getRubrosRaiz = (req, res) => {
+    rubrosDomain
+        .getRubrosPorPadre("")
+        .then((rubros) => {
+            res.json(rubros);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+}; //exports.getRubrosRaiz
+
+exports.getRubrosHijos = (req, res) => {
+    rubrosDomain
+        .getRubrosPorPadre(req.params.id)
+        .then((rubros) => {
+            res.json(rubros);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+}; //exports.getRubrosRaiz
 
 exports.getRubros = (req, res) => {
     rubrosDomain
@@ -23,6 +46,7 @@ exports.getRubros = (req, res) => {
             res.status(400).json(err);
         });
 }; //exports.getRubros
+
 exports.getRubrosBorrados = (req, res) => {
     rubrosDomain
         .getRubros(true)
@@ -75,6 +99,8 @@ exports.updateRubro = (req, res) => {
             res.json(rubro);
         })
         .catch((err) => {
+            console.log("Error en rubro.routes -> updateRubro " + err);
+            
             res.status(400).json(err);
         });
 }; //exports.updateRubro
@@ -108,6 +134,7 @@ exports.hardDeleteRubro = (req, res) => {
             res.json(rubro);
         })
         .catch((err) => {
+            console.log("Error en rubro.routes -> hardDeleteRubro " + err);
             res.status(400).json(err);
         });
 }; //exports.hardDeleteRubro

@@ -22,6 +22,8 @@ exports.assignRoutes = (app) => {
     //Rubros
     app.post(URL_RUBROS + '/', rubrosRoutes.createRubro)//Crear un rubro
     app.get(URL_RUBROS + '/', rubrosRoutes.getRubros)//Obtener rubros no borrados
+    app.get(URL_RUBROS + '/raices', rubrosRoutes.getRubrosRaiz)//Obtener rubros raíz (no borrados)
+    app.get(URL_RUBROS + '/:id/subrubros', rubrosRoutes.getRubrosHijos)//Obtener subrubros (no borrados)
     app.get(URL_RUBROS + '/borrados', rubrosRoutes.getRubrosBorrados)//Obtener rubros borrados
     app.get(URL_RUBROS + '/deInsumo', rubrosRoutes.getRubrosInsumo)//obtener rubros de insumos
     app.get(URL_RUBROS + '/deCatalogo', rubrosRoutes.getRubrosCatalogo)//obtener rubros de catalogo
@@ -30,7 +32,5 @@ exports.assignRoutes = (app) => {
     app.put(URL_RUBROS + '/softdelete/:id', rubrosRoutes.softDeleteRubro) //borrado lógico de un rubro
     app.put(URL_RUBROS + '/softundelete/:id',rubrosRoutes.softUndeleteRubro) //restaurado lógico de un rubro
     app.delete(URL_RUBROS + '/harddelete/:id', rubrosRoutes.hardDeleteRubro) //borrado fisico de un rubro
-
     //Usuarios
-    
 }

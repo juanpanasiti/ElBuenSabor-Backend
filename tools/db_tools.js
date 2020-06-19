@@ -11,7 +11,7 @@ exports.DBConnectMongoose = () => {
         mongoose.Promise = global.Promise
 
         //Conexion a la DB
-        mongoose.connect(db_conn).then(() => {
+        mongoose.connect(db_conn, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
             console.log(`Conectado a la DB ${config.db_config.name}`);
             resolve(db)
         })
