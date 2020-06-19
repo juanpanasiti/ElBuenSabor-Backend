@@ -2,19 +2,24 @@ const mongoose = require('mongoose')
 
 const UsuarioSchema = mongoose.Schema({
     email: {
-        type: String
+        type: String,
+        require: true
     },
     nombre: {
-        type: String
+        type: String,
+        default: ""
     },
     apellido: {
-        type: String
+        type: String,
+        default: ""
     },
     fechaNacimiento: {
-        type: Date
+        type: Date,
+        default: ""
     },
     telefono: {
-        type: Boolean
+        type: Number,
+        default: ""
     },
     borrado: {
         type: Boolean,
