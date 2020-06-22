@@ -1,31 +1,32 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const ArticuloInsumoSchema = mongoose.Schema({
-    denominacion: {
-        type: String
-    },
-    precioCompra: {
-        type: mongoose.SchemaTypes.Decimal128
-    },
-    stockActual: {
-        type: Number
-    },
-    stockMinimo: {
-        type: Number
-    },
-    stockMaximo: {
-        type: Number
-    },
-    unidadMedida: {
-        type: String
-    },
-    rubroId: {
-        type: String
-    },
-    borrado: {
-        type: Boolean,
-        default: false
-    }
-})
+const insumoSchema = mongoose.Schema({
+  denominacion: {
+    type: String,
+  },
+  precioCompra: {
+    type: mongoose.SchemaTypes.Decimal128,
+  },
+  stockActual: {
+    type: Number,
+  },
+  stockMinimo: {
+    type: Number,
+  },
+  stockMaximo: {
+    type: Number,
+  },
+  unidadMedida: {
+    type: String,
+  },
+  rubro: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Rubro",
+  },
+  borrado: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-module.exports = mongoose.model('ArticuloInsumo', ArticuloInsumoSchema)
+mongoose.model("Insumo", insumoSchema);

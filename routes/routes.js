@@ -8,15 +8,19 @@ const URL_USUARIOS = URL_BASE + "/usuarios";
 //implementaciones de los endpoints
 const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
-//const insumosRoutes = require("./insumos.routes");
+const insumosRoutes = require("./insumos.routes");
 const usuariosRoutes = require("./usuarios.routes");
 
 exports.assignRoutes = (app) => {
   //ENDPOINTS
   //Articulos Insumo
-  //app.post(URL_INSUMOS + "/", insumosRoutes.createInsumo); //Crear insumo
-  //app.get(URL_INSUMOS + '/') //Obtener todos los insumos no borrados
-  //app.get(URL_INSUMOS + '/') //
+  app.post(URL_INSUMOS + "/", insumosRoutes.createInsumo); //Crear insumo
+  app.get(URL_INSUMOS + '/', insumosRoutes.getInsumos) //Obtener todos los insumos no borrados
+  app.get(URL_INSUMOS + '/:id', insumosRoutes.getInsumo) // Obtener insumo por ID
+  app.put(URL_INSUMOS + '/:id', insumosRoutes.updateInsumo) // Actualizar insumo
+  app.put(URL_INSUMOS + '/softdelete/:id', insumosRoutes.softdeleteInsumo) // Borrado lógico
+  app.put(URL_INSUMOS + '/softundelete/:id', insumosRoutes.softundeleteInsumo) // Restaurado lógico
+  app.delete(URL_INSUMOS + '/harddelete/:id', insumosRoutes.hardDeleteInsumo) // Borrado físico
 
   //Articulos Reventa
   //Detalle Ingredientes

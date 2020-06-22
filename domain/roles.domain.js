@@ -70,7 +70,7 @@ exports.setBorradoRol = (id, borrado) => {
 
 exports.hardDeleteRol = (id) => {
   return new Promise((resolve, reject) => {
-  usuariosDB
+  rolesDB
     .hardDeleteRol(id)
     .then((rol) => {
       resolve(rol);
