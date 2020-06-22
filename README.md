@@ -78,4 +78,4 @@ Se utiliza la siguiente estructura de carpetas:
 *PUT*: **URL_USUARIOS** + `"/:id"` -> Actualizar un usuario  
 *PUT*: **URL_USUARIOS** + `"/softdelete/:id"` -> Borrado lógico de un usuario  
 *PUT*: **URL_USUARIOS** + `"/softundelete/:id"` -> Restaurado lógico de un usuario  
-*PUT*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario  
+*PUT*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario 

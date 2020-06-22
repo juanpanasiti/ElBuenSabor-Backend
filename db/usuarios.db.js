@@ -106,4 +106,4 @@ exports.updateUsuario = (id, usuarioData) => {
           reject(err);
         });
     });
-  }; //exports.hardDeleteRubro
+  }; //exports.hardDeleteUsuario

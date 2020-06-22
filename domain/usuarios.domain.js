@@ -1,4 +1,5 @@
 const usuariosDB = require("../db/usuarios.db");
+const rolesDB = require("../db/roles.db");
 
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
@@ -59,30 +60,35 @@ exports.getUsuarioById = (id) => {
 }; //exports.getUsuarioById
 
 exports.updateUsuario = (id, usuarioData) => {
-  usuariosDB
-    .updateUsuario(id, usuarioData)
-    .then((usuario) => {
-      resolve(usuario);
-    })
-    .catch((err) => {
-      console.log("Error -> usuarios.domain -> updateUsuario -> " + err);
-      reject(err);
-    });
+  return new Promise((resolve, reject) => {
+    usuariosDB
+      .updateUsuario(id, usuarioData)
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.domain -> updateUsuario -> " + err);
+        reject(err);
+      });
+  });
 }; //exports.updateUsuario
 
 exports.setBorradoUsuario = (id, borrado) => {
-  usuariosDB
-    .setBorradoUsuario(id, borrado)
-    .then((usuario) => {
-      resolve(usuario);
-    })
-    .catch((err) => {
-      console.log("Error -> usuarios.domain -> setBorradoUsuario -> " + err);
-      reject(err);
-    });
+  return new Promise((resolve, reject) => {
+    usuariosDB
+      .setBorradoUsuario(id, borrado)
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.domain -> setBorradoUsuario -> " + err);
+        reject(err);
+      });
+  });
 }; //exports.setBorradoUsuario
 
 exports.hardDeleteUsuario = (id) => {
+  return new Promise((resolve, reject) => {
   usuariosDB
     .hardDeleteUsuario(id)
     .then((usuario) => {
@@ -92,4 +98,25 @@ exports.hardDeleteUsuario = (id) => {
       console.log("Error -> usuarios.domain -> hardDeleteUsuario -> " + err);
       reject(err);
     });
+  })
 }; //exports.hardDeleteUsuario
+
+//Integración con roles
+exports.getRolesByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+  this.getUsuarioByEmail(email)
+    .then((usuario) => {
+      //return usuario
+      rolesDB.getRolesByUsuario(usuario._id).then((roles) => {
+        resolve(roles)
+      }).catch((err) => {
+        console.log("Error -> usuarios.domain -> getRolesByEmail -> getRolesByUsuario ->" + err);
+        reject(err)
+      })
+    })
+    .catch((error) => {
+      console.log("Error -> usuarios.domain -> getRolesByEmail -> " + err);
+      reject(err);
+    });
+  })
+};

@@ -84,3 +84,14 @@ exports.hardDeleteUsuario = (req, res) => {
       res.json(err);
     });
 };//exports.hardDeleteUsuario
+
+exports.getRolesByEmail = (req, res) => {
+  usuariosDomain.getRolesByEmail(req.params.email)
+  .then((roles) => {
+    res.json(roles);
+  })
+  .catch((err) => {
+    console.log("Error -> usuarios.routes -> getRolesByEmail -> " + err);
+    res.json(err);
+  });
+}//getRolesByEmail

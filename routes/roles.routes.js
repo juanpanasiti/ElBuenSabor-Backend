@@ -1,110 +1,87 @@
-//const express = require('express')
-//const router = express.Router()
-//const mongoose = require('mongoose');
-//require('../models/Rol')
-
-//const Rol = mongoose.model('Rol')
 const rolesDomain = require("../domain/roles.domain");
 
+exports.createRol = (req, res) => {
+    const rolData = req.body;
+  rolesDomain
+    .createRol(rolData)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> roles.routes -> createRol ->" + err);
+      res.status(400).json(err);
+    });
+}; //exports.createRol
+
 exports.getRoles = (req, res) => {
-  rolesDomain.getRoles()
-    .then(roles => {
-        res.json(roles)
+  rolesDomain
+    .getRoles()
+    .then((roles) => {
+      res.json(roles);
     })
-    .catch( err => {
-        res.status(400).json(err)
-    })
-  /*
-    Rol.find({borrado: false})//Entre llaves van los filtros
-    .then( docs => {
-        console.log("Buscando roles.");
-        res.json(docs)
-    }).catch( err => {
-        console.log("Error al buscar roles.");
-        res.json(err)
-    })
-    */
-};//exports.getRoles
+    .catch((err) => {
+      console.log("Error -> roles.routes -> getRoles ->" + err);
+      res.status(400).json(err);
+    });
+}; //exports.getRoles
 
+exports.getRolById = (req, res) => {
+  rolesDomain
+    .getRolById(req.params.id)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> roles.routes -> getRolById ->" + err);
+    });
+};//exports.getRolById
 
-//Rutas dentro de '/api/roles'
-/*
-//Contar registros
-router.get('/contar', (req, res) => {
-    Rol.countDocuments().then(c => {
-        res.json(c);
-    }).catch(err => {
-        res.json(err)
-    })
-})
-//Create one
-router.post('/', (req, res) => {
-    Rol.create({
-        //usuarioId: req.body.usuarioId
-        nombreRol: req.body.nombreRol,
-        activo: req.body.activo
-    }).then( doc => {
-        res.json(doc)
-    }).catch( err => {
-        res.json(err)
-    })
-})
-//Get all
-router.get('/', (req, res) => {
-   Rol.find({})//Entre llaves van los filtros
-    .then( docs => {
-        console.log("Buscando roles.");
-        res.json(docs)
-    }).catch( err => {
-        console.log("Error al buscar roles.");
-        res.json(err)
-    })
-})//Get all
-
-//Get one
-router.get('/:id', (req, res) => {
-    Rol.findById(req.params.id)
-        .then( doc => {
-            console.log("Busqueda OK");
-            if (doc) {
-                console.log(doc);
-            } else {
-                console.log(`No se encontró ningún Rol con _id ${req.params.id}`);
-                
-            }
-            res.json(doc)
-        }).catch( err => {
-            console.log(`Error al buscar el rol con id ${req.params.id}`);
-            console.log(err);
-            
-            res.json(err)
+exports.updateRol = (req, res) => {
+    const rolData = req.body;
+    rolesDomain
+        .updateRubro(req.params.id, rolData)
+        .then((rol) => {
+            res.json(rol);
         })
-})//get one
+        .catch((err) => {
+            console.log("Error -> rol.routes -> updateRol " + err);
+            
+            res.status(400).json(err);
+        });
+}; //exports.updateRol
 
-//Update one
-router.put('/:id', (req, res) => {
-    Rol.findByIdAndUpdate(req.params.id, {
-        nombreRol: req.body.nombreRol,
-        activo: req.body.activo
-    },{new: true}).then( doc => {
-        res.json(doc)
-    }).catch(err => {
-        res.json(err)
-    })
-})//update one
-
-//Soft delete one
-router.put('/delete/:id', (req, res) => {
-    Rol.findByIdAndUpdate(req.params.id, {
-        borrado: true
-    },{new: true}).then( doc => {
-        res.json(doc)
-    }).catch(err => {
-        res.json(err)
-    })
-})//Soft delete one
-
-
-
-module.exports = router;
-*/
+exports.softdeleteRol = (req, res) => {
+    rolesDomain
+      .setBorradoRol(req.params.id, true)
+      .then((rol) => {
+        res.json(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.routes -> softdeleteRol -> " + err);
+        res.json(err);
+      });
+  }; //exports.softdeleteRol
+  
+  exports.softundeleteRol = (req, res) => {
+    rolesDomain
+      .setBorradoRol(req.params.id, false)
+      .then((rol) => {
+        res.json(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.routes -> softundeleteRol -> " + err);
+        res.json(err);
+      });
+  }; //exports.softundeleteRol
+  
+  exports.hardDeleteRol = (req, res) => {
+    rolesDomain
+      .hardDeleteRol(req.params.id)
+      .then((rol) => {
+        res.json(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.routes -> hardDeleteRol -> " + err);
+        res.json(err);
+      });
+  };//exports.hardDeleteRol

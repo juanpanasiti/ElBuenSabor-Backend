@@ -6,7 +6,7 @@ const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
 
 //implementaciones de los endpoints
-//const rolesRoutes = require("./roles.routes");
+const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
 //const insumosRoutes = require("./insumos.routes");
 const usuariosRoutes = require("./usuarios.routes");
@@ -24,7 +24,13 @@ exports.assignRoutes = (app) => {
   //Platos
 
   //Roles
-  //app.get(URL_ROLES + "/", rolesRoutes.getRoles); //Roles no borrados
+  app.post(URL_ROLES + "/", rolesRoutes.createRol); // Crear rol
+  app.get(URL_ROLES + "/", rolesRoutes.getRoles); //Roles no borrados
+  app.get(URL_ROLES + "/:id", rolesRoutes.getRolById); // Obtener rol por ID de Rol
+  app.put(URL_ROLES + "/:id", rolesRoutes.updateRol); // Actualizar rol
+  app.put(URL_ROLES + "/softdelete/:id", rolesRoutes.softdeleteRol); // Borrado lógico
+  app.put(URL_ROLES + "/softundelete/:id", rolesRoutes.softundeleteRol); // Restaurado lógico
+  app.delete(URL_ROLES + "/harddelete/:id", rolesRoutes.hardDeleteRol); // Borrado físico
 
   //Rubros
   app.post(URL_RUBROS + "/", rubrosRoutes.createRubro); //Crear un rubro
@@ -42,7 +48,12 @@ exports.assignRoutes = (app) => {
 
   //Usuarios
   //app.post(URL_USUARIOS + '/'); //Crear usuario
-  app.get(URL_USUARIOS + '/', usuariosRoutes.getUsuarios); //Obtener todos los usuarios (borrados o no)
-  app.get(URL_USUARIOS + '/:email', usuariosRoutes.getUsuario) //Obtener usuario por email
-  
-};
+  app.get(URL_USUARIOS + "/", usuariosRoutes.getUsuarios); //Obtener todos los usuarios (borrados o no)
+  app.get(URL_USUARIOS + "/check/:email", usuariosRoutes.getUsuarioByEmail); //Obtener usuario por email
+  app.get(URL_USUARIOS + "/:id", usuariosRoutes.getUsuarioById); //Obtener usuario por ID
+  app.put(URL_USUARIOS + "/:id", usuariosRoutes.updateUsuario); //Actualizar usuario
+  app.put(URL_USUARIOS + "/softdelete/:id", usuariosRoutes.softdeleteUsuario); //Borrado lógido de un usuario
+  app.put(URL_USUARIOS + "/softundelete/:id", usuariosRoutes.softundeleteUsuario); //Restaurado lógido de un usuario
+  app.delete(URL_USUARIOS + "/harddelete/:id", usuariosRoutes.hardDeleteUsuario); //Borrado físico de un usuario
+  app.get(URL_USUARIOS + '/roles/:email', usuariosRoutes.getRolesByEmail)// Obtener lista de roles asociados a un email
+}; //exports.assignRoutes
