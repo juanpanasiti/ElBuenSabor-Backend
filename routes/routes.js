@@ -1,19 +1,34 @@
 //urls base
 const URL_BASE = "/api";
 const URL_INSUMOS = URL_BASE + "/insumos";
+const URL_REVENTA = URL_BASE + '/reventa';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
 
 //implementaciones de los endpoints
+const insumosRoutes = require("./insumos.routes");
+const reventasRoutes = require("./reventas.routes")
+//const ingredientesRoutes = require("./ingredientes.routes")
+//const domiciliosRoutes = require("./domicilios.routes")
+//const platosRoutes = require("./platos.routes")
 const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
-const insumosRoutes = require("./insumos.routes");
 const usuariosRoutes = require("./usuarios.routes");
+
 
 exports.assignRoutes = (app) => {
   //ENDPOINTS
   //Articulos Insumo
+  app.post(URL_REVENTA + "/", reventasRoutes.createReventa); //Crear insumo
+  app.get(URL_REVENTA + '/', reventasRoutes.getReventa) //Obtener todos los insumos no borrados
+  app.get(URL_REVENTA + '/:id', reventasRoutes.getReventa) // Obtener insumo por ID
+  app.put(URL_REVENTA + '/:id', reventasRoutes.updateReventa) // Actualizar insumo
+  app.put(URL_REVENTA + '/softdelete/:id', reventasRoutes.softdeleteReventa) // Borrado lógico
+  app.put(URL_REVENTA + '/softundelete/:id', reventasRoutes.softundeleteReventa) // Restaurado lógico
+  app.delete(URL_REVENTA + '/harddelete/:id', reventasRoutes.hardDeleteReventa) // Borrado físico
+
+  //Articulos Reventa
   app.post(URL_INSUMOS + "/", insumosRoutes.createInsumo); //Crear insumo
   app.get(URL_INSUMOS + '/', insumosRoutes.getInsumos) //Obtener todos los insumos no borrados
   app.get(URL_INSUMOS + '/:id', insumosRoutes.getInsumo) // Obtener insumo por ID
@@ -22,7 +37,6 @@ exports.assignRoutes = (app) => {
   app.put(URL_INSUMOS + '/softundelete/:id', insumosRoutes.softundeleteInsumo) // Restaurado lógico
   app.delete(URL_INSUMOS + '/harddelete/:id', insumosRoutes.hardDeleteInsumo) // Borrado físico
 
-  //Articulos Reventa
   //Detalle Ingredientes
   //Domicilios
   //Platos

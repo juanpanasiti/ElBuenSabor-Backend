@@ -58,7 +58,7 @@ exports.updateInsumo = (id, insumoData) => {
 exports.setBorradoInsumo = (id, borrado) => {
   return new Promise((resolve, reject) => {
     insumosDB
-      .setBorradoRol(id, borrado)
+      .setBorradoInsumo(id, borrado)
       .then((insumo) => {
         resolve(insumo);
       })
@@ -72,7 +72,7 @@ exports.setBorradoInsumo = (id, borrado) => {
 exports.hardDeleteInsumo = (id) => {
   return new Promise((resolve, reject) => {
   insumosDB
-    .hardDeleteRol(id)
+    .hardDeleteInsumo(id)
     .then((insumo) => {
       resolve(insumo);
     })
