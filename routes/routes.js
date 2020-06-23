@@ -3,7 +3,7 @@ const URL_BASE = "/api";
 const URL_INSUMOS = URL_BASE + "/insumos";
 const URL_INGREDIENTES = URL_BASE + "/ingredientes";
 const URL_DOMICILIOS = URL_BASE + "/domicilios";
-//const URL_PLATOS = URL_BASE + "/platos";
+const URL_PLATOS = URL_BASE + "/platos";
 const URL_REVENTA = URL_BASE + '/reventa';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
@@ -14,7 +14,7 @@ const insumosRoutes = require("./insumos.routes");
 const reventasRoutes = require("./reventas.routes")
 const ingredientesRoutes = require("./ingredientes.routes")
 const domiciliosRoutes = require("./domicilios.routes")
-//const platosRoutes = require("./platos.routes")
+const platosRoutes = require("./platos.routes")
 const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
 const usuariosRoutes = require("./usuarios.routes");
@@ -24,7 +24,7 @@ exports.assignRoutes = (app) => {
   //ENDPOINTS
   //Articulos Insumo
   app.post(URL_REVENTA + "/", reventasRoutes.createReventa); //Crear insumo
-  app.get(URL_REVENTA + '/', reventasRoutes.getReventa) //Obtener todos los insumos no borrados
+  app.get(URL_REVENTA + '/', reventasRoutes.getReventas) //Obtener todos los insumos no borrados
   app.get(URL_REVENTA + '/:id', reventasRoutes.getReventa) // Obtener insumo por ID
   app.put(URL_REVENTA + '/:id', reventasRoutes.updateReventa) // Actualizar insumo
   app.put(URL_REVENTA + '/softdelete/:id', reventasRoutes.softdeleteReventa) // Borrado lógico
@@ -59,6 +59,13 @@ exports.assignRoutes = (app) => {
   app.delete(URL_DOMICILIOS + '/harddelete/:id', domiciliosRoutes.hardDeleteDomicilio) // Borrado físico
   
   //Platos
+  app.post(URL_PLATOS + "/", platosRoutes.createPlato); //Crear insumo
+  app.get(URL_PLATOS + '/', platosRoutes.getPlatos) //Obtener todos los insumos no borrados
+  app.get(URL_PLATOS + '/:id', platosRoutes.getPlato) // Obtener insumo por ID
+  app.put(URL_PLATOS + '/:id', platosRoutes.updatePlato) // Actualizar insumo
+  app.put(URL_PLATOS + '/softdelete/:id', platosRoutes.softdeletePlato) // Borrado lógico
+  app.put(URL_PLATOS + '/softundelete/:id', platosRoutes.softundeletePlato) // Restaurado lógico
+  app.delete(URL_PLATOS + '/harddelete/:id', platosRoutes.hardDeletePlato) // Borrado físico
 
   //Roles
   app.post(URL_ROLES + "/", rolesRoutes.createRol); // Crear rol
