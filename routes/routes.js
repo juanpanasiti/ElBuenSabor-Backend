@@ -1,6 +1,7 @@
 //urls base
 const URL_BASE = "/api";
 const URL_INSUMOS = URL_BASE + "/insumos";
+const URL_INGREDIENTES = URL_BASE + "/ingredientes";
 const URL_REVENTA = URL_BASE + '/reventa';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
@@ -9,7 +10,7 @@ const URL_USUARIOS = URL_BASE + "/usuarios";
 //implementaciones de los endpoints
 const insumosRoutes = require("./insumos.routes");
 const reventasRoutes = require("./reventas.routes")
-//const ingredientesRoutes = require("./ingredientes.routes")
+const ingredientesRoutes = require("./ingredientes.routes")
 //const domiciliosRoutes = require("./domicilios.routes")
 //const platosRoutes = require("./platos.routes")
 const rolesRoutes = require("./roles.routes");
@@ -38,6 +39,15 @@ exports.assignRoutes = (app) => {
   app.delete(URL_INSUMOS + '/harddelete/:id', insumosRoutes.hardDeleteInsumo) // Borrado físico
 
   //Detalle Ingredientes
+  app.post(URL_INSUMOS + "/", ingredientesRoutes.createIngrediente); //Crear insumo
+  app.get(URL_INSUMOS + '/', ingredientesRoutes.getIngredientes) //Obtener todos los insumos no borrados
+  app.get(URL_INSUMOS + '/:id', ingredientesRoutes.getIngrediente) // Obtener insumo por ID
+  app.put(URL_INSUMOS + '/:id', ingredientesRoutes.updateIngrediente) // Actualizar insumo
+  app.put(URL_INSUMOS + '/softdelete/:id', ingredientesRoutes.softdeleteIngrediente) // Borrado lógico
+  app.put(URL_INSUMOS + '/softundelete/:id', ingredientesRoutes.softundeleteIngrediente) // Restaurado lógico
+  app.delete(URL_INSUMOS + '/harddelete/:id', ingredientesRoutes.hardDeleteIngrediente) // Borrado físico
+
+
   //Domicilios
   //Platos
 

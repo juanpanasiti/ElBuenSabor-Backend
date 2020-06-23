@@ -77,13 +77,13 @@ exports.softundeleteReventa = (req, res) => {
 }; //exports.softundeleteReventa
 
 exports.hardDeleteReventa = (req, res) => {
-    reventasDomain
-      .hardDeleteReventa(req.params.id)
-      .then((reventa) => {
-        res.json(reventa);
-      })
-      .catch((err) => {
-        console.log("Error -> reventas.routes -> hardDeleteReventa -> " + err);
-        res.json(err);
-      });
-  }; //exports.hardDeleteReventa
+  reventasDomain
+    .hardDeleteReventa(req.params.id)
+    .then((reventa) => {
+      res.json(reventa);
+    })
+    .catch((err) => {
+      console.log("Error -> reventas.routes -> hardDeleteReventa -> " + err);
+      res.json(err);
+    });
+}; //exports.hardDeleteReventa

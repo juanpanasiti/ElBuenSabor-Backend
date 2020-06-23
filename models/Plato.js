@@ -8,7 +8,7 @@ const PlatoSchema = mongoose.Schema({
         type: Number
     },
     previoVenta: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     imagenPath: {
         type: String

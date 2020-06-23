@@ -8,7 +8,7 @@ const DetalleIngredienteSchema = mongoose.Schema({
         type: Boolean
     },
     cantidad: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     borrado: {
         type: Boolean,

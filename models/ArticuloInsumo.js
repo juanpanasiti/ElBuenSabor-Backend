@@ -5,7 +5,7 @@ const insumoSchema = mongoose.Schema({
     type: String,
   },
   precioCompra: {
-    type: mongoose.SchemaTypes.Decimal128,
+    type: Number,
   },
   stockActual: {
     type: Number,

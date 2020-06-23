@@ -5,10 +5,10 @@ const ArticuloReventaSchema = mongoose.Schema({
         type: String
     },
     precioCompra: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     precioVenta: {
-        type: mongoose.SchemaTypes.Decimal128
+        type: Number
     },
     stockActual: {
         type: Number
