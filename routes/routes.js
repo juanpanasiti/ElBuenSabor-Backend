@@ -2,6 +2,8 @@
 const URL_BASE = "/api";
 const URL_INSUMOS = URL_BASE + "/insumos";
 const URL_INGREDIENTES = URL_BASE + "/ingredientes";
+const URL_DOMICILIOS = URL_BASE + "/domicilios";
+//const URL_PLATOS = URL_BASE + "/platos";
 const URL_REVENTA = URL_BASE + '/reventa';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
@@ -11,7 +13,7 @@ const URL_USUARIOS = URL_BASE + "/usuarios";
 const insumosRoutes = require("./insumos.routes");
 const reventasRoutes = require("./reventas.routes")
 const ingredientesRoutes = require("./ingredientes.routes")
-//const domiciliosRoutes = require("./domicilios.routes")
+const domiciliosRoutes = require("./domicilios.routes")
 //const platosRoutes = require("./platos.routes")
 const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
@@ -39,16 +41,23 @@ exports.assignRoutes = (app) => {
   app.delete(URL_INSUMOS + '/harddelete/:id', insumosRoutes.hardDeleteInsumo) // Borrado físico
 
   //Detalle Ingredientes
-  app.post(URL_INSUMOS + "/", ingredientesRoutes.createIngrediente); //Crear insumo
-  app.get(URL_INSUMOS + '/', ingredientesRoutes.getIngredientes) //Obtener todos los insumos no borrados
-  app.get(URL_INSUMOS + '/:id', ingredientesRoutes.getIngrediente) // Obtener insumo por ID
-  app.put(URL_INSUMOS + '/:id', ingredientesRoutes.updateIngrediente) // Actualizar insumo
-  app.put(URL_INSUMOS + '/softdelete/:id', ingredientesRoutes.softdeleteIngrediente) // Borrado lógico
-  app.put(URL_INSUMOS + '/softundelete/:id', ingredientesRoutes.softundeleteIngrediente) // Restaurado lógico
-  app.delete(URL_INSUMOS + '/harddelete/:id', ingredientesRoutes.hardDeleteIngrediente) // Borrado físico
-
-
+  app.post(URL_INGREDIENTES + "/", ingredientesRoutes.createIngrediente); //Crear insumo
+  app.get(URL_INGREDIENTES + '/', ingredientesRoutes.getIngredientes) //Obtener todos los insumos no borrados
+  app.get(URL_INGREDIENTES + '/:id', ingredientesRoutes.getIngrediente) // Obtener insumo por ID
+  app.put(URL_INGREDIENTES + '/:id', ingredientesRoutes.updateIngrediente) // Actualizar insumo
+  app.put(URL_INGREDIENTES + '/softdelete/:id', ingredientesRoutes.softdeleteIngrediente) // Borrado lógico
+  app.put(URL_INGREDIENTES + '/softundelete/:id', ingredientesRoutes.softundeleteIngrediente) // Restaurado lógico
+  app.delete(URL_INGREDIENTES + '/harddelete/:id', ingredientesRoutes.hardDeleteIngrediente) // Borrado físico
+  
   //Domicilios
+  app.post(URL_DOMICILIOS + "/", domiciliosRoutes.createDomicilio); //Crear insumo
+  app.get(URL_DOMICILIOS + '/', domiciliosRoutes.getDomicilios) //Obtener todos los insumos no borrados
+  app.get(URL_DOMICILIOS + '/:id', domiciliosRoutes.getDomicilio) // Obtener insumo por ID
+  app.put(URL_DOMICILIOS + '/:id', domiciliosRoutes.updateDomicilio) // Actualizar insumo
+  app.put(URL_DOMICILIOS + '/softdelete/:id', domiciliosRoutes.softdeleteDomicilio) // Borrado lógico
+  app.put(URL_DOMICILIOS + '/softundelete/:id', domiciliosRoutes.softundeleteDomicilio) // Restaurado lógico
+  app.delete(URL_DOMICILIOS + '/harddelete/:id', domiciliosRoutes.hardDeleteDomicilio) // Borrado físico
+  
   //Platos
 
   //Roles
