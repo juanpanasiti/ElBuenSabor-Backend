@@ -2,28 +2,36 @@ const mongoose = require('mongoose')
 
 const ArticuloReventaSchema = mongoose.Schema({
     denominacion: {
-        type: String
+        type: String,
+        require: true
     },
     precioCompra: {
-        type: Number
+        type: Number,
+        default: 0
     },
     precioVenta: {
-        type: Number
+        type: Number,
+        default: 0
     },
     stockActual: {
-        type: Number
+        type: Number,
+        default: 0
     },
     stockMinimo: {
-        type: Number
+        type: Number,
+        default: 0
     },
     stockMaximo: {
-        type: Number
+        type: Number,
+        default: 0
     },
     unidadMedida: {
-        type: String
+        type: String,
+        require:true
     },
-    rubroId: {
-        type: String
+    rubro: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true
     },
     borrado: {
         type: Boolean,

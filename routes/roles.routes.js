@@ -1,7 +1,7 @@
 const rolesDomain = require("../domain/roles.domain");
 
 exports.createRol = (req, res) => {
-    const rolData = req.body;
+  const rolData = req.body;
   rolesDomain
     .createRol(rolData)
     .then((rol) => {
@@ -34,54 +34,54 @@ exports.getRolById = (req, res) => {
     .catch((err) => {
       console.log("Error -> roles.routes -> getRolById ->" + err);
     });
-};//exports.getRolById
+}; //exports.getRolById
 
 exports.updateRol = (req, res) => {
-    const rolData = req.body;
-    rolesDomain
-        .updateRubro(req.params.id, rolData)
-        .then((rol) => {
-            res.json(rol);
-        })
-        .catch((err) => {
-            console.log("Error -> rol.routes -> updateRol " + err);
-            
-            res.status(400).json(err);
-        });
+  const rolData = req.body;
+  rolesDomain
+    .updateRol(req.params.id, rolData)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> rol.routes -> updateRol " + err);
+
+      res.status(400).json(err);
+    });
 }; //exports.updateRol
 
 exports.softdeleteRol = (req, res) => {
-    rolesDomain
-      .setBorradoRol(req.params.id, true)
-      .then((rol) => {
-        res.json(rol);
-      })
-      .catch((err) => {
-        console.log("Error -> roles.routes -> softdeleteRol -> " + err);
-        res.json(err);
-      });
-  }; //exports.softdeleteRol
-  
-  exports.softundeleteRol = (req, res) => {
-    rolesDomain
-      .setBorradoRol(req.params.id, false)
-      .then((rol) => {
-        res.json(rol);
-      })
-      .catch((err) => {
-        console.log("Error -> roles.routes -> softundeleteRol -> " + err);
-        res.json(err);
-      });
-  }; //exports.softundeleteRol
-  
-  exports.hardDeleteRol = (req, res) => {
-    rolesDomain
-      .hardDeleteRol(req.params.id)
-      .then((rol) => {
-        res.json(rol);
-      })
-      .catch((err) => {
-        console.log("Error -> roles.routes -> hardDeleteRol -> " + err);
-        res.json(err);
-      });
-  };//exports.hardDeleteRol
+  rolesDomain
+    .setBorradoRol(req.params.id, true)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> roles.routes -> softdeleteRol -> " + err);
+      res.json(err);
+    });
+}; //exports.softdeleteRol
+
+exports.softundeleteRol = (req, res) => {
+  rolesDomain
+    .setBorradoRol(req.params.id, false)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> roles.routes -> softundeleteRol -> " + err);
+      res.json(err);
+    });
+}; //exports.softundeleteRol
+
+exports.hardDeleteRol = (req, res) => {
+  rolesDomain
+    .hardDeleteRol(req.params.id)
+    .then((rol) => {
+      res.json(rol);
+    })
+    .catch((err) => {
+      console.log("Error -> roles.routes -> hardDeleteRol -> " + err);
+      res.json(err);
+    });
+}; //exports.hardDeleteRol

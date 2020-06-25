@@ -51,6 +51,50 @@ Se utiliza la siguiente estructura de carpetas:
     - Tipo: boolean
     - default: false
 
+#### Rol
+  - `usuario`:
+    - Tipo: ObjectId
+    - Required: true
+  - `nombreRol`:
+    - Tipo: string
+    - required: true  
+  - `borrado`:
+    - Tipo: boolean
+    - default: false
+
+#### Artículos de Reventa
+  - `denominacion`:
+    - Tipo: string
+    - require: true
+  - `unidadMedida`:
+    - Tipo: string
+    - require: true
+  - `rubro`:
+    - Tipo: ObjectId
+    - require: true
+  - `precioCompra`:
+    - Tipo: number
+    - default: 0
+  - `precioVenta`:
+    - Tipo: number
+    - default: 0
+  - `stockActual`:
+    - Tipo: number
+    - default: 0
+  - `stockMinimo`:
+    - Tipo: number
+    - default: 0
+  - `stockMaximo`:
+    - Tipo: number
+    - default: 0
+  - `stock`:
+    - Tipo: number
+    - default: 0
+  - `borrado`:
+      - Tipo: boolean
+      - default: false
+
+
 ## Endpoints
 **URL_BASE:** `"/api"`
 ### Rubro
@@ -70,12 +114,33 @@ Se utiliza la siguiente estructura de carpetas:
 *DELETE*: **URL_RUBROS** + `"/harddelete/:id"` -> borrado fisico de un rubro  
 
 ### Usuarios
-**URL_USUARIOS:** `URL_BASE + "/rubros"`  
-
+**URL_USUARIOS:** `URL_BASE + "/usuarios"`  
+~*POST*:~ El usuario se crea al hacer el `check/:email`  
 *GET*: **URL_USUARIOS** + `"/"` -> Obtener todos los usuarios (borrados o no). Esto solo lo debería acceder el admin  
 *GET*: **URL_USUARIOS** + `"/check/:email"` -> Obtener usuario por email  
 *GET*: **URL_USUARIOS** + `"/:id"` -> Obtener usuario por ID  
 *PUT*: **URL_USUARIOS** + `"/:id"` -> Actualizar un usuario  
 *PUT*: **URL_USUARIOS** + `"/softdelete/:id"` -> Borrado lógico de un usuario  
 *PUT*: **URL_USUARIOS** + `"/softundelete/:id"` -> Restaurado lógico de un usuario  
-*PUT*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario 
+*DELETE*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario  
+*GET*: **URL_USUARIOS** + `"/roles/:email"` -> Obtener todos los roles de un email
+### Roles
+**URL_ROLES:** `URL_BASE + "/roles"`
+
+*POST*: **URL_ROLES** + `"/"` -> Crear rol  
+*GET*: **URL_ROLES** + `"/"` -> Obtener roles no borrados  
+*GET*: **URL_ROLES** + `"/:id"` -> Obtener rol por ID  
+*PUT*: **URL_ROLES** + `"/:id"` -> Actualizar rol  
+*PUT*: **URL_ROLES** + `"/softdelete/:id"` -> Borrado lógico de un rol  
+*PUT*: **URL_ROLES** + `"/softundelete/:id"` -> Restaurado lógico de un rol  
+*DELETE*: **URL_ROLES** + `"/harddelete/:id"` -> Borrado físico de un rol  
+
+### Artículos de Reventa
+**URL_REVENTA:** `URL_BASE + "/reventas"`
+*POST*: **URL_REVENTA** + `"/"` -> Crear reventa  
+*GET*: **URL_REVENTA** + `"/"` -> Obtener reventas no borrados  
+*GET*: **URL_REVENTA** + `"/:id"` -> Obtener reventa por ID   
+*PUT*: **URL_REVENTA** + `"/:id"` -> Actualizara reventa  
+*PUT*: **URL_REVENTA** + `"/softdelete/:id"` -> Borrado lógico de una reventa  
+*PUT*: **URL_REVENTA** + `"/softundelete/:id"` -> Restaurado lógico de una reventa  
+*DELETE*: **URL_REVENTA** + `"/harddelete/:id"` -> Borrado físico de una reventa  

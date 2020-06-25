@@ -4,7 +4,7 @@ const URL_INSUMOS = URL_BASE + "/insumos";
 const URL_INGREDIENTES = URL_BASE + "/ingredientes";
 const URL_DOMICILIOS = URL_BASE + "/domicilios";
 const URL_PLATOS = URL_BASE + "/platos";
-const URL_REVENTA = URL_BASE + '/reventa';
+const URL_REVENTA = URL_BASE + '/reventas';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
@@ -22,7 +22,7 @@ const usuariosRoutes = require("./usuarios.routes");
 
 exports.assignRoutes = (app) => {
   //ENDPOINTS
-  //Articulos Insumo
+  //Articulos Reventa
   app.post(URL_REVENTA + "/", reventasRoutes.createReventa); //Crear insumo
   app.get(URL_REVENTA + '/', reventasRoutes.getReventas) //Obtener todos los insumos no borrados
   app.get(URL_REVENTA + '/:id', reventasRoutes.getReventa) // Obtener insumo por ID
@@ -30,8 +30,8 @@ exports.assignRoutes = (app) => {
   app.put(URL_REVENTA + '/softdelete/:id', reventasRoutes.softdeleteReventa) // Borrado lógico
   app.put(URL_REVENTA + '/softundelete/:id', reventasRoutes.softundeleteReventa) // Restaurado lógico
   app.delete(URL_REVENTA + '/harddelete/:id', reventasRoutes.hardDeleteReventa) // Borrado físico
-
-  //Articulos Reventa
+  
+  //Articulos Insumo
   app.post(URL_INSUMOS + "/", insumosRoutes.createInsumo); //Crear insumo
   app.get(URL_INSUMOS + '/', insumosRoutes.getInsumos) //Obtener todos los insumos no borrados
   app.get(URL_INSUMOS + '/:id', insumosRoutes.getInsumo) // Obtener insumo por ID

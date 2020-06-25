@@ -1,11 +1,20 @@
 const rolesDB = require("../db/roles.db");
+const usuariosDomain = require("./usuarios.domain");
 
 exports.createRol = (rolData) => {
   return new Promise((resolve, reject) => {
     rolesDB
       .saveRol(rolData)
-      .then((roles) => {
-        resolve(roles);
+      .then((rol) => {
+        usuariosDomain
+          .addRol(rol._id, rol.usuario)
+          .then((usuario) => {
+            return console.log("Usuario editado");
+          })
+          .catch((error) => {
+            return console.log(error);
+          });
+        resolve(rol);
       })
       .catch((err) => {
         console.log("Error -> roles.domain -> createRol ->" + err);
@@ -29,21 +38,23 @@ exports.getRoles = () => {
 
 exports.getRolById = (rolId) => {
   return new Promise((resolve, reject) => {
-    rolesDB.getRolById(rolId)
-    .then((rol) => {
-      resolve(rol);
-    })
-    .catch((err) => {
-      console.log("Error -> roles.domain -> getRolById ->" + err);
-      reject(err);
-    });
-  })
-}//exports.getRolById
+    rolesDB
+      .getRolById(rolId)
+      .then((rol) => {
+        resolve(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.domain -> getRolById ->" + err);
+        reject(err);
+      });
+  });
+}; //exports.getRolById
 
 exports.updateRol = (id, rolData) => {
+  console.log("Actualizando rol: " + id)
   return new Promise((resolve, reject) => {
     rolesDB
-      .updateRubro(id, rolData)
+      .updateRol(id, rolData)
       .then((rol) => {
         resolve(rol);
       })
@@ -70,14 +81,14 @@ exports.setBorradoRol = (id, borrado) => {
 
 exports.hardDeleteRol = (id) => {
   return new Promise((resolve, reject) => {
-  rolesDB
-    .hardDeleteRol(id)
-    .then((rol) => {
-      resolve(rol);
-    })
-    .catch((err) => {
-      console.log("Error -> roles.domain -> hardDeleteRol -> " + err);
-      reject(err);
-    });
-  })
+    rolesDB
+      .hardDeleteRol(id)
+      .then((rol) => {
+        resolve(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.domain -> hardDeleteRol -> " + err);
+        reject(err);
+      });
+  });
 }; //exports.hardDeleteRol

@@ -1,4 +1,4 @@
-const db_tools = require("../tools/db_tools");
+//const db_tools = require("../tools/db_tools");
 const mongoose = require("mongoose");
 require("../models/Rol");
 
@@ -31,7 +31,8 @@ exports.saveRol = (rolData) => {
 //Obtener no borrados
 exports.getRoles = () => {
   return new Promise((resolve, reject) => {
-    Rol.find({})
+    Rol.find({borrado:false})
+      .populate("usuario")
       .then((roles) => {
         console.log(`Encontrados ${roles.length} roles`);
         resolve(roles);
@@ -47,6 +48,7 @@ exports.getRoles = () => {
 exports.getRolesBorrados = () => {
   return new Promise((resolve, reject) => {
     Rol.find({ borrado: true })
+      .populate("usuario")
       .then((roles) => {
         console.log(`Encontrados ${roles.length} roles`);
         resolve(roles);
@@ -62,6 +64,7 @@ exports.getRolesBorrados = () => {
 exports.getRolesByUsuario = (usuarioId) => {
   return new Promise((resolve, reject) => {
     Rol.find({ usuario: usuarioId })
+      .populate("usuario")
       .then((roles) => {
         resolve(roles);
       })
@@ -76,6 +79,7 @@ exports.getRolesByUsuario = (usuarioId) => {
 exports.getRolById = (rolId) => {
   return new Promise((resolve, reject) => {
     Rol.findById(rolId)
+      .populate("usuario")
       .then((rol) => {
         resolve(rol);
       })
@@ -90,7 +94,8 @@ exports.getRolById = (rolId) => {
 exports.updateRol = (id, rolData) => {
   return new Promise((resolve, reject) => {
     Rol.findByIdAndUpdate(id, rolData, { new: true })
-      .then((rol) => {
+    .then((rol) => {
+      console.log("Actualizando rol: " + rol)
         resolve(rol);
       })
       .catch((err) => {
@@ -108,23 +113,22 @@ exports.setBorradoRol = (id, borrado) => {
         resolve(rol);
       })
       .catch((err) => {
-          console.log("Error -> roles.db -> setBorradoRol -> " + err);
+        console.log("Error -> roles.db -> setBorradoRol -> " + err);
         reject(err);
       });
   });
-};//exports.setBorradoRol
-
+}; //exports.setBorradoRol
 
 //Borrado físico de uno
-  exports.hardDeleteRol = (id) => {
-    return new Promise((resolve, reject) => {
-      Rol.findByIdAndDelete({ _id: id })
-        .then((rol) => {
-          resolve(rol);
-        })
-        .catch((err) => {
-            console.log("Error -> roles.db -> hardDeleteRol -> " + err);
-          reject(err);
-        });
-    });
-  }; //exports.hardDeleteRol
+exports.hardDeleteRol = (id) => {
+  return new Promise((resolve, reject) => {
+    Rol.findByIdAndDelete({ _id: id })
+      .then((rol) => {
+        resolve(rol);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.db -> hardDeleteRol -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.hardDeleteRol

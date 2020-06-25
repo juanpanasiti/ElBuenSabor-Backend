@@ -27,6 +27,7 @@ exports.saveUsuario = (usuarioData) => {
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
     Usuario.find({})
+      .populate("roles")
       .then((usuarios) => {
         console.log(`Encontrados ${usuarios.length} usuarios`);
         resolve(usuarios);
@@ -42,6 +43,7 @@ exports.getUsuarios = () => {
 exports.getUsuario = (id) => {
   return new Promise((resolve, reject) => {
     Usuario.findById(id)
+      .populate("roles")
       .then((usuario) => {
         console.log("encontrado: " + usuario.email);
         resolve(usuario);
@@ -51,14 +53,15 @@ exports.getUsuario = (id) => {
         reject(err);
       });
   });
-};//exports.getUsuario
+}; //exports.getUsuario
 
 //Obtener usuario por email
 exports.getUsuarioByEmail = (email) => {
   return new Promise((resolve, reject) => {
     Usuario.findOne({ email: email })
+      .populate("roles")
       .then((usuario) => {
-        console.log("encontrado: " + usuario);
+        //console.log("encontrado: " + usuario);
         resolve(usuario);
       })
       .catch((err) => {
@@ -70,40 +73,40 @@ exports.getUsuarioByEmail = (email) => {
 
 //Actualizar un usuario
 exports.updateUsuario = (id, usuarioData) => {
-    return new Promise((resolve, reject) => {
-      Usuario.findByIdAndUpdate(id, usuarioData, { new: true })
-        .then((usuario) => {
-          resolve(usuario);
-        })
-        .catch((err) => {
-            console.log("Error -> usuarios.db -> updateUsuario -> " + err);
-          reject(err);
-        });
-    });
-  }; //exports.updateUsuario
+  return new Promise((resolve, reject) => {
+    Usuario.findByIdAndUpdate(id, usuarioData, { new: true })
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.db -> updateUsuario -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.updateUsuario
 
-  exports.setBorradoUsuario = (id, borrado) => {
-    return new Promise((resolve, reject) => {
-      Usuario.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
-        .then((usuario) => {
-          resolve(usuario);
-        })
-        .catch((err) => {
-            console.log("Error -> usuarios.db -> setBorradoUsuario -> " + err);
-          reject(err);
-        });
-    });
-  };//exports.setBorradoUsuario
+exports.setBorradoUsuario = (id, borrado) => {
+  return new Promise((resolve, reject) => {
+    Usuario.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.db -> setBorradoUsuario -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.setBorradoUsuario
 
-  exports.hardDeleteUsuario = (id) => {
-    return new Promise((resolve, reject) => {
-      Usuario.findByIdAndDelete({ _id: id })
-        .then((usuario) => {
-          resolve(usuario);
-        })
-        .catch((err) => {
-            console.log("Error -> usuarios.db -> hardDeleteUsuario -> " + err);
-          reject(err);
-        });
-    });
-  }; //exports.hardDeleteUsuario
+exports.hardDeleteUsuario = (id) => {
+  return new Promise((resolve, reject) => {
+    Usuario.findByIdAndDelete({ _id: id })
+      .then((usuario) => {
+        resolve(usuario);
+      })
+      .catch((err) => {
+        console.log("Error -> usuarios.db -> hardDeleteUsuario -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.hardDeleteUsuario
