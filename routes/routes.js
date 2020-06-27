@@ -100,4 +100,6 @@ exports.assignRoutes = (app) => {
   app.put(URL_USUARIOS + "/softundelete/:id", usuariosRoutes.softundeleteUsuario); //Restaurado lógido de un usuario
   app.delete(URL_USUARIOS + "/harddelete/:id", usuariosRoutes.hardDeleteUsuario); //Borrado físico de un usuario
   app.get(URL_USUARIOS + '/roles/:email', usuariosRoutes.getRolesByEmail)// Obtener lista de roles asociados a un email
+  app.get(URL_USUARIOS + '/rol/:rol', usuariosRoutes.getUsuariosByRol)// Obtener lista de roles asociados a un email
+
 }; //exports.assignRoutes

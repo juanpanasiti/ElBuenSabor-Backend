@@ -87,9 +87,6 @@ Se utiliza la siguiente estructura de carpetas:
   - `stockMaximo`:
     - Tipo: number
     - default: 0
-  - `stock`:
-    - Tipo: number
-    - default: 0
   - `borrado`:
     - Tipo: boolean
     - default: false  
@@ -114,9 +111,6 @@ Se utiliza la siguiente estructura de carpetas:
     - Tipo: number
     - default: 0
   - `stockMaximo`:
-    - Tipo: number
-    - default: 0
-  - `stock`:
     - Tipo: number
     - default: 0
   - `borrado`:
@@ -214,6 +208,7 @@ Se utiliza la siguiente estructura de carpetas:
 *PUT*: **URL_USUARIOS** + `"/softundelete/:id"` -> Restaurado lógico de un usuario  
 *DELETE*: **URL_USUARIOS** + `"/harddelete/:id"` -> Borrado físico de un usuario  
 *GET*: **URL_USUARIOS** + `"/roles/:email"` -> Obtener todos los roles de un email
+*GET*: **URL_USUARIOS** + `"/rol/:rol"` -> Obtener todos los usuarios que tengan cierto Rol (por nombre de rol)
 ### Roles
 **URL_ROLES:** `URL_BASE + "/roles"`
 

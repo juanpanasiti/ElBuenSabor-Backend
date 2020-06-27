@@ -31,7 +31,7 @@ exports.saveRol = (rolData) => {
 //Obtener no borrados
 exports.getRoles = () => {
   return new Promise((resolve, reject) => {
-    Rol.find({borrado:false})
+    Rol.find({ borrado: false })
       .populate("usuario")
       .then((roles) => {
         console.log(`Encontrados ${roles.length} roles`);
@@ -94,8 +94,8 @@ exports.getRolById = (rolId) => {
 exports.updateRol = (id, rolData) => {
   return new Promise((resolve, reject) => {
     Rol.findByIdAndUpdate(id, rolData, { new: true })
-    .then((rol) => {
-      console.log("Actualizando rol: " + rol)
+      .then((rol) => {
+        console.log("Actualizando rol: " + rol);
         resolve(rol);
       })
       .catch((err) => {
@@ -132,3 +132,17 @@ exports.hardDeleteRol = (id) => {
       });
   });
 }; //exports.hardDeleteRol
+
+exports.getRolesByNombre = (nombre) => {
+  return new Promise((resolve, reject) => {
+    Rol.find({ nombreRol: nombre })
+      .then((roles) => {
+        console.log(`Encontrados ${roles.length} roles`);
+        resolve(roles);
+      })
+      .catch((err) => {
+        console.log("Error -> roles.db -> getRolesByNombre -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getRolesByNombre

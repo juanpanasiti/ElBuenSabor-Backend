@@ -147,4 +147,25 @@ exports.addRol = (idRol, idUsuario) => {
         reject(error);
       });
   });
-};//exports.addRol
+}; //exports.addRol
+
+exports.getUsuarioByRol = (nombreRol) => {
+  return new Promise((resolve, reject) => {
+    
+    rolesDB
+      .getRolesByNombre(nombreRol)
+      .then((roles) => {
+        const promises = []
+        for (let rol of roles) {
+          promises.push(usuariosDB.getUsuario(rol.usuario))
+        } //for()
+        return Promise.all(promises)
+      })//then
+      .then((usuariosRes) => {
+        resolve(usuariosRes)
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  }); //Promise
+}; //exports.getUsuarioByRol

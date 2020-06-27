@@ -83,15 +83,30 @@ exports.hardDeleteUsuario = (req, res) => {
       console.log("Error -> usuarios.routes -> hardDeleteUsuario -> " + err);
       res.json(err);
     });
-};//exports.hardDeleteUsuario
+}; //exports.hardDeleteUsuario
 
 exports.getRolesByEmail = (req, res) => {
-  usuariosDomain.getRolesByEmail(req.params.email)
-  .then((roles) => {
-    res.json(roles);
-  })
-  .catch((err) => {
-    console.log("Error -> usuarios.routes -> getRolesByEmail -> " + err);
-    res.json(err);
-  });
-}//getRolesByEmail
+  usuariosDomain
+    .getRolesByEmail(req.params.email)
+    .then((roles) => {
+      res.json(roles);
+    })
+    .catch((err) => {
+      console.log("Error -> usuarios.routes -> getRolesByEmail -> " + err);
+      res.json(err);
+    });
+}; //getRolesByEmail
+
+exports.getUsuariosByRol = (req, res) => {
+  usuariosDomain
+    .getUsuarioByRol(req.params.rol)
+    .then((usuarios) => {
+      console.log(usuarios.length);
+      
+      res.json(usuarios);
+    })
+    .catch((err) => {
+      console.log("Error -> usuarios.routes -> getUsuariosByRol -> " + err);
+      res.json(err);
+    });
+}; //exports.getUsuariosByRol
