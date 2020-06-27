@@ -91,8 +91,37 @@ Se utiliza la siguiente estructura de carpetas:
     - Tipo: number
     - default: 0
   - `borrado`:
-      - Tipo: boolean
-      - default: false
+    - Tipo: boolean
+    - default: false  
+
+#### Artículos Insumo
+  - `denominacion`:
+    - Tipo: string
+    - require: true
+  - `unidadMedida`:
+    - Tipo: string
+    - require: true
+  - `rubro`:
+    - Tipo: ObjectId
+    - require: true
+  - `precioCompra`:
+    - Tipo: number
+    - default: 0
+  - `stockActual`:
+    - Tipo: number
+    - default: 0
+  - `stockMinimo`:
+    - Tipo: number
+    - default: 0
+  - `stockMaximo`:
+    - Tipo: number
+    - default: 0
+  - `stock`:
+    - Tipo: number
+    - default: 0
+  - `borrado`:
+    - Tipo: boolean
+    - default: false
 
 
 ## Endpoints
@@ -144,3 +173,43 @@ Se utiliza la siguiente estructura de carpetas:
 *PUT*: **URL_REVENTA** + `"/softdelete/:id"` -> Borrado lógico de una reventa  
 *PUT*: **URL_REVENTA** + `"/softundelete/:id"` -> Restaurado lógico de una reventa  
 *DELETE*: **URL_REVENTA** + `"/harddelete/:id"` -> Borrado físico de una reventa  
+
+### Artículos Insumo
+**URL_INSUMO:** `URL_BASE + "/insumos"`
+*POST*: **URL_INSUMO** + `"/"` -> Crear insumo  
+*GET*: **URL_INSUMO** + `"/"` -> Obtener insumos no borrados  
+*GET*: **URL_INSUMO** + `"/:id"` -> Obtener insumo por ID  
+*PUT*: **URL_INSUMO** + `"/:id"` -> Actualizara insumo  
+*PUT*: **URL_INSUMO** + `"/softdelete/:id"` -> Borrado lógico de un insumo  
+*PUT*: **URL_INSUMO** + `"/softundelete/:id"` -> Restaurado lógico de un insumo  
+*DELETE*: **URL_INSUMO** + `"/harddelete/:id"` -> Borrado físico de un insumo  
+
+### Artículos Manufacturados (Platos)
+**URL_PLATOS:** `URL_BASE + "/platos"`
+*POST*: **URL_PLATOS** + `"/"` -> Crear plato  
+*GET*: **URL_PLATOS** + `"/"` -> Obtener platos no borrados  
+*GET*: **URL_PLATOS** + `"/:id"` -> Obtener plato por ID  
+*PUT*: **URL_PLATOS** + `"/:id"` -> Actualizara plato  
+*PUT*: **URL_PLATOS** + `"/softdelete/:id"` -> Borrado lógico de un plato  
+*PUT*: **URL_PLATOS** + `"/softundelete/:id"` -> Restaurado lógico de un plato  
+*DELETE*: **URL_PLATOS** + `"/harddelete/:id"` -> Borrado físico de un plato  
+
+### Artículo Manufacturado Detalle (Ingredientes/Receta)
+**URL_INGREDIENTES:** `URL_BASE + "/ingredientes"`
+*POST*: **URL_INGREDIENTES** + `"/"` -> Crear ingrediente  
+*GET*: **URL_INGREDIENTES** + `"/"` -> Obtener ingredientes no borrados  
+*GET*: **URL_INGREDIENTES** + `"/:id"` -> Obtener ingrediente por ID  
+*PUT*: **URL_INGREDIENTES** + `"/:id"` -> Actualizara ingrediente  
+*PUT*: **URL_INGREDIENTES** + `"/softdelete/:id"` -> Borrado lógico de un ingrediente  
+*PUT*: **URL_INGREDIENTES** + `"/softundelete/:id"` -> Restaurado lógico de un ingrediente  
+*DELETE*: **URL_INGREDIENTES** + `"/harddelete/:id"` -> Borrado físico de un ingrediente  
+
+### Domicilios
+**URL_DOMICILIOS:** `URL_BASE + "/domicilios"`
+*POST*: **URL_DOMICILIOS** + `"/"` -> Crear domicilio  
+*GET*: **URL_DOMICILIOS** + `"/"` -> Obtener domicilios no borrados  
+*GET*: **URL_DOMICILIOS** + `"/:id"` -> Obtener domicilio por ID  
+*PUT*: **URL_DOMICILIOS** + `"/:id"` -> Actualizara domicilio  
+*PUT*: **URL_DOMICILIOS** + `"/softdelete/:id"` -> Borrado lógico de un domicilio  
+*PUT*: **URL_DOMICILIOS** + `"/softundelete/:id"` -> Restaurado lógico de un domicilio  
+*DELETE*: **URL_DOMICILIOS** + `"/harddelete/:id"` -> Borrado físico de un domicilio  

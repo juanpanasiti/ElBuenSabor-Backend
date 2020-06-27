@@ -44,7 +44,7 @@ exports.getInsumoById = (insumoId) => {
 exports.updateInsumo = (id, insumoData) => {
   return new Promise((resolve, reject) => {
     insumosDB
-      .updateRubro(id, insumoData)
+      .updateInsumo(id, insumoData)
       .then((insumo) => {
         resolve(insumo);
       })

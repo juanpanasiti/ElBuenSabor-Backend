@@ -4,7 +4,7 @@ exports.createInsumo = (req, res) => {
   const insumoData = req.body;
 
   insumosDomain
-    .createRubro(insumoData)
+    .createInsumo(insumoData)
     .then((insumo) => {
       res.json(insumo);
     })
