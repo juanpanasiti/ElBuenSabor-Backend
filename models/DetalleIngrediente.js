@@ -1,14 +1,19 @@
 const mongoose = require('mongoose')
 
 const DetalleIngredienteSchema = mongoose.Schema({
-    platoId: {
-        type: String
+    plato: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Plato',
+        required: true
     },
-    insumoId: {
-        type: Boolean
+    insumo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Insumo',
+        required: true
     },
     cantidad: {
-        type: Number
+        type: Number,
+        required: true
     },
     borrado: {
         type: Boolean,

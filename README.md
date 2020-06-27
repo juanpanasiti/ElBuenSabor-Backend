@@ -123,7 +123,7 @@ Se utiliza la siguiente estructura de carpetas:
     - Tipo: boolean
     - default: false
 
-#### Rol
+#### Plato (Artículo Manufacturado)
   - `denominacion`:
     - Tipo: String
     - Required: true
@@ -142,6 +142,21 @@ Se utiliza la siguiente estructura de carpetas:
   - `borrado`:
     - Tipo: boolean
     - default: false
+
+#### Detalle Ingrediente (Item Receta)
+  - `plato`:
+    - Tipo: ObjectId
+    - Required: true
+  - `ingrediente`:
+    - Tipo: ObjectId
+    - Required: true
+  - `cantidad`:
+    - Tipo: Number
+    - required: true  
+  - `borrado`:
+    - Tipo: boolean
+    - default: false
+(La unidad de medida se toma del ingrediente)
 
 ## Endpoints
 **URL_BASE:** `"/api"`
