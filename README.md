@@ -158,6 +158,33 @@ Se utiliza la siguiente estructura de carpetas:
     - default: false
 (La unidad de medida se toma del ingrediente)
 
+#### Domicilio
+  - `usuario`:
+    - Tipo: ObjectId
+    - Required: true
+  - `alias`:
+    - Tipo: String
+    - required: true  
+  - `calle`:
+    - Tipo: String
+    - required: true  
+  - `numero`:
+    - Tipo: Number
+    - required: true  
+  - `localidad`:
+    - Tipo: String
+    - required: true  
+  - `piso`:
+    - Tipo: String
+    - default: ""  
+  - `departamento`:
+    - Tipo: String
+    - default: ""  
+  - `borrado`:
+    - Tipo: boolean
+    - default: false
+(La unidad de medida se toma del ingrediente)
+
 ## Endpoints
 **URL_BASE:** `"/api"`
 ### Rubro
