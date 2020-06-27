@@ -1,26 +1,23 @@
-//const db_tools = require("../tools/db_tools");
 const mongoose = require("mongoose");
 require("../models/Rubro");
-
-//Conectar la base de datos
-//const db = db_tools.getDBConexion();
 
 //Registrar Schema
 const Rubro = mongoose.model("Rubro");
 
 exports.Rubro = Rubro;
+
 //Guardar
 exports.saveRubro = (rubroData) => {
-return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const rubro = new Rubro(rubroData);
     rubro
       .save()
       .then((rubro) => {
-        console.log("Rubro guardado");
+        console.log("Rubro guardado con id: " + rubro._id);
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error en rubros.db al guardar " + err);
+        console.log("Error -> rubros.db -> saveRubro() -> " + err);
         reject(err);
       });
   });
@@ -29,13 +26,14 @@ return new Promise((resolve, reject) => {
 //Obtener rubros raíz (sin padre)
 exports.getRubrosPorPadre = (idPadre) => {
   return new Promise((resolve, reject) => {
-    Rubro.find({ rubroPadre: idPadre, borrado: false }).populate('Rubro')
+    Rubro.find({ rubroPadre: idPadre, borrado: false })
+      .populate("rubroPadre")
       .then((rubros) => {
         console.log(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error obteniendo rubros en roles.db " + err);
+        console.log("Error -> rubros.db -> getRubrosPorPadre() -> " + err);
         reject(err);
       });
   });
@@ -45,12 +43,13 @@ exports.getRubrosPorPadre = (idPadre) => {
 exports.getRubros = (estaBorrado) => {
   return new Promise((resolve, reject) => {
     Rubro.find({ borrado: estaBorrado })
+      .populate("rubroPadre")
       .then((rubros) => {
         console.log(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error obteniendo rubros en roles.db " + err);
+        console.log("Error -> rubros.db -> getRubros() -> " + err);
         reject(err);
       });
   });
@@ -60,12 +59,13 @@ exports.getRubros = (estaBorrado) => {
 exports.getRubrosPorTipo = (esDeInsumo) => {
   return new Promise((resolve, reject) => {
     Rubro.find({ esRubroInsumo: esDeInsumo, borrado: false })
+      .populate("rubroPadre")
       .then((rubros) => {
         console.log(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error obteniendo rubros en roles.db " + err);
+        console.log("Error -> rubros.db -> getRubrosPorTipo() -> " + err);
         reject(err);
       });
   });
@@ -75,16 +75,19 @@ exports.getRubrosPorTipo = (esDeInsumo) => {
 exports.getRubro = (id) => {
   return new Promise((resolve, reject) => {
     Rubro.findById(id)
+      .populate("rubroPadre")
       .then((rubro) => {
         console.log(`Encontrado el rubro ${rubro.denominacion}.`);
         resolve(rubro);
       })
       .catch((err) => {
+        console.log("Error -> rubros.db -> getRubro() -> " + err);
         reject(err);
       });
   });
 }; //exports.getRubro
 
+//Actualizar
 exports.updateRubro = (id, rubroData) => {
   return new Promise((resolve, reject) => {
     Rubro.findByIdAndUpdate(id, rubroData, { new: true })
@@ -92,12 +95,13 @@ exports.updateRubro = (id, rubroData) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error en rubro.db -> updateRubro " + err);
+        console.log("Error -> rubros.db -> updateRubro() -> " + err);
         reject(err);
       });
   });
 }; //exports.updateRubro
 
+//Borrado/Restaurado lógico
 exports.setBorradoRubro = (id, borrado) => {
   return new Promise((resolve, reject) => {
     Rubro.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
@@ -105,11 +109,13 @@ exports.setBorradoRubro = (id, borrado) => {
         resolve(rubro);
       })
       .catch((err) => {
+        console.log("Error -> rubros.db -> setBorradoRubro() -> " + err);
         reject(err);
       });
   });
-};//exports.setBorradoRubro
+}; //exports.setBorradoRubro
 
+//Borrado físico de la base de datos
 exports.hardDeleteRubro = (id) => {
   return new Promise((resolve, reject) => {
     Rubro.findByIdAndDelete({ _id: id })
@@ -117,6 +123,7 @@ exports.hardDeleteRubro = (id) => {
         resolve(rubro);
       })
       .catch((err) => {
+        console.log("Error -> rubros.db -> hardDeleteRubro() -> " + err);
         reject(err);
       });
   });

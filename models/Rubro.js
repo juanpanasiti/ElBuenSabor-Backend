@@ -4,17 +4,17 @@ const mongoose = require("mongoose");
 const rubroSchema = new mongoose.Schema({
   denominacion: {
     type: String,
-    required: true
+    required: true,
   },
   esRubroInsumo: {
     type: Boolean,
-    default: false
+    default: false,
   },
   rubroPadre: {
-    type: String,
+    //Era String, lo cambie para probar si solucionamos error al guardar "" para los rubros raíz
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Rubro",
-    default: ""
-
+    default: null, //Un rubro raíz debe tener el campo en null o no
   },
   borrado: {
     type: Boolean,
