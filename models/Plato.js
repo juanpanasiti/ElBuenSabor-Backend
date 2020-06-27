@@ -2,19 +2,25 @@ const mongoose = require('mongoose')
 
 const PlatoSchema = mongoose.Schema({
     denominacion: {
-        type: String
+        type: String,
+        required: true
     },
     tiempoCocina: {
-        type: Number
+        type: Number,
+        required: true
     },
-    previoVenta: {
-        type: Number
+    precioVenta: {
+        type: Number,
+        default: 0
     },
     imagenPath: {
-        type: String
+        type: String,
+        default: ""
     },
-    rubroId: {
-        type: String
+    rubro: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Rubro',
+        required: true
     },
     borrado: {
         type: Boolean,

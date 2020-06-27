@@ -123,6 +123,25 @@ Se utiliza la siguiente estructura de carpetas:
     - Tipo: boolean
     - default: false
 
+#### Rol
+  - `denominacion`:
+    - Tipo: String
+    - Required: true
+  - `tiempoCocina`:
+    - Tipo: Number
+    - required: true  
+  - `precioVenta`:
+    - Tipo: Number
+    - required: true  
+  - `imagenPath`:
+    - Tipo: String
+    - Required: true
+  - `rubro`:
+    - Tipo: ObjectId
+    - Required: true
+  - `borrado`:
+    - Tipo: boolean
+    - default: false
 
 ## Endpoints
 **URL_BASE:** `"/api"`

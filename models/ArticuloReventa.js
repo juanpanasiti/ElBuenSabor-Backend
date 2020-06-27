@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const ArticuloReventaSchema = mongoose.Schema({
     denominacion: {
         type: String,
-        require: true
+        required: true
     },
     precioCompra: {
         type: Number,
@@ -27,7 +27,7 @@ const ArticuloReventaSchema = mongoose.Schema({
     },
     unidadMedida: {
         type: String,
-        require:true
+        required:true
     },
     rubro: {
         type: mongoose.Schema.Types.ObjectId,
