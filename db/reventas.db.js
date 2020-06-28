@@ -13,7 +13,7 @@ exports.saveReventa = (reventaData) => {
     reventa
       .save()
       .then((reventa) => {
-        console.log("Reventa guardada");
+        console.log("Guardado artículo de reventa ID: " + reventa._id);
         resolve(reventa);
       })
       .catch((err) => {
@@ -27,6 +27,7 @@ exports.saveReventa = (reventaData) => {
 exports.getReventas = () => {
   return new Promise((resolve, reject) => {
     Reventa.find({ borrado: false })
+      .populate("rubro")
       .then((reventas) => {
         console.log(`Encontrados ${reventas.length} reventas`);
         resolve(reventas);
@@ -42,6 +43,7 @@ exports.getReventas = () => {
 exports.getReventaById = (reventaId) => {
   return new Promise((resolve, reject) => {
     Reventa.findById(reventaId)
+      .populate("rubro")
       .then((reventa) => {
         resolve(reventa);
       })

@@ -31,6 +31,7 @@ const ArticuloReventaSchema = mongoose.Schema({
     },
     rubro: {
         type: mongoose.Schema.Types.ObjectId,
+        ref:'Rubro',
         require: true
     },
     borrado: {
