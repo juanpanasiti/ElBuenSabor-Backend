@@ -3,6 +3,7 @@ require("../models/DetalleIngrediente");
 
 //Registrar Schema
 const Ingrediente = mongoose.model("DetalleIngrediente");
+const platosDB = require("../db/platos.db");
 
 exports.Ingrediente = Ingrediente;
 
@@ -13,7 +14,8 @@ exports.saveIngrediente = (ingredienteData) => {
     ingrediente
       .save()
       .then((ingrediente) => {
-        console.log("ingrediente guardado");
+        //Agregar el ID del ingrediente a los ingredites del plato
+        platosDB.addIngrediente(ingrediente._id, ingrediente.plato);
         resolve(ingrediente);
       })
       .catch((err) => {
@@ -27,6 +29,8 @@ exports.saveIngrediente = (ingredienteData) => {
 exports.getIngredientes = () => {
   return new Promise((resolve, reject) => {
     Ingrediente.find({ borrado: false })
+      .populate("plato")
+      .populate("insumo")
       .then((ingredientes) => {
         console.log(`Encontrados ${ingredientes.length} ingredientes`);
         resolve(ingredientes);
@@ -42,6 +46,8 @@ exports.getIngredientes = () => {
 exports.getIngredienteById = (id) => {
   return new Promise((resolve, reject) => {
     Ingrediente.findById(id)
+      .populate("plato")
+      .populate("insumo")
       .then((ingrediente) => {
         resolve(ingrediente);
       })
@@ -71,6 +77,12 @@ exports.setBorradoIngrediente = (id, borrado) => {
   return new Promise((resolve, reject) => {
     Ingrediente.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
       .then((ingrediente) => {
+        //Agregar o quitar el ID del ingrediente a los ingredites del plato
+        if (borrado) {
+          platosDB.removeIngrediente(ingrediente._id, ingrediente.plato);
+        } else {
+          platosDB.addIngrediente(ingrediente._id, ingrediente.plato);
+        }
         resolve(ingrediente);
       })
       .catch((err) => {
@@ -87,10 +99,13 @@ exports.hardDeleteIngrediente = (id) => {
   return new Promise((resolve, reject) => {
     Ingrediente.findByIdAndDelete({ _id: id })
       .then((ingrediente) => {
+        platosDB.removeIngrediente(ingrediente._id, ingrediente.plato);
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.db -> hardDeleteIngrediente -> " + err);
+        console.log(
+          "Error -> ingredientes.db -> hardDeleteIngrediente -> " + err
+        );
         reject(err);
       });
   });
