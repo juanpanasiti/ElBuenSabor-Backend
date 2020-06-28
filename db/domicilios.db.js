@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("../models/Domicilio");
+const usuariosDB = require("../db/usuarios.db");
 
 //Registrar Schema
 const Domicilio = mongoose.model("Domicilio");
@@ -13,7 +14,7 @@ exports.saveDomicilio = (domicilioData) => {
     domicilio
       .save()
       .then((domicilio) => {
-        console.log("domicilio guardado");
+        usuariosDB.addDomicilio(domicilio._id, domicilio.usuario);
         resolve(domicilio);
       })
       .catch((err) => {
@@ -27,6 +28,7 @@ exports.saveDomicilio = (domicilioData) => {
 exports.getDomicilios = () => {
   return new Promise((resolve, reject) => {
     Domicilio.find({ borrado: false })
+      .populate("usuario")
       .then((domicilios) => {
         console.log(`Encontrados ${domicilios.length} domicilios`);
         resolve(domicilios);
@@ -42,6 +44,7 @@ exports.getDomicilios = () => {
 exports.getDomicilioById = (id) => {
   return new Promise((resolve, reject) => {
     Domicilio.findById(id)
+      .populate("usuario")
       .then((domicilio) => {
         resolve(domicilio);
       })
@@ -71,6 +74,12 @@ exports.setBorradoDomicilio = (id, borrado) => {
   return new Promise((resolve, reject) => {
     Domicilio.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
       .then((domicilio) => {
+        //Agregar o quitar el ID del rol a los roles del usuario
+        if (borrado) {
+          usuariosDB.removeDomicilio(domicilio._id, domicilio.usuario);
+        } else {
+          usuariosDB.addDomicilio(domicilio._id, domicilio.usuario);
+        }
         resolve(domicilio);
       })
       .catch((err) => {
@@ -82,14 +91,15 @@ exports.setBorradoDomicilio = (id, borrado) => {
 
 //Borrado físico de uno
 exports.hardDeleteDomicilio = (id) => {
-    return new Promise((resolve, reject) => {
-      Domicilio.findByIdAndDelete({ _id: id })
-        .then((domicilio) => {
-          resolve(domicilio);
-        })
-        .catch((err) => {
-          console.log("Error -> domicilios.db -> hardDeleteDomicilio -> " + err);
-          reject(err);
-        });
-    });
-  }; //exports.hardDeleteDomicilio
+  return new Promise((resolve, reject) => {
+    Domicilio.findByIdAndDelete({ _id: id })
+      .then((domicilio) => {
+        usuariosDB.removeDomicilio(domicilio._id, domicilio.usuario);
+        resolve(domicilio);
+      })
+      .catch((err) => {
+        console.log("Error -> domicilios.db -> hardDeleteDomicilio -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.hardDeleteDomicilio

@@ -31,6 +31,12 @@ const UsuarioSchema = mongoose.Schema({
       ref: "Rol",
     },
   ],
+  domicilios: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Domicilio",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Usuario", UsuarioSchema);

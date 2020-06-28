@@ -29,6 +29,7 @@ exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
     Usuario.find({})
       .populate("roles")
+      .populate("domicilios")
       .then((usuarios) => {
         console.log(`Encontrados ${usuarios.length} usuarios`);
         resolve(usuarios);
@@ -45,6 +46,7 @@ exports.getUsuario = (id) => {
   return new Promise((resolve, reject) => {
     Usuario.findById(id)
       .populate("roles")
+      .populate("domicilios")
       .then((usuario) => {
         console.log("encontrado: " + usuario.email);
         resolve(usuario);
@@ -61,6 +63,7 @@ exports.getUsuarioByEmail = (email) => {
   return new Promise((resolve, reject) => {
     Usuario.findOne({ email: email })
       .populate("roles")
+      .populate("domicilios")
       .then((usuario) => {
         //console.log("encontrado: " + usuario);
         resolve(usuario);
@@ -112,7 +115,7 @@ exports.hardDeleteUsuario = (id) => {
   });
 }; //exports.hardDeleteUsuario
 
-//Métodos para implementar relaciones con Roles
+//Métodos para implementar relaciones con Roles y Domicilios
 //Agregar ID de rol a la lista de roles del usuario
 exports.addRol = (rolId, usuarioId) => {
   return new Promise((resolve, reject) => {
@@ -138,10 +141,7 @@ exports.removeRol = (rolId, usuarioId) => {
   return new Promise((resolve, reject) => {
     this.getUsuario(usuarioId)
       .then((usuario) => {
-        const roles = utils.removeItemFromList(
-          usuario.roles,
-          rolId
-        );        
+        const roles = utils.removeItemFromList(usuario.roles, rolId);
         usuario.roles = roles;
         this.updateUsuario(usuarioId, usuario)
           .then((usuarioEd) => {
@@ -155,4 +155,48 @@ exports.removeRol = (rolId, usuarioId) => {
         reject(error);
       });
   });
-}; //exports.removeIngrediente
+}; //exports.removeRol
+
+//Agregar ID de domicilio a la lista de domicilios del usuario
+exports.addDomicilio = (domicilioId, usuarioId) => {
+  return new Promise((resolve, reject) => {
+    this.getUsuario(usuarioId)
+      .then((usuario) => {
+        usuario.domicilios.push(domicilioId);
+        this.updateUsuario(usuarioId, usuario)
+          .then((usuarioEd) => {
+            resolve(usuarioEd);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}; //exports.addDomicilio
+
+//Remover ID de domicilio de la lista de domicilios del usuario
+exports.removeDomicilio = (domicilioId, usuarioId) => {
+  return new Promise((resolve, reject) => {
+    this.getUsuario(usuarioId)
+      .then((usuario) => {
+        const domicilios = utils.removeItemFromList(
+          usuario.domicilios,
+          domicilioId
+        );
+        usuario.domicilios = domicilios;
+        this.updateUsuario(usuarioId, usuario)
+          .then((usuarioEd) => {
+            resolve(usuarioEd);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}; //exports.removeDomicilio
