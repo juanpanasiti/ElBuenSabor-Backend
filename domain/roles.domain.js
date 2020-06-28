@@ -6,14 +6,6 @@ exports.createRol = (rolData) => {
     rolesDB
       .saveRol(rolData)
       .then((rol) => {
-        usuariosDomain
-          .addRol(rol._id, rol.usuario)
-          .then((usuario) => {
-            return console.log("Usuario editado");
-          })
-          .catch((error) => {
-            return console.log(error);
-          });
         resolve(rol);
       })
       .catch((err) => {

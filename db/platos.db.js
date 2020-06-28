@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const utils = require("../tools/utils.tools");
 require("../models/Plato");
 
 //Registrar Schema
@@ -118,17 +119,17 @@ exports.addIngrediente = (ingredienteId, platoId) => {
         reject(error);
       });
   });
-}; //exports.addRol
+}; //exports.addIngrediente
 
 //Remover ID de ingrediente de la lista de ingredientes del plato
 exports.removeIngrediente = (ingredienteId, platoId) => {
   return new Promise((resolve, reject) => {
     this.getPlatoById(platoId)
       .then((plato) => {
-        const ingredientes = this.removeItemFromList(
+        const ingredientes = utils.removeItemFromList(
           plato.ingredientes,
           ingredienteId
-        );
+        );        
         plato.ingredientes = ingredientes;
         this.updatePlato(platoId, plato)
           .then((platoEd) => {
@@ -144,12 +145,12 @@ exports.removeIngrediente = (ingredienteId, platoId) => {
   });
 }; //exports.removeIngrediente
 
-exports.removeItemFromList = (ingedientesPlato, ingredienteId) => {
-  let ingredientes = [];
-  for (let ingrediente of ingedientesPlato) {
-    if (ingrediente != ingredienteId.toString()) {
-      ingredientes.push(ingrediente);
-    }
-  }
-  return ingredientes;
-};
+// exports.removeItemFromList = (ingedientesPlato, ingredienteId) => {
+//   let ingredientes = [];
+//   for (let ingrediente of ingedientesPlato) {
+//     if (ingrediente != ingredienteId.toString()) {
+//       ingredientes.push(ingrediente);
+//     }
+//   }
+//   return ingredientes;
+// };

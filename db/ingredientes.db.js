@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 require("../models/DetalleIngrediente");
+const platosDB = require("../db/platos.db");
 
 //Registrar Schema
 const Ingrediente = mongoose.model("DetalleIngrediente");
-const platosDB = require("../db/platos.db");
 
 exports.Ingrediente = Ingrediente;
 

@@ -1,10 +1,6 @@
-//const db_tools = require("../tools/db_tools");
 const mongoose = require("mongoose");
 require("../models/Rol");
-
-//Conectar db
-//const db = db_tools.getDBConexion();
-
+const usuariosDB = require("../db/usuarios.db")
 //Registrar Schema
 const Rol = mongoose.model("Rol");
 
@@ -16,7 +12,8 @@ exports.saveRol = (rolData) => {
     rol
       .save()
       .then((rol) => {
-        console.log("Rol guardado");
+        //Agregar el ID del rol a los roles del usuario
+        usuariosDB.addRol(rol._id, rol.usuario);
         resolve(rol);
       })
       .catch((err) => {
@@ -110,6 +107,12 @@ exports.setBorradoRol = (id, borrado) => {
   return new Promise((resolve, reject) => {
     Rol.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
       .then((rol) => {
+        //Agregar o quitar el ID del rol a los roles del usuario
+        if (borrado) {
+          usuariosDB.removeRol(rol._id, rol.usuario);
+        } else {
+          usuariosDB.addRol(rol._id, rol.usuario);
+        }
         resolve(rol);
       })
       .catch((err) => {
@@ -124,6 +127,7 @@ exports.hardDeleteRol = (id) => {
   return new Promise((resolve, reject) => {
     Rol.findByIdAndDelete({ _id: id })
       .then((rol) => {
+        usuariosDB.removeRol(rol._id, rol.usuario);
         resolve(rol);
       })
       .catch((err) => {
@@ -136,6 +140,7 @@ exports.hardDeleteRol = (id) => {
 exports.getRolesByNombre = (nombre) => {
   return new Promise((resolve, reject) => {
     Rol.find({ nombreRol: nombre })
+    .populate('usuario')
       .then((roles) => {
         console.log(`Encontrados ${roles.length} roles`);
         resolve(roles);

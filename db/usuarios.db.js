@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const utils = require("../tools/utils.tools");
 require("../models/Usuario");
 
 //Registrar Schema
@@ -110,3 +111,48 @@ exports.hardDeleteUsuario = (id) => {
       });
   });
 }; //exports.hardDeleteUsuario
+
+//Métodos para implementar relaciones con Roles
+//Agregar ID de rol a la lista de roles del usuario
+exports.addRol = (rolId, usuarioId) => {
+  return new Promise((resolve, reject) => {
+    this.getUsuario(usuarioId)
+      .then((usuario) => {
+        usuario.roles.push(rolId);
+        this.updateUsuario(usuarioId, usuario)
+          .then((usuarioEd) => {
+            resolve(usuarioEd);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}; //exports.addRol
+
+//Remover ID de rol de la lista de roles del usuario
+exports.removeRol = (rolId, usuarioId) => {
+  return new Promise((resolve, reject) => {
+    this.getUsuario(usuarioId)
+      .then((usuario) => {
+        const roles = utils.removeItemFromList(
+          usuario.roles,
+          rolId
+        );        
+        usuario.roles = roles;
+        this.updateUsuario(usuarioId, usuario)
+          .then((usuarioEd) => {
+            resolve(usuarioEd);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}; //exports.removeIngrediente

@@ -129,26 +129,6 @@ exports.getRolesByEmail = (email) => {
   });
 }; //exports.getRolesByEmail
 
-exports.addRol = (idRol, idUsuario) => {
-  return new Promise((resolve, reject) => {
-    this.getUsuarioById(idUsuario)
-      .then((usuario) => {
-        usuario.roles.push(idRol);
-        console.log(usuario);
-        this.updateUsuario(idUsuario, usuario)
-          .then((usuarioEd) => {
-            resolve(usuarioEd);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}; //exports.addRol
-
 exports.getUsuarioByRol = (nombreRol) => {
   return new Promise((resolve, reject) => {
     
