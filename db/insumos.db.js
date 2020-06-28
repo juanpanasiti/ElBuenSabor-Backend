@@ -26,7 +26,8 @@ exports.saveInsumo = (insumoData) => {
 //Obtener no borrados
 exports.getInsumos = () => {
   return new Promise((resolve, reject) => {
-    Insumo.find({borrado: false})
+    Insumo.find({ borrado: false })
+      .populate("rubro")
       .then((insumos) => {
         console.log(`Encontrados ${insumos.length} insumos`);
         resolve(insumos);
@@ -46,6 +47,7 @@ exports.getInsumos = () => {
 exports.getInsumoById = (insumoId) => {
   return new Promise((resolve, reject) => {
     Insumo.findById(insumoId)
+      .populate("rubro")
       .then((insumo) => {
         resolve(insumo);
       })
@@ -78,23 +80,22 @@ exports.setBorradoInsumo = (id, borrado) => {
         resolve(insumo);
       })
       .catch((err) => {
-          console.log("Error -> insumos.db -> setBorradoInsumo -> " + err);
+        console.log("Error -> insumos.db -> setBorradoInsumo -> " + err);
         reject(err);
       });
   });
-};//exports.setBorradoInsumo
-
+}; //exports.setBorradoInsumo
 
 //Borrado físico de uno
-  exports.hardDeleteInsumo = (id) => {
-    return new Promise((resolve, reject) => {
-      Insumo.findByIdAndDelete({ _id: id })
-        .then((insumo) => {
-          resolve(insumo);
-        })
-        .catch((err) => {
-            console.log("Error -> insumos.db -> hardDeleteInsumo -> " + err);
-          reject(err);
-        });
-    });
-  }; //exports.hardDeleteInsumo
+exports.hardDeleteInsumo = (id) => {
+  return new Promise((resolve, reject) => {
+    Insumo.findByIdAndDelete({ _id: id })
+      .then((insumo) => {
+        resolve(insumo);
+      })
+      .catch((err) => {
+        console.log("Error -> insumos.db -> hardDeleteInsumo -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.hardDeleteInsumo
