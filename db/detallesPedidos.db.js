@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/DetallePedido");
 const pedidosDB = require("../db/pedidos.db");
+const utils = require("../tools/utils.tools");
 
 //Registrar Schema
 const Detalle = mongoose.model("DetallePedido");
@@ -19,7 +20,7 @@ exports.saveDetalle = (detalleData) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log("Error -> detallesPedidos.db -> saveDetalle -> " + err);
+        utils.logError("Error -> detallesPedidos.db -> saveDetalle -> " + err);
         reject(err);
       });
   });
@@ -31,11 +32,11 @@ exports.getDetalles = () => {
     Detalle.find({ borrado: false })
       .populate("pedido")
       .then((detalles) => {
-        console.log(`Encontrados ${detalles.length} detalles de pedido`);
+        utils.logInfo(`Encontrados ${detalles.length} detalles de pedido`);
         resolve(detalles);
       })
       .catch((err) => {
-        console.log("Error -> detallesPedidos.db -> getDetalles -> " + err);
+        utils.logError("Error -> detallesPedidos.db -> getDetalles -> " + err);
         reject(err);
       });
   });
@@ -51,7 +52,9 @@ exports.getDetalleById = (id) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log("Error -> detallesPedidos.db -> getDetalleById -> " + err);
+        utils.logError(
+          "Error -> detallesPedidos.db -> getDetalleById -> " + err
+        );
         reject(err);
       });
   });
@@ -65,7 +68,7 @@ exports.updateDetalle = (id, detalleData) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log("Error -> detallesPedidos.db -> updateDetalle " + err);
+        utils.logError("Error -> detallesPedidos.db -> updateDetalle " + err);
         reject(err);
       });
   });
@@ -85,7 +88,7 @@ exports.setBorradoDetalle = (id, borrado) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log(
+        utils.logError(
           "Error -> detallesPedidos.db -> setBorradoDetalle -> " + err
         );
         reject(err);
@@ -102,7 +105,7 @@ exports.hardDeleteDetalle = (id) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log(
+        utils.logError(
           "Error -> detallesPedidos.db -> hardDeleteDetalle -> " + err
         );
         reject(err);

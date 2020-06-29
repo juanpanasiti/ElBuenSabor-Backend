@@ -64,9 +64,7 @@ exports.setBorradoPedido = (id, borrado) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log(
-          "Error -> pedidos.domain -> setBorradoPedido -> " + err
-        );
+        console.log("Error -> pedidos.domain -> setBorradoPedido -> " + err);
         reject(err);
       });
   });
@@ -80,10 +78,23 @@ exports.hardDeletePedido = (id) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log(
-          "Error -> pedidos.domain -> hardDeletePedido -> " + err
-        );
+        console.log("Error -> pedidos.domain -> hardDeletePedido -> " + err);
         reject(err);
       });
   });
 }; //exports.hardDeletePedido
+
+///// Estados de pedidos
+exports.getPedidosByEstado = (estado) => {
+  return new Promise((resolve, reject) => {
+    pedidosDB
+      .getPedidosByEstado(estado)
+      .then((pedidos) => {
+        resolve(pedidos);
+      })
+      .catch((err) => {
+        console.log("Error -> pedidos.domain -> getPedidosByEstado -> " + err);
+        reject(err);
+      });
+  });
+};

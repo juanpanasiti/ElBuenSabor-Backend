@@ -7,5 +7,9 @@
     "server_config": {
         "name": "ElBuenSabor-Server",
         "port": 3033
+    },
+    "app_config": {
+        "cantidadCocineros": 2,
+        "emailEmpresa": "elbuensabor-mza@gmail.com"
     }
 }

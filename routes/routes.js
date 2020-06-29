@@ -8,6 +8,7 @@ const URL_REVENTA = URL_BASE + '/reventas';
 const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
+const URL_PEDIDOS = URL_BASE + "/pedidos";
 
 //implementaciones de los endpoints
 const insumosRoutes = require("./insumos.routes");
@@ -18,6 +19,7 @@ const platosRoutes = require("./platos.routes")
 const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
 const usuariosRoutes = require("./usuarios.routes");
+const pedidosRoutes = require("./pedidos.routes");
 
 
 exports.assignRoutes = (app) => {
@@ -102,4 +104,10 @@ exports.assignRoutes = (app) => {
   app.get(URL_USUARIOS + '/roles/:email', usuariosRoutes.getRolesByEmail)// Obtener lista de roles asociados a un email
   app.get(URL_USUARIOS + '/rol/:rol', usuariosRoutes.getUsuariosByRol)// Obtener lista de roles asociados a un email
 
+  //Pedidos
+  app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/en-proceso', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/preparados', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/en-delivery', pedidosRoutes.getPedidosByEstado)
 }; //exports.assignRoutes

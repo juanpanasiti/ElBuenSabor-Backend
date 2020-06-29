@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 var cors = require('cors')
 require('dotenv/config')
+const utils = require('./tools/utils.tools')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -14,7 +15,7 @@ routes.assignRoutes(app)
 mongoose.connect(
     process.env.DB_CONN,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    () => console.log('Connected to MongoDB!')
+    () => utils.logSuccess('Connected to MongoDB!')
 )
 
 //port

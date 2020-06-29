@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("../models/Pedido");
+const utils = require("../tools/utils.tools");
 
 //Registrar Schema
 const Pedido = mongoose.model("Pedido");
@@ -10,14 +11,17 @@ exports.Pedido = Pedido;
 exports.savePedido = (pedidoData) => {
   return new Promise((resolve, reject) => {
     const pedido = new Pedido(pedidoData);
+    pedido.estado = 'pendiente'
+    //pedido.horaFinEstimada =
+    //pedido.numero =
     pedido
       .save()
       .then((pedido) => {
-        console.log("Guardado artículo de pedido ID: " + pedido._id);
+        utils.logSuccess("Guardado pedido ID: " + pedido._id);
         resolve(pedido);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> savePedido -> " + err);
+        utils.logError("Error -> pedidos.db -> savePedido -> " + err);
         reject(err);
       });
   });
@@ -29,11 +33,11 @@ exports.getPedidos = () => {
     Pedido.find({ borrado: false })
       .populate("detalle")
       .then((pedidos) => {
-        console.log(`Encontrados ${pedidos.length} pedidos`);
+        utils.logSuccess(`Encontrados ${pedidos.length} pedidos`);
         resolve(pedidos);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> getPedidos -> " + err);
+        utils.logError("Error -> pedidos.db -> getPedidos -> " + err);
         reject(err);
       });
   });
@@ -48,7 +52,7 @@ exports.getPedidoById = (pedidoId) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> getPedidoById -> " + err);
+        utils.logError("Error -> pedidos.db -> getPedidoById -> " + err);
         reject(err);
       });
   });
@@ -62,7 +66,7 @@ exports.updatePedido = (id, pedidoData) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> updatePedido " + err);
+        utils.logError("Error -> pedidos.db -> updatePedido " + err);
         reject(err);
       });
   });
@@ -76,7 +80,7 @@ exports.setBorradoPedido = (id, borrado) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> setBorradoPedido -> " + err);
+        utils.logError("Error -> pedidos.db -> setBorradoPedido -> " + err);
         reject(err);
       });
   });
@@ -90,7 +94,7 @@ exports.hardDeletePedido = (id) => {
         resolve(pedido);
       })
       .catch((err) => {
-        console.log("Error -> pedidos.db -> hardDeletePedido -> " + err);
+        utils.logError("Error -> pedidos.db -> hardDeletePedido -> " + err);
         reject(err);
       });
   });
@@ -107,10 +111,12 @@ exports.addDetalle = (detalleId, pedidoId) => {
             resolve(pedidoEd);
           })
           .catch((error) => {
+            utils.logError("Error -> pedidos.db -> addDetalle -> " + err);
             reject(error);
           });
       })
       .catch((error) => {
+        utils.logError("Error -> pedidos.db -> addDetalle -> " + err);
         reject(error);
       });
   });
@@ -128,11 +134,29 @@ exports.removeDetalle = (detalleId, pedidoId) => {
             resolve(pedidoEd);
           })
           .catch((error) => {
+            utils.logError("Error -> pedidos.db -> removeDetalle -> " + err);
             reject(error);
           });
       })
       .catch((error) => {
+        utils.logError("Error -> pedidos.db -> removeDetalle -> " + err);
         reject(error);
       });
   });
 }; //exports.removeDetalle
+
+///// Estados de pedidos
+exports.getPedidosByEstado = (estado) => {
+  return new Promise((resolve, reject) => {
+    Pedido.find({ estado: estado })
+      .populate("detalle")
+      .then((pedidos) => {
+        utils.logSuccess(`Encontrados ${pedidos.length} pedidos ${estado}`);
+        resolve(pedidos);
+      })
+      .catch((err) => {
+        utils.logError("Error -> pedidos.db -> getPedidos -> " + err);
+        reject(err);
+      });
+  });
+};
