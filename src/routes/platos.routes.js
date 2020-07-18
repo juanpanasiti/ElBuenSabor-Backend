@@ -1,4 +1,4 @@
-const platosDomain = require("../domain/platos.domain");
+const platosDomain = require("../services/platos.services");
 exports.createPlato = (req, res) => {
     const platoData = req.body;
   

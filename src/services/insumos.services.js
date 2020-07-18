@@ -1,4 +1,4 @@
-const insumosDB = require("../db/insumos.db");
+const insumosDB = require("../data/db/insumos.db");
 
 exports.createInsumo = (insumoData) => {
   return new Promise((resolve, reject) => {

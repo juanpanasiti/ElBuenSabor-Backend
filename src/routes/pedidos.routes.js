@@ -1,5 +1,5 @@
-const pedidosDomain = require("../domain/pedidos.domain");
-const utils = require("../tools/utils.tools");
+const pedidosDomain = require("../services/pedidos.services");
+const utils = require("../config/logger.config");
 
 exports.createPedido = (req, res) => {
   const pedidoData = req.body;

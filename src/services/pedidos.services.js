@@ -1,4 +1,4 @@
-const pedidosDB = require("../db/pedidos.db");
+const pedidosDB = require("../data/db/pedidos.db");
 
 exports.createPedido = (pedidoData) => {
   return new Promise((resolve, reject) => {

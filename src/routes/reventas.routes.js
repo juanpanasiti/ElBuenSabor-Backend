@@ -1,4 +1,4 @@
-const reventasDomain = require("../domain/reventas.domain");
+const reventasDomain = require("../services/reventas.services");
 
 exports.createReventa = (req, res) => {
   const reventaData = req.body;

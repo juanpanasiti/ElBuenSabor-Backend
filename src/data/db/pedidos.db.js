@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("../models/Pedido");
-const utils = require("../tools/utils.tools");
+const {logSuccess, logError} = require("../../config/logger.config");
 
 //Registrar Schema
 const Pedido = mongoose.model("Pedido");
@@ -17,11 +17,11 @@ exports.savePedido = (pedidoData) => {
     pedido
       .save()
       .then((pedido) => {
-        utils.logSuccess("Guardado pedido ID: " + pedido._id);
+        logSuccess("Guardado pedido ID: " + pedido._id);
         resolve(pedido);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> savePedido -> " + err);
+        logError("Error -> pedidos.db -> savePedido -> " + err);
         reject(err);
       });
   });
@@ -33,11 +33,11 @@ exports.getPedidos = () => {
     Pedido.find({ borrado: false })
       .populate("detalle")
       .then((pedidos) => {
-        utils.logSuccess(`Encontrados ${pedidos.length} pedidos`);
+        logSuccess(`Encontrados ${pedidos.length} pedidos`);
         resolve(pedidos);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> getPedidos -> " + err);
+        logError("Error -> pedidos.db -> getPedidos -> " + err);
         reject(err);
       });
   });
@@ -52,7 +52,7 @@ exports.getPedidoById = (pedidoId) => {
         resolve(pedido);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> getPedidoById -> " + err);
+        logError("Error -> pedidos.db -> getPedidoById -> " + err);
         reject(err);
       });
   });
@@ -66,7 +66,7 @@ exports.updatePedido = (id, pedidoData) => {
         resolve(pedido);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> updatePedido " + err);
+        logError("Error -> pedidos.db -> updatePedido " + err);
         reject(err);
       });
   });
@@ -80,7 +80,7 @@ exports.setBorradoPedido = (id, borrado) => {
         resolve(pedido);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> setBorradoPedido -> " + err);
+        logError("Error -> pedidos.db -> setBorradoPedido -> " + err);
         reject(err);
       });
   });
@@ -94,7 +94,7 @@ exports.hardDeletePedido = (id) => {
         resolve(pedido);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> hardDeletePedido -> " + err);
+        logError("Error -> pedidos.db -> hardDeletePedido -> " + err);
         reject(err);
       });
   });
@@ -111,12 +111,12 @@ exports.addDetalle = (detalleId, pedidoId) => {
             resolve(pedidoEd);
           })
           .catch((error) => {
-            utils.logError("Error -> pedidos.db -> addDetalle -> " + err);
+            logError("Error -> pedidos.db -> addDetalle -> " + err);
             reject(error);
           });
       })
       .catch((error) => {
-        utils.logError("Error -> pedidos.db -> addDetalle -> " + err);
+        logError("Error -> pedidos.db -> addDetalle -> " + err);
         reject(error);
       });
   });
@@ -127,19 +127,19 @@ exports.removeDetalle = (detalleId, pedidoId) => {
   return new Promise((resolve, reject) => {
     this.getPedido(pedidoId)
       .then((pedido) => {
-        const detalle = utils.removeItemFromList(pedido.detalle, detalleId);
+        const detalle = removeItemFromList(pedido.detalle, detalleId);
         pedido.detalle = detalle;
         this.updatePedido(pedidoId, pedido)
           .then((pedidoEd) => {
             resolve(pedidoEd);
           })
           .catch((error) => {
-            utils.logError("Error -> pedidos.db -> removeDetalle -> " + err);
+            logError("Error -> pedidos.db -> removeDetalle -> " + err);
             reject(error);
           });
       })
       .catch((error) => {
-        utils.logError("Error -> pedidos.db -> removeDetalle -> " + err);
+        logError("Error -> pedidos.db -> removeDetalle -> " + err);
         reject(error);
       });
   });
@@ -151,11 +151,11 @@ exports.getPedidosByEstado = (estado) => {
     Pedido.find({ estado: estado })
       .populate("detalle")
       .then((pedidos) => {
-        utils.logSuccess(`Encontrados ${pedidos.length} pedidos ${estado}`);
+        logSuccess(`Encontrados ${pedidos.length} pedidos ${estado}`);
         resolve(pedidos);
       })
       .catch((err) => {
-        utils.logError("Error -> pedidos.db -> getPedidos -> " + err);
+        logError("Error -> pedidos.db -> getPedidos -> " + err);
         reject(err);
       });
   });

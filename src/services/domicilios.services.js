@@ -1,4 +1,4 @@
-const domiciliosDB = require("../db/domicilios.db");
+const domiciliosDB = require("../data/db/domicilios.db");
 
 exports.createDomicilio = (domicilioData) => {
   return new Promise((resolve, reject) => {

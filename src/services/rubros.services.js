@@ -1,4 +1,4 @@
-const rubrosDB = require("../db/rubros.db");
+const rubrosDB = require("../data/db/rubros.db");
 
 exports.createRubro = (rubroData) => {
   return new Promise((resolve, reject) => {

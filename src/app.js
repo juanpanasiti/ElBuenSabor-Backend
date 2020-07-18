@@ -1,24 +1,22 @@
 const express = require('express')
-const app = express();
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-var cors = require('cors')
-require('dotenv/config')
-const utils = require('./tools/utils.tools')
+const cors = require('cors')
+const {logInfo} = require('./config/logger.config')
+const {db_conn, db_name} = require('./config/connection.config')
 
+
+const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
+//Imports routes
 const routes = require('./routes/routes')
 routes.assignRoutes(app)
+
 //Connect to DB
 mongoose.connect(
-    process.env.DB_CONN,
+    db_conn,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    () => utils.logSuccess('Connected to MongoDB!')
+    () => logInfo(`Connected to ${db_name}!`)
 )
-
-//port
-const port = process.env.PORT || 3001
-app.listen(port)
-utils.logSuccess(`Conectado al puerto ${port}`)

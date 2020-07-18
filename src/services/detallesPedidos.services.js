@@ -1,4 +1,4 @@
-const detallesDB = require("../db/detalles.db");
+const detallesDB = require("../data/db/detalles.db");
 
 exports.createDetalle = (detalleData) => {
   return new Promise((resolve, reject) => {

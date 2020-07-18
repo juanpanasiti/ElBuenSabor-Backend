@@ -1,4 +1,4 @@
-const usuariosDomain = require("../domain/usuarios.domain");
+const usuariosDomain = require("../services/usuarios.services");
 
 exports.getUsuarios = (req, res) => {
   usuariosDomain

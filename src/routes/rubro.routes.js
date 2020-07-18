@@ -1,4 +1,4 @@
-const rubrosDomain = require("../domain/rubros.domain");
+const rubrosDomain = require("../services/rubros.services");
 
 exports.createRubro = (req, res) => {
     const rubroData = req.body;

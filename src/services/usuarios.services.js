@@ -1,5 +1,5 @@
-const usuariosDB = require("../db/usuarios.db");
-const rolesDB = require("../db/roles.db");
+const usuariosDB = require("../data/db/usuarios.db");
+const rolesDB = require("../data/db/roles.db");
 
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {

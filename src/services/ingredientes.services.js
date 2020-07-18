@@ -1,4 +1,4 @@
-const ingredientesDB = require("../db/ingredientes.db");
+const ingredientesDB = require("../data/db/ingredientes.db");
 
 exports.createIngrediente = (ingredienteData) => {
   return new Promise((resolve, reject) => {

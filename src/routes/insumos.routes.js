@@ -1,4 +1,4 @@
-const insumosDomain = require("../domain/insumos.domain");
+const insumosDomain = require("../services/insumos.services");
 
 exports.createInsumo = (req, res) => {
   const insumoData = req.body;

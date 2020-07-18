@@ -1,4 +1,4 @@
-const rolesDomain = require("../domain/roles.domain");
+const rolesDomain = require("../services/roles.services");
 
 exports.createRol = (req, res) => {
   const rolData = req.body;

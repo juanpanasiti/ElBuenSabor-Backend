@@ -1,4 +1,4 @@
-const domiciliosDomain = require("../domain/domicilios.domain");
+const domiciliosDomain = require("../services/domicilios.services");
 
 exports.createDomicilio = (req, res) => {
   const domicilioData = req.body;

@@ -1,4 +1,4 @@
-const reventasDB = require("../db/reventas.db");
+const reventasDB = require("../data/db/reventas.db");
 
 exports.createReventa = (reventaData) => {
   return new Promise((resolve, reject) => {

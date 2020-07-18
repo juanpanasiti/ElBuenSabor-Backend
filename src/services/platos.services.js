@@ -1,4 +1,4 @@
-const platosDB = require("../db/platos.db");
+const platosDB = require("../data/db/platos.db");
 
 exports.createPlato = (platoData) => {
     return new Promise((resolve, reject) => {

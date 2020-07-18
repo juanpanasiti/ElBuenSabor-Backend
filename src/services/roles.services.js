@@ -1,5 +1,5 @@
-const rolesDB = require("../db/roles.db");
-const usuariosDomain = require("./usuarios.domain");
+const rolesDB = require("../data/db/roles.db");
+const usuariosDomain = require("./usuarios.services");
 
 exports.createRol = (rolData) => {
   return new Promise((resolve, reject) => {

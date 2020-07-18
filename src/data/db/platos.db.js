@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const utils = require("../tools/utils.tools");
+const utils = require("../../config/logger.config");
 require("../models/Plato");
 
 //Registrar Schema

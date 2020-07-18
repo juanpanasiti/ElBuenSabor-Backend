@@ -1,4 +1,4 @@
-const ingredientesDomain = require("../domain/ingredientes.domain");
+const ingredientesDomain = require("../services/ingredientes.services");
 
 exports.createIngrediente = (req, res) => {
   const ingredienteData = req.body;
