@@ -20,3 +20,8 @@ mongoose.connect(
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => logInfo(`Connected to ${db_name}!`)
 )
+
+//port
+const port = process.env.PORT || 3001
+app.listen(port)
+logInfo(`Conectado al puerto ${port}`)
