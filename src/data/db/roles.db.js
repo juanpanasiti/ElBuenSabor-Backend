@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/Rol");
-const usuariosDB = require("../db/usuarios.db")
+const usuariosDB = require("../db/usuarios.db");
+const { logSuccess } = require("../../config/logger.config");
 //Registrar Schema
 const Rol = mongoose.model("Rol");
 
@@ -23,7 +24,13 @@ exports.saveRol = (rolData) => {
   });
 }; //exports.saveRol
 
-//Contar no borrados
+//Obtener opciones de roles
+exports.getOptionsForRoles = () => {
+  return new Promise((resolve, reject) => {
+    options = ["Administrador", "Cajero","Cocinero","Delivery"]
+    resolve(options)
+  })
+}//exports.getOptionsForRoles
 
 //Obtener no borrados
 exports.getRoles = () => {
@@ -142,7 +149,7 @@ exports.getRolesByNombre = (nombre) => {
     Rol.find({ nombreRol: nombre })
     .populate('usuario')
       .then((roles) => {
-        console.log(`Encontrados ${roles.length} roles`);
+        logSuccess(`Encontrados ${roles.length} roles`);
         resolve(roles);
       })
       .catch((err) => {

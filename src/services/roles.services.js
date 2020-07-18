@@ -1,5 +1,6 @@
 const rolesDB = require("../data/db/roles.db");
 const usuariosDomain = require("./usuarios.services");
+const { logError } = require("../config/logger.config");
 
 exports.createRol = (rolData) => {
   return new Promise((resolve, reject) => {
@@ -14,6 +15,20 @@ exports.createRol = (rolData) => {
       });
   });
 }; //exports.createRol
+
+exports.getOptionsForRoles = () => {
+  return new Promise((resolve, reject) => {
+    rolesDB.getOptionsForRoles()
+    .then((options) => {
+      resolve(options)
+    })
+    .catch((err) => {
+      logError(`Error -> roles.domain -> createRol -> ${err}`)
+      reject(err)
+    })
+  })
+}//exports.getOptionsForRoles
+
 exports.getRoles = () => {
   return new Promise((resolve, reject) => {
     rolesDB
