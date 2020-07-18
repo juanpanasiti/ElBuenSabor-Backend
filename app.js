@@ -19,4 +19,6 @@ mongoose.connect(
 )
 
 //port
-app.listen(3033)
+const port = process.env.PORT || 3001
+app.listen(port)
+utils.logSuccess(`Conectado al puerto ${port}`)
