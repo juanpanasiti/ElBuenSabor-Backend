@@ -9,6 +9,7 @@ const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
 const URL_PEDIDOS = URL_BASE + "/pedidos";
+const URL_OPCIONES = URL_BASE + "/opciones";
 
 //implementaciones de los endpoints
 const insumosRoutes = require("./insumos.routes");
@@ -20,6 +21,7 @@ const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
 const usuariosRoutes = require("./usuarios.routes");
 const pedidosRoutes = require("./pedidos.routes");
+const opcionesRoutes = require('./opciones.routes')
 
 
 exports.assignRoutes = (app) => {
@@ -111,4 +113,10 @@ exports.assignRoutes = (app) => {
   app.get(URL_PEDIDOS + '/estado/en-proceso', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/preparados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-delivery', pedidosRoutes.getPedidosByEstado)
+
+  //Opciones para selects de los formularios
+  app.get(URL_OPCIONES + '/unidades-medida', opcionesRoutes.getUnidadesMedida)
+  app.get(URL_OPCIONES + '/estados-pedido', opcionesRoutes.getEstadoPedido)
+  app.get(URL_OPCIONES + '/formas-pago', opcionesRoutes.getFormasPago)
+  app.get(URL_OPCIONES + '/nombres-rol', opcionesRoutes.getNombresRoles)
 }; //exports.assignRoutes
