@@ -14,11 +14,11 @@ const pedidoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  horaFinEstimada: {
-    type: Date,
+  minutosDemora: {
+    type: Number,
     required: true,
   },
-  envioDomicilio: {
+  delivery: {
     type: Boolean,
     default: true,
   },

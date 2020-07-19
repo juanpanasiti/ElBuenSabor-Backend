@@ -7,20 +7,32 @@ const detallePedidoSchema = new mongoose.Schema({
     ref: "Pedido",
     required: true,
   },
-  plato: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Plato",
-    default: null,
-  },
-  reventa: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "ArticuloReventa",
-    default: null,
-  },
-  cantidad: {
-    type: Number,
-    required: true,
-  },
+  platos: [
+    {
+      item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Plato",
+        required:true,
+      },
+      cantidad: {
+        type: Number,
+        default: 1
+      }
+    }
+  ],
+  reventas: [
+    {
+      item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ArticuloReventa",
+        required: true,
+      },
+      cantidad: {
+        type: Number,
+        default: 1
+      }
+    }
+  ],
   subtotal: {
     type: Number,
     required: true,
