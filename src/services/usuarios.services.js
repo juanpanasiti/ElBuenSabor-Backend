@@ -1,5 +1,6 @@
 const usuariosDB = require("../data/db/usuarios.db");
 const rolesDB = require("../data/db/roles.db");
+const { logError, logWarning, logSuccess } = require("../config/logger.config");
 
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
@@ -9,7 +10,7 @@ exports.getUsuarios = () => {
         resolve(usuarios);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> getUsuarios -> " + err);
+        logError("Error -> usuarios.services -> getUsuarios -> " + err);
         reject(err);
       });
   });
@@ -21,6 +22,9 @@ exports.getUsuarioByEmail = (email) => {
       .getUsuarioByEmail(email)
       .then((usuario) => {
         if (!usuario) {
+          logWarning(
+            `El usuario ${email} no se encuentra registrado, por lo que se lo cargará en el sistema.`
+          );
           return usuariosDB
             .saveUsuario({ email: email })
             .then((nuevoUsuario) => {
@@ -29,8 +33,8 @@ exports.getUsuarioByEmail = (email) => {
               resolve(usuario);
             })
             .catch((err) => {
-              console.log(
-                "Error -> usuarios.domain -> getUsuarioByEmail -> save -> " +
+              logError(
+                "Error -> usuarios.services -> getUsuarioByEmail -> save -> " +
                   err
               );
               reject(err);
@@ -39,7 +43,7 @@ exports.getUsuarioByEmail = (email) => {
         resolve(usuario);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> getUsuarioByEmail -> " + err);
+        logError("Error -> usuarios.services -> getUsuarioByEmail -> " + err);
         reject(err);
       });
   });
@@ -53,7 +57,7 @@ exports.getUsuarioById = (id) => {
         resolve(usuario);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> getUsuarioById -> " + err);
+        logError("Error -> usuarios.services -> getUsuarioById -> " + err.message);
         reject(err);
       });
   });
@@ -67,7 +71,7 @@ exports.updateUsuario = (id, usuarioData) => {
         resolve(usuario);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> updateUsuario -> " + err);
+        logError("Error -> usuarios.services -> updateUsuario -> " + err);
         reject(err);
       });
   });
@@ -81,7 +85,7 @@ exports.setBorradoUsuario = (id, borrado) => {
         resolve(usuario);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> setBorradoUsuario -> " + err);
+        logError("Error -> usuarios.services -> setBorradoUsuario -> " + err);
         reject(err);
       });
   });
@@ -95,7 +99,7 @@ exports.hardDeleteUsuario = (id) => {
         resolve(usuario);
       })
       .catch((err) => {
-        console.log("Error -> usuarios.domain -> hardDeleteUsuario -> " + err);
+        logError("Error -> usuarios.services -> hardDeleteUsuario -> " + err);
         reject(err);
       });
   });
@@ -111,19 +115,19 @@ exports.getRolesByEmail = (email) => {
         rolesDB
           .getRolesByUsuario(usuario._id)
           .then((roles) => {
-            console.log("Encontrado: " + roles);
+            logSuccess(`Encontrados ${roles.length} roles.`);
             resolve(roles);
           })
           .catch((err) => {
-            console.log(
-              "Error -> usuarios.domain -> getRolesByEmail -> getRolesByUsuario ->" +
+            logError(
+              "Error -> usuarios.services -> getRolesByEmail -> getRolesByUsuario ->" +
                 err
             );
             reject(err);
           });
       })
       .catch((error) => {
-        console.log("Error -> usuarios.domain -> getRolesByEmail -> " + err);
+        logError("Error -> usuarios.services -> getRolesByEmail -> " + err);
         reject(err);
       });
   });
@@ -131,20 +135,20 @@ exports.getRolesByEmail = (email) => {
 
 exports.getUsuarioByRol = (nombreRol) => {
   return new Promise((resolve, reject) => {
-    
     rolesDB
       .getRolesByNombre(nombreRol)
       .then((roles) => {
-        const promises = []
+        const promises = [];
         for (let rol of roles) {
-          promises.push(usuariosDB.getUsuario(rol.usuario))
+          promises.push(usuariosDB.getUsuario(rol.usuario));
         } //for()
-        return Promise.all(promises)
-      })//then
+        return Promise.all(promises);
+      }) //then
       .then((usuariosRes) => {
-        resolve(usuariosRes)
+        resolve(usuariosRes);
       })
       .catch((error) => {
+        logError("Error -> usuarios.services -> getUsuarioByRol -> " + err);
         reject(error);
       });
   }); //Promise

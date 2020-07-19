@@ -1,112 +1,113 @@
-const usuariosDomain = require("../services/usuarios.services");
+const usuariosService = require("../services/usuarios.services");
+const {logSuccess, logError, logInfo, logWarning} = require('../config/logger.config')
 
 exports.getUsuarios = (req, res) => {
-  usuariosDomain
+  usuariosService
     .getUsuarios()
     .then((usuarios) => {
       res.json(usuarios);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getUsuarios -> " + err);
+      logError("Error -> usuarios.routes -> getUsuarios -> " + err);
       res.json(err);
     });
 }; //exports.getUsuarios
 
 exports.getUsuarioByEmail = (req, res) => {
-  usuariosDomain
+  usuariosService
     .getUsuarioByEmail(req.params.email)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getUsuarioByEmail -> " + err);
+      logError("Error -> usuarios.routes -> getUsuarioByEmail -> " + err);
       res.json(err);
     });
 }; //exports.getUsuarioByEmail
 
 exports.getUsuarioById = (req, res) => {
-  usuariosDomain
+  usuariosService
     .getUsuarioById(req.params.id)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getUsuarioById -> " + err);
-      res.json(err);
+      logError("Error -> usuarios.routes -> getUsuarioById -> " + err.message);
+      res.status(err.code).json(err);
     });
 }; //exports.getUsuarioById
 
 exports.updateUsuario = (req, res) => {
   const usuarioData = req.body;
-  usuariosDomain
+  usuariosService
     .updateUsuario(req.params.id, usuarioData)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getUsuarioById -> " + err);
+      logError("Error -> usuarios.routes -> getUsuarioById -> " + err);
       res.json(err);
     });
 }; //exports.updateUsuario
 
 exports.softdeleteUsuario = (req, res) => {
-  usuariosDomain
+  usuariosService
     .setBorradoUsuario(req.params.id, true)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> softdeleteUsuario -> " + err);
+      logError("Error -> usuarios.routes -> softdeleteUsuario -> " + err);
       res.json(err);
     });
 }; //exports.softdeleteUsuario
 
 exports.softundeleteUsuario = (req, res) => {
-  usuariosDomain
+  usuariosService
     .setBorradoUsuario(req.params.id, false)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> softundeleteUsuario -> " + err);
+      logError("Error -> usuarios.routes -> softundeleteUsuario -> " + err);
       res.json(err);
     });
 }; //exports.softundeleteUsuario
 
 exports.hardDeleteUsuario = (req, res) => {
-  usuariosDomain
+  usuariosService
     .hardDeleteUsuario(req.params.id)
     .then((usuario) => {
       res.json(usuario);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> hardDeleteUsuario -> " + err);
+      logError("Error -> usuarios.routes -> hardDeleteUsuario -> " + err);
       res.json(err);
     });
 }; //exports.hardDeleteUsuario
 
 exports.getRolesByEmail = (req, res) => {
-  usuariosDomain
+  usuariosService
     .getRolesByEmail(req.params.email)
     .then((roles) => {
       res.json(roles);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getRolesByEmail -> " + err);
+      logError("Error -> usuarios.routes -> getRolesByEmail -> " + err);
       res.json(err);
     });
 }; //getRolesByEmail
 
 exports.getUsuariosByRol = (req, res) => {
-  usuariosDomain
+  usuariosService
     .getUsuarioByRol(req.params.rol)
     .then((usuarios) => {
-      console.log(usuarios.length);
+      logError(usuarios.length);
       
       res.json(usuarios);
     })
     .catch((err) => {
-      console.log("Error -> usuarios.routes -> getUsuariosByRol -> " + err);
+      logError("Error -> usuarios.routes -> getUsuariosByRol -> " + err);
       res.json(err);
     });
 }; //exports.getUsuariosByRol

@@ -9,6 +9,9 @@ exports.Rubro = Rubro;
 //Guardar
 exports.saveRubro = (rubroData) => {
   return new Promise((resolve, reject) => {
+    if(rubroData.rubroPadre === ""){
+      rubroData.rubroPadre = null
+    }
     const rubro = new Rubro(rubroData);
     rubro
       .save()
