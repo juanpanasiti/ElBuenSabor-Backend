@@ -24,14 +24,6 @@ exports.saveRol = (rolData) => {
   });
 }; //exports.saveRol
 
-//Obtener opciones de roles
-exports.getOptionsForRoles = () => {
-  return new Promise((resolve, reject) => {
-    options = ["Administrador", "Cajero","Cocinero","Delivery"]
-    resolve(options)
-  })
-}//exports.getOptionsForRoles
-
 //Obtener no borrados
 exports.getRoles = () => {
   return new Promise((resolve, reject) => {

@@ -14,15 +14,6 @@ exports.createRol = (req, res) => {
     });
 }; //exports.createRol
 
-exports.getOptionsForRoles = (req,res) => {
-  rolesDomain.getOptionsForRoles().then((options) => {
-    res.json(options)
-  })
-  .catch((err) => {
-    logError(`Error -> roles.routes -> getOptionsForRoles -> ${err}`)
-    res.status(400).json(err)
-  })
-}
 exports.getRoles = (req, res) => {
   rolesDomain
     .getRoles()

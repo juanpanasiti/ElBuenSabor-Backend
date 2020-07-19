@@ -73,7 +73,6 @@ exports.assignRoutes = (app) => {
 
   //Roles
   app.post(URL_ROLES + "/", rolesRoutes.createRol); // Crear rol
-  app.get(URL_ROLES + "/options", rolesRoutes.getOptionsForRoles); //Opciones para roles
   app.get(URL_ROLES + "/", rolesRoutes.getRoles); //Roles no borrados
   app.get(URL_ROLES + "/:id", rolesRoutes.getRolById); // Obtener rol por ID de Rol
   app.put(URL_ROLES + "/:id", rolesRoutes.updateRol); // Actualizar rol
