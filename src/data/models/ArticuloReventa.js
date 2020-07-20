@@ -34,6 +34,10 @@ const ArticuloReventaSchema = mongoose.Schema({
         ref:'Rubro',
         require: true
     },
+    imagenPath: {
+        type: String,
+        default: "",
+      },
     borrado: {
         type: Boolean,
         default: false

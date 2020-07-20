@@ -16,6 +16,10 @@ const rubroSchema = new mongoose.Schema({
     ref: "Rubro",
     default: null, //Un rubro raíz debe tener el campo en null o no
   },
+  imagenPath: {
+    type: String,
+    default: "",
+  },
   borrado: {
     type: Boolean,
     default: false,
