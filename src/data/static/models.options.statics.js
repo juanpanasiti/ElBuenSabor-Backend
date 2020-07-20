@@ -1,6 +1,6 @@
 module.exports = {
     unidadesMedida: () => {
-        options = ["gr", "cc", "unidades"]
+        options = ["gr", "ml", "u."]
         return options
     },
     estadoPedido: () => {
