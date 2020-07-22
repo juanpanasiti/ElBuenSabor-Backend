@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { estadoPedido } = require("../static/models.options.statics");
 
 //Definición del SCHEMA
 const pedidoSchema = new mongoose.Schema({
@@ -12,11 +13,11 @@ const pedidoSchema = new mongoose.Schema({
   },
   estado: {
     type: String,
-    required: true,
+    default: estadoPedido()[0],
   },
   minutosDemora: {
     type: Number,
-    required: true,
+    default: 0,
   },
   delivery: {
     type: Boolean,
@@ -24,7 +25,7 @@ const pedidoSchema = new mongoose.Schema({
   },
   total: {
     type: Number,
-    required: true,
+    default: 0,
   },
   formaPago: {
     type: String,
@@ -38,7 +39,7 @@ const pedidoSchema = new mongoose.Schema({
   detalle: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "DetallePedido",
-    required: true,
+    default:null,
   },
   factura: {
     type: mongoose.Schema.Types.ObjectId,

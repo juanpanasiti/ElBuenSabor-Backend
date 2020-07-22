@@ -107,6 +107,7 @@ exports.assignRoutes = (app) => {
   app.get(URL_USUARIOS + '/rol/:rol', usuariosRoutes.getUsuariosByRol)// Obtener lista de roles asociados a un email
 
   //Pedidos
+  app.post(URL_PEDIDOS + '/', pedidosRoutes.createPedido)
   app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-proceso', pedidosRoutes.getPedidosByEstado)

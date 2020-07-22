@@ -1,17 +1,30 @@
 const mongoose = require("mongoose");
 require("../models/Pedido");
-const {logSuccess, logError} = require("../../config/logger.config");
+const { logSuccess, logError, logInfo } = require("../../config/logger.config");
 
 //Registrar Schema
 const Pedido = mongoose.model("Pedido");
 
 exports.Pedido = Pedido;
 
+//Contar pedidos
+exports.countPedidos = () => {
+  return new Promise((resolve, reject) => {
+    Pedido.countDocuments()
+      .then((count) => {
+        resolve(count);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}; //exports.countPedidos
+
 //Crear
 exports.savePedido = (pedidoData) => {
   return new Promise((resolve, reject) => {
     const pedido = new Pedido(pedidoData);
-    pedido.estado = 'pendiente'
+    pedido.estado = "pendiente";
     //pedido.horaFinEstimada =
     //pedido.numero =
     pedido
@@ -156,6 +169,25 @@ exports.getPedidosByEstado = (estado) => {
       })
       .catch((err) => {
         logError("Error -> pedidos.db -> getPedidos -> " + err);
+        reject(err);
+      });
+  });
+};
+
+exports.getPedidosPendientesAnteriores = (fecha) => {
+  return new Promise((resolve, reject) => {
+    Pedido.find({
+      $or: [{ estado: "pendiente" }, { estado: "en proceso" }],
+      fecha: { $lt: fecha },
+    })
+      .then((pedidos) => {
+        logInfo(`Encontrados ${pedidos.length} pedidos`);
+        resolve(pedidos);
+      })
+      .catch((err) => {
+        logError(
+          "Error -> pedidos.db -> getPedidosPendientesAnteriores -> " + err
+        );
         reject(err);
       });
   });

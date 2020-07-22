@@ -1,16 +1,33 @@
-const detallesDB = require("../data/db/detalles.db");
+const detallesDB = require("../data/db/detallesPedidos.db");
+const platoDB = require("../data/db/platos.db")
+const reventaDB = require('../data/db/reventas.db')
+const { newDetallePedidoDTO } = require("../data/dto/detallePedido.dto");
+const { logInfo } = require("../config/logger.config");
 
-exports.createDetalle = (detalleData) => {
+exports.createDetalle = (pedidoData) => {
+  const detalleDTO = newDetallePedidoDTO()
+  detalleDTO.subtotal = 0.0
   return new Promise((resolve, reject) => {
-    detallesDB
-      .saveDetalle(detalleData)
-      .then((detalle) => {
-        resolve(detalle);
+
+    for(plato of pedidoData.platos){
+      detalleDTO.platos.push(plato)
+      platoDB.getPlatoById(plato.item_id)
+      .then((plato) => {
+        logInfo(plato.precioVenta)
+        detalleDTO.subtotal += plato.precioVenta
+        logInfo(detalleDTO)
       })
-      .catch((err) => {
-        console.log("Error -> detallesPedidos.domain -> createDetalle -> " + err);
-        reject(err);
-      });
+      .catch((error) => {
+        reject(error)
+      })
+      //detalleDTO.subtotal += 
+    }
+    for(reventa of pedidoData.reventas){
+  
+      detalleDTO.reventas.push(reventa)
+    }
+    
+    logInfo(detalleDTO.reventas[0])
   });
 }; //exports.createDetalle
 

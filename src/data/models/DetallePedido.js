@@ -5,7 +5,7 @@ const detallePedidoSchema = new mongoose.Schema({
   pedido: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Pedido",
-    required: true,
+    default: null,
   },
   platos: [
     {

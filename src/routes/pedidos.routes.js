@@ -1,5 +1,6 @@
 const pedidosDomain = require("../services/pedidos.services");
 const utils = require("../config/logger.config");
+const { logError, logWarning } = require("../config/logger.config");
 
 exports.createPedido = (req, res) => {
   const pedidoData = req.body;
@@ -105,7 +106,7 @@ exports.getPedidosByEstado = (req, res) => {
   } else if (req.originalUrl.includes("estado/entregados")) {
     estado = "entregado";
   } else {
-    utils.logWarning("Algo malió sal!! el estado es " + estado);
+    logWarning("Algo malió sal!! el estado es " + estado);
   }
   pedidosDomain
     .getPedidosByEstado(estado)
@@ -113,6 +114,6 @@ exports.getPedidosByEstado = (req, res) => {
       res.json(pedidos);
     })
     .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> getPedidosByEstado " + err);
+      logError("Error -> pedidos.routes -> getPedidosByEstado " + err);
     });
 }; //exports.getPedidos
