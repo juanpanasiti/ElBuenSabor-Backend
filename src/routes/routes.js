@@ -108,11 +108,15 @@ exports.assignRoutes = (app) => {
 
   //Pedidos
   app.post(URL_PEDIDOS + '/', pedidosRoutes.createPedido)
+  //Obtener por estados
   app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-proceso', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/preparados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-delivery', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/entregados', pedidosRoutes.getPedidosByEstado)
+  //Settear estados
+
 
   //Opciones para selects de los formularios
   app.get(URL_OPCIONES + '/unidades-medida', opcionesRoutes.getUnidadesMedida)

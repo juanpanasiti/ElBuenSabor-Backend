@@ -9,7 +9,7 @@ const detallePedidoSchema = new mongoose.Schema({
   },
   platos: [
     {
-      item: {
+      item_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Plato",
         required:true,
@@ -22,7 +22,7 @@ const detallePedidoSchema = new mongoose.Schema({
   ],
   reventas: [
     {
-      item: {
+      item_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ArticuloReventa",
         required: true,

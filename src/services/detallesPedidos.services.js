@@ -1,33 +1,35 @@
 const detallesDB = require("../data/db/detallesPedidos.db");
-const platoDB = require("../data/db/platos.db")
-const reventaDB = require('../data/db/reventas.db')
+const platosDB = require("../data/db/platos.db");
+const reventasDB = require("../data/db/reventas.db");
 const { newDetallePedidoDTO } = require("../data/dto/detallePedido.dto");
-const { logInfo } = require("../config/logger.config");
+const {
+  logInfo,
+  logError,
+  logWarning,
+  logSuccess,
+} = require("../config/logger.config");
 
-exports.createDetalle = (pedidoData) => {
-  const detalleDTO = newDetallePedidoDTO()
-  detalleDTO.subtotal = 0.0
+exports.createDetalle = async (pedidoData, pedidoID) => {
+  const detalleDTO = newDetallePedidoDTO();
+  detalleDTO.pedido = pedidoID;
+  detalleDTO.subtotal = 0.0;
+  detalleDTO.platos = pedidoData.platos;
+  detalleDTO.reventas = pedidoData.reventas;
+
+  //Calcular costo del pedido
+  await calcularCosto(detalleDTO, pedidoData);
+
   return new Promise((resolve, reject) => {
-
-    for(plato of pedidoData.platos){
-      detalleDTO.platos.push(plato)
-      platoDB.getPlatoById(plato.item_id)
-      .then((plato) => {
-        logInfo(plato.precioVenta)
-        detalleDTO.subtotal += plato.precioVenta
-        logInfo(detalleDTO)
+    detallesDB
+      .saveDetalle(detalleDTO)
+      .then((detalleG) => {
+        logSuccess(detalleG);
+        resolve(detalleG);
       })
       .catch((error) => {
-        reject(error)
-      })
-      //detalleDTO.subtotal += 
-    }
-    for(reventa of pedidoData.reventas){
-  
-      detalleDTO.reventas.push(reventa)
-    }
-    
-    logInfo(detalleDTO.reventas[0])
+        logError(`detallesPedidos.services -> createDetalle() -> ${error}`);
+        reject(error);
+      });
   });
 }; //exports.createDetalle
 
@@ -53,7 +55,9 @@ exports.getDetalleById = (id) => {
         resolve(detalle);
       })
       .catch((err) => {
-        console.log("Error -> detallesPedidos.domain -> getDetalleById ->" + err);
+        console.log(
+          "Error -> detallesPedidos.domain -> getDetalleById ->" + err
+        );
         reject(err);
       });
   });
@@ -104,3 +108,44 @@ exports.hardDeleteDetalle = (id) => {
       });
   });
 }; //exports.hardDeleteDetalle
+
+/////////////////////////////////
+async function calcularCosto(detalleDTO, pedidoData) {
+  let costo = 0;
+
+  //Calcular costo de los platos
+  for (const platoPD of pedidoData.platos) {
+    promise = new Promise((resolve, reject) => {
+      platosDB
+        .getPlatoById(platoPD.item_id)
+        .then((plato) => {
+          logWarning(plato.precioVenta);
+          resolve(plato.precioVenta * platoPD.cantidad);
+        })
+        .catch((error) => {
+          logError(error);
+          reject(0);
+        });
+    }); //promise
+    costo += await promise;
+  } //for()
+
+  //Calcular costo de los articulos de reventa
+  for (const reventaPD of pedidoData.reventas) {
+    promise = new Promise((resolve, reject) => {
+      reventasDB
+        .getReventaById(reventaPD.item_id)
+        .then((reventa) => {
+          logWarning(reventa.precioVenta);
+          resolve(reventa.precioVenta * reventaPD.cantidad);
+        })
+        .catch((error) => {
+          logError(error);
+          reject(0);
+        });
+    }); //promise
+    costo += await promise;
+  } //for()
+  //asigno el costo calculado al total del pedido
+  detalleDTO.subtotal = costo;
+}

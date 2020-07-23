@@ -24,9 +24,6 @@ exports.countPedidos = () => {
 exports.savePedido = (pedidoData) => {
   return new Promise((resolve, reject) => {
     const pedido = new Pedido(pedidoData);
-    pedido.estado = "pendiente";
-    //pedido.horaFinEstimada =
-    //pedido.numero =
     pedido
       .save()
       .then((pedido) => {

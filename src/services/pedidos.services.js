@@ -1,8 +1,13 @@
 const pedidosDB = require("../data/db/pedidos.db");
 const platosDB = require("../data/db/platos.db");
-const reventasDB = require('../data/db/reventas.db')
+const reventasDB = require("../data/db/reventas.db");
 const detallePedidoService = require("./detallesPedidos.services");
-const { logInfo, logWarning, logError } = require("../config/logger.config");
+const {
+  logInfo,
+  logWarning,
+  logError,
+  logSuccess,
+} = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
 
@@ -19,20 +24,42 @@ exports.createPedido = async (pedidoData) => {
   await calcularDemora(pedidoDTO, pedidoData.platos);
 
   //Calcular costo del pedido
-  await calcularCosto(pedidoDTO,pedidoData)
+  await calcularCosto(pedidoDTO, pedidoData);
 
   //logInfo(pedidoDTO)
   return new Promise((resolve, reject) => {
     pedidosDB.countPedidos().then((count) => {
       pedidoDTO.numero = ++count;
-      
-      logWarning(pedidoDTO)
-      //Crear nuevo pedido
-      // pedidosDB.savePedido(pedidoDTO)
-      // .then((pedidoG) => {
-      //   detallePedidoService.createDetalle(pedidoData);
 
-      // });
+      logWarning(pedidoDTO);
+      //Crear nuevo pedido
+      pedidosDB
+        .savePedido(pedidoDTO)
+        .then((pedidoG) => {
+          detallePedidoService
+            .createDetalle(pedidoData, pedidoG._id)
+            .then((detalleG) => {
+              pedidoG.detalle = detalleG._id;
+              pedidosDB
+                .updatePedido(pedidoG._id, pedidoG)
+                .then((pedido) => {
+                  logSuccess(pedido);
+                  resolve(pedido);
+                })
+                .catch((error) => {
+                  logError(error);
+                  reject(error);
+                });
+            })
+            .catch((error) => {
+              logError(error);
+              reject(error);
+            });
+        })
+        .catch((error) => {
+          logError(error);
+          reject(error);
+        });
     });
   });
 }; //exports.createPedido
@@ -143,7 +170,7 @@ async function calcularDemora(pedidoDTO, platosPedido) {
   let promise = new Promise((resolve, reject) => {
     resolve(pedidoDTO.delivery ? 10 : 0);
   });
-  //Los 10 minutos deberían sumarse en otro lado ya que cuando está en 
+  //Los 10 minutos deberían sumarse en otro lado ya que cuando está en
   //delivery no afecta al tiempo de cocina de los demas platos
 
   demora += await promise;
@@ -189,8 +216,8 @@ async function calcularDemora(pedidoDTO, platosPedido) {
   pedidoDTO.minutosDemora = demora;
 } //calcularDemora()
 
-async function calcularCosto(pedidoDTO, pedidoData){
-  let costo = 0
+async function calcularCosto(pedidoDTO, pedidoData) {
+  let costo = 0;
 
   //Calcular costo de los platos
   for (const platoPD of pedidoData.platos) {
@@ -212,7 +239,8 @@ async function calcularCosto(pedidoDTO, pedidoData){
   //Calcular costo de los articulos de reventa
   for (const reventaPD of pedidoData.reventas) {
     promise = new Promise((resolve, reject) => {
-      reventasDB.getReventaById(reventaPD.item_id)
+      reventasDB
+        .getReventaById(reventaPD.item_id)
         .then((reventa) => {
           logWarning(reventa.precioVenta);
           resolve(reventa.precioVenta * reventaPD.cantidad);
@@ -226,9 +254,9 @@ async function calcularCosto(pedidoDTO, pedidoData){
   } //for()
 
   //Asigno descuento si corresponde (en caso de retiro en local)
-  if(!pedidoDTO.delivery){
-    costo *= 0.9
+  if (!pedidoDTO.delivery) {
+    costo *= 0.9;
   }
   //asigno el costo calculado al total del pedido
-  pedidoDTO.total = costo
+  pedidoDTO.total = costo;
 }
