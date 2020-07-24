@@ -109,13 +109,26 @@ exports.assignRoutes = (app) => {
   //Pedidos
   app.post(URL_PEDIDOS + '/', pedidosRoutes.createPedido)
   //Obtener por estados
-  app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
+  app.get(URL_PEDIDOS + '/estado/aprobados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-proceso', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/preparados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/en-delivery', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/entregados', pedidosRoutes.getPedidosByEstado)
-  //Settear estados
+  //Actualizar estado del pedido
+  app.put(URL_PEDIDOS + '/cancelar/:id', pedidosRoutes.updateEstadoPedido)
+  app.put(URL_PEDIDOS + '/aprobar/:id', pedidosRoutes.updateEstadoPedido)
+  app.put(URL_PEDIDOS + '/comenzar/:id', pedidosRoutes.updateEstadoPedido)
+  app.put(URL_PEDIDOS + '/terminar/:id', pedidosRoutes.updateEstadoPedido)
+  app.put(URL_PEDIDOS + '/enviar/:id', pedidosRoutes.updateEstadoPedido)
+  app.put(URL_PEDIDOS + '/entregar/:id', pedidosRoutes.updateEstadoPedido)
+  //
+  app.put(URL_PEDIDOS + '/facturar')
+  app.put(URL_PEDIDOS + '/agregar-item')
+  //Otras consultas
+  app.put(URL_PEDIDOS + '/:email')
+
 
 
   //Opciones para selects de los formularios

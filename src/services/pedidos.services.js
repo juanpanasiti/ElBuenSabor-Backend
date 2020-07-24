@@ -15,7 +15,7 @@ exports.createPedido = async (pedidoData) => {
   const pedidoDTO = newPedidoDTO();
   //Llenar datos al DTO
   pedidoDTO.fecha = Date.now();
-  pedidoDTO.estado = estadoPedido()[0].toLowerCase();
+  pedidoDTO.estado = estadoPedido()[1].toLowerCase();
   pedidoDTO.delivery = pedidoData.delivery;
   pedidoDTO.formaPago = pedidoData.formaPago;
   pedidoDTO.usuario = pedidoData.usuario;
@@ -162,6 +162,29 @@ exports.getPedidosByEstado = (estado) => {
       });
   });
 }; //exports.getPedidosByEstado
+
+exports.updateEstadoPedido = (id, estado) => {
+  return new Promise((resolve, reject) => {
+    pedidosDB
+      .getPedidoById(id)
+      .then((pedido) => {
+        pedido.estado = estado;
+        pedidosDB
+          .updatePedido(pedido._id, pedido)
+          .then((pedido) => {
+            resolve(pedido);
+          })
+          .catch((error) => {
+            logError(`${error}`);
+            reject(error);
+          });
+      })
+      .catch((error) => {
+        logError(`${error}`);
+        reject(error);
+      });
+  });
+}; //exports.updatePedido
 
 ///////////funciones
 async function calcularDemora(pedidoDTO, platosPedido) {
