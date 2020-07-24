@@ -174,7 +174,7 @@ exports.getPedidosByEstado = (estado) => {
 exports.getPedidosPendientesAnteriores = (fecha) => {
   return new Promise((resolve, reject) => {
     Pedido.find({
-      $or: [{ estado: "pendiente" }, { estado: "en proceso" }],
+      $or: [{ estado: "pendiente" }, { estado: "en proceso" }, { estado: "aprobado" }],
       fecha: { $lt: fecha },
     })
       .then((pedidos) => {
