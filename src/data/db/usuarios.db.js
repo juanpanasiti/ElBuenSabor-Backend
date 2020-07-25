@@ -77,7 +77,11 @@ exports.getUsuarioByEmail = (email) => {
       .populate("roles")
       .populate("domicilios")
       .then((usuario) => {
-        logSuccess("Encontrado usuario " + usuario.email);
+        if(usuario){
+          logSuccess("Encontrado usuario " + usuario.email);
+        }else {
+          logWarning(`No se encontró el usuario ${email}, se lo registrará como nuevo usuario.`)
+        }
         resolve(usuario);
       })
       .catch((err) => {
