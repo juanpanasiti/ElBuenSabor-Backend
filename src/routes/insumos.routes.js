@@ -1,38 +1,39 @@
-const insumosDomain = require("../services/insumos.services");
+const insumosService = require("../services/insumos.services");
+const { logError } = require("../config/logger.config");
 
 exports.createInsumo = (req, res) => {
   const insumoData = req.body;
 
-  insumosDomain
+  insumosService
     .createInsumo(insumoData)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> createInsumo " + err);
+      logError("Error -> insumos.routes -> createInsumo " + err);
       res.status(400).json(err);
     });
 }; //exports.createInsumo
 
 exports.getInsumos = (req, res) => {
-  insumosDomain
+  insumosService
     .getInsumos()
     .then((insumos) => {
       res.json(insumos);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> getInsumos " + err);
+      logError("Error -> insumos.routes -> getInsumos " + err);
     });
 }; //exports.getInsumos
 
 exports.getInsumo = (req, res) => {
-  insumosDomain
+  insumosService
     .getInsumoById(req.params.id)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> getInsumo " + err);
+      logError("Error -> insumos.routes -> getInsumo " + err);
 
       res.status(400).json(err);
     });
@@ -40,50 +41,50 @@ exports.getInsumo = (req, res) => {
 
 exports.updateInsumo = (req, res) => {
   const insumoData = req.body;
-  insumosDomain
+  insumosService
     .updateInsumo(req.params.id, insumoData)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> updateInsumo " + err);
+      logError("Error -> insumos.routes -> updateInsumo " + err);
 
       res.status(400).json(err);
     });
 }; //exports.updateInsumo
 
 exports.softdeleteInsumo = (req, res) => {
-  insumosDomain
+  insumosService
     .setBorradoInsumo(req.params.id, true)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> softdeleteInsumo -> " + err);
+      logError("Error -> insumos.routes -> softdeleteInsumo -> " + err);
       res.json(err);
     });
 }; //exports.softdeleteInsumo
 
 exports.softundeleteInsumo = (req, res) => {
-  insumosDomain
+  insumosService
     .setBorradoInsumo(req.params.id, false)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> softundeleteInsumo -> " + err);
+      logError("Error -> insumos.routes -> softundeleteInsumo -> " + err);
       res.json(err);
     });
 }; //exports.softundeleteInsumo
 
 exports.hardDeleteInsumo = (req, res) => {
-  insumosDomain
+  insumosService
     .hardDeleteInsumo(req.params.id)
     .then((insumo) => {
       res.json(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.routes -> hardDeleteInsumo -> " + err);
+      logError("Error -> insumos.routes -> hardDeleteInsumo -> " + err);
       res.json(err);
     });
 }; //exports.hardDeleteInsumo

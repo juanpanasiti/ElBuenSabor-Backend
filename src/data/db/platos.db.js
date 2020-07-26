@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const utils = require("../../config/logger.config");
+const { logError, logSuccess, logInfo } = require("../../config/logger.config");
 require("../models/Plato");
 
 //Registrar Schema
@@ -14,11 +15,11 @@ exports.savePlato = (platoData) => {
     plato
       .save()
       .then((plato) => {
-        console.log("plato guardada");
+        logSuccess(`Plato ${plato.denominacion} guardado.`);
         resolve(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> savePlato -> " + err);
+        logError("Error -> platos.db -> savePlato -> " + err);
         reject(err);
       });
   });
@@ -31,11 +32,11 @@ exports.getPlatos = () => {
       .populate("ingredientes")
       .populate("rubro")
       .then((platos) => {
-        console.log(`Encontrados ${platos.length} platos`);
+        logInfo(`Encontrados ${platos.length} platos`);
         resolve(platos);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> getPlatos -> " + err);
+        logError("Error -> platos.db -> getPlatos -> " + err);
         reject(err);
       });
   });
@@ -51,7 +52,7 @@ exports.getPlatoById = (id) => {
         resolve(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> getPlatoById -> " + err);
+        logError("Error -> platos.db -> getPlatoById -> " + err);
         reject(err);
       });
   });
@@ -65,7 +66,7 @@ exports.updatePlato = (id, platoData) => {
         resolve(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> updatePlato " + err);
+        logError("Error -> platos.db -> updatePlato " + err);
         reject(err);
       });
   });
@@ -79,7 +80,7 @@ exports.setBorradoPlato = (id, borrado) => {
         resolve(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> setBorradoPlato -> " + err);
+        logError("Error -> platos.db -> setBorradoPlato -> " + err);
         reject(err);
       });
   });
@@ -93,7 +94,7 @@ exports.hardDeletePlato = (id) => {
         resolve(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.db -> hardDeletePlato -> " + err);
+        logError("Error -> platos.db -> hardDeletePlato -> " + err);
         reject(err);
       });
   });
@@ -106,7 +107,7 @@ exports.addIngrediente = (ingredienteId, platoId) => {
     this.getPlatoById(platoId)
       .then((plato) => {
         plato.ingredientes.push(ingredienteId);
-        console.log("Agregado ingrediente a " + plato.denominacion);
+        logSuccess("Agregado ingrediente a " + plato.denominacion);
         this.updatePlato(platoId, plato)
           .then((platoEd) => {
             resolve(platoEd);

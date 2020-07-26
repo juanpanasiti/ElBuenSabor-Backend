@@ -1,22 +1,23 @@
-const rubrosDomain = require("../services/rubros.services");
+const rubrosService = require("../services/rubros.services");
+const { logError } = require("../config/logger.config");
 
 exports.createRubro = (req, res) => {
     const rubroData = req.body;
     
-    rubrosDomain
+    rubrosService
         .createRubro(rubroData)
         .then((rubro) => {
             res.json(rubro);
         })
         .catch((err) => {
-            console.log("Error en rubro.routes -> createRubro " + err);
+            logError("Error -> rubro.routes -> createRubro " + err);
             res.status(400).json(err);
         });
 }; //exports.createRubro
 
 exports.getRubrosRaiz = (req, res) => {
-    rubrosDomain
-        .getRubrosPorPadre("")
+    rubrosService
+        .getRubrosPorPadre(null)
         .then((rubros) => {
             res.json(rubros);
         })
@@ -26,7 +27,7 @@ exports.getRubrosRaiz = (req, res) => {
 }; //exports.getRubrosRaiz
 
 exports.getRubrosHijos = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubrosPorPadre(req.params.id)
         .then((rubros) => {
             res.json(rubros);
@@ -37,7 +38,7 @@ exports.getRubrosHijos = (req, res) => {
 }; //exports.getRubrosRaiz
 
 exports.getRubros = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubros(false)
         .then((rubros) => {
             res.json(rubros);
@@ -48,7 +49,7 @@ exports.getRubros = (req, res) => {
 }; //exports.getRubros
 
 exports.getRubrosBorrados = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubros(true)
         .then((rubros) => {
             res.json(rubros);
@@ -59,7 +60,7 @@ exports.getRubrosBorrados = (req, res) => {
 }; //exports.getRubros
 
 exports.getRubrosInsumo = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubrosPorTipo(true) //True para insumos, false para catálogo
         .then((rubros) => {
             res.json(rubros);
@@ -70,7 +71,7 @@ exports.getRubrosInsumo = (req, res) => {
 }; //exports.getRubrosInsumo
 
 exports.getRubrosCatalogo = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubrosPorTipo(false) //True para insumos, false para catálogo
         .then((rubros) => {
             res.json(rubros);
@@ -81,7 +82,7 @@ exports.getRubrosCatalogo = (req, res) => {
 }; //exports.getRubrosInsumo
 
 exports.getRubro = (req, res) => {
-    rubrosDomain
+    rubrosService
         .getRubro(req.params.id)
         .then((rubro) => {
             res.json(rubro);
@@ -93,7 +94,7 @@ exports.getRubro = (req, res) => {
 
 exports.updateRubro = (req, res) => {
     const rubroData = req.body;
-    rubrosDomain
+    rubrosService
         .updateRubro(req.params.id, rubroData)
         .then((rubro) => {
             res.json(rubro);
@@ -106,7 +107,7 @@ exports.updateRubro = (req, res) => {
 }; //exports.updateRubro
 
 exports.softDeleteRubro = (req, res) => {
-    rubrosDomain
+    rubrosService
         .setBorradoRubro(req.params.id, true)
         .then((rubro) => {
             res.json(rubro);
@@ -117,7 +118,7 @@ exports.softDeleteRubro = (req, res) => {
 }; //exports.softDeleteRubro
 
 exports.softUndeleteRubro = (req, res) => {
-    rubrosDomain
+    rubrosService
         .setBorradoRubro(req.params.id, false )
         .then((rubro) => {
             res.json(rubro);
@@ -128,7 +129,7 @@ exports.softUndeleteRubro = (req, res) => {
 }; //exports.softUndeleteRubro
 
 exports.hardDeleteRubro = (req, res) => {
-    rubrosDomain
+    rubrosService
         .hardDeleteRubro(req.params.id)
         .then((rubro) => {
             res.json(rubro);

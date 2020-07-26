@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { logSuccess, logError, logInfo } = require("../../config/logger.config");
 require("../models/ArticuloInsumo");
 
 //Registrar Schema
@@ -13,11 +14,11 @@ exports.saveInsumo = (insumoData) => {
     insumo
       .save()
       .then((insumo) => {
-        console.log("Insumo guardado");
+        logSuccess("Insumo guardado");
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> saveRubro -> " + err);
+        logError("Error -> insumos.db -> saveRubro -> " + err);
         reject(err);
       });
   });
@@ -29,11 +30,11 @@ exports.getInsumos = () => {
     Insumo.find({ borrado: false })
       .populate("rubro")
       .then((insumos) => {
-        console.log(`Encontrados ${insumos.length} insumos`);
+        logInfo(`Encontrados ${insumos.length} insumos`);
         resolve(insumos);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> getInsumos -> " + err);
+        logError("Error -> insumos.db -> getInsumos -> " + err);
         reject(err);
       });
   });
@@ -52,7 +53,7 @@ exports.getInsumoById = (insumoId) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> getInsumoById -> " + err);
+        logError("Error -> insumos.db -> getInsumoById -> " + err);
         reject(err);
       });
   });
@@ -66,7 +67,7 @@ exports.updateInsumo = (id, insumoData) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> updateInsumo " + err);
+        logError("Error -> insumos.db -> updateInsumo " + err);
         reject(err);
       });
   });
@@ -80,7 +81,7 @@ exports.setBorradoInsumo = (id, borrado) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> setBorradoInsumo -> " + err);
+        logError("Error -> insumos.db -> setBorradoInsumo -> " + err);
         reject(err);
       });
   });
@@ -94,7 +95,7 @@ exports.hardDeleteInsumo = (id) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.db -> hardDeleteInsumo -> " + err);
+        logError("Error -> insumos.db -> hardDeleteInsumo -> " + err);
         reject(err);
       });
   });

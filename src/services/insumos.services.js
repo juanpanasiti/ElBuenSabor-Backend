@@ -1,4 +1,5 @@
 const insumosDB = require("../data/db/insumos.db");
+const { logError } = require("../config/logger.config");
 
 exports.createInsumo = (insumoData) => {
   return new Promise((resolve, reject) => {
@@ -8,7 +9,7 @@ exports.createInsumo = (insumoData) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.domain -> createInsumo -> " + err);
+        logError("Error -> insumos.services -> createInsumo -> " + err);
         reject(err);
       });
   });
@@ -22,7 +23,7 @@ exports.getInsumos = () => {
         resolve(insumos);
       })
       .catch((err) => {
-        console.log("Error -> insumos.domain -> getInsumos -> " + err);
+        logError("Error -> insumos.services -> getInsumos -> " + err);
         reject(err);
       });
   });
@@ -35,7 +36,7 @@ exports.getInsumoById = (insumoId) => {
       resolve(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.domain -> getInsumoById ->" + err);
+      logError("Error -> insumos.services -> getInsumoById ->" + err);
       reject(err);
     });
   })
@@ -49,7 +50,7 @@ exports.updateInsumo = (id, insumoData) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.domain -> updateInsumo " + err);
+        logError("Error -> insumos.services -> updateInsumo " + err);
         reject(err);
       });
   });
@@ -63,7 +64,7 @@ exports.setBorradoInsumo = (id, borrado) => {
         resolve(insumo);
       })
       .catch((err) => {
-        console.log("Error -> insumos.domain -> setBorradoInsumo -> " + err);
+        logError("Error -> insumos.services -> setBorradoInsumo -> " + err);
         reject(err);
       });
   });
@@ -77,7 +78,7 @@ exports.hardDeleteInsumo = (id) => {
       resolve(insumo);
     })
     .catch((err) => {
-      console.log("Error -> insumos.domain -> hardDeleteInsumo -> " + err);
+      logError("Error -> insumos.services -> hardDeleteInsumo -> " + err);
       reject(err);
     });
   })

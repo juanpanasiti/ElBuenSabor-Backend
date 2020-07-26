@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { logError, logSuccess } = require("../../config/logger.config");
 require("../models/Rubro");
 
 //Registrar Schema
@@ -16,11 +17,11 @@ exports.saveRubro = (rubroData) => {
     rubro
       .save()
       .then((rubro) => {
-        console.log("Rubro guardado con id: " + rubro._id);
+        logSuccess("Rubro guardado con id: " + rubro._id);
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> saveRubro() -> " + err);
+        logError("Error -> rubros.db -> saveRubro() -> " + err);
         reject(err);
       });
   });
@@ -32,11 +33,11 @@ exports.getRubrosPorPadre = (idPadre) => {
     Rubro.find({ rubroPadre: idPadre, borrado: false })
       .populate("rubroPadre")
       .then((rubros) => {
-        console.log(`Encontrados ${rubros.length} rubros`);
+        logSuccess(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> getRubrosPorPadre() -> " + err);
+        logError("Error -> rubros.db -> getRubrosPorPadre() -> " + err);
         reject(err);
       });
   });
@@ -48,11 +49,11 @@ exports.getRubros = (estaBorrado) => {
     Rubro.find({ borrado: estaBorrado })
       .populate("rubroPadre")
       .then((rubros) => {
-        console.log(`Encontrados ${rubros.length} rubros`);
+        logSuccess(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> getRubros() -> " + err);
+        logError("Error -> rubros.db -> getRubros() -> " + err);
         reject(err);
       });
   });
@@ -64,11 +65,11 @@ exports.getRubrosPorTipo = (esDeInsumo) => {
     Rubro.find({ esRubroInsumo: esDeInsumo, borrado: false })
       .populate("rubroPadre")
       .then((rubros) => {
-        console.log(`Encontrados ${rubros.length} rubros`);
+        logSuccess(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> getRubrosPorTipo() -> " + err);
+        logError("Error -> rubros.db -> getRubrosPorTipo() -> " + err);
         reject(err);
       });
   });
@@ -80,11 +81,11 @@ exports.getRubro = (id) => {
     Rubro.findById(id)
       .populate("rubroPadre")
       .then((rubro) => {
-        console.log(`Encontrado el rubro ${rubro.denominacion}.`);
+        logSuccess(`Encontrado el rubro ${rubro.denominacion}.`);
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> getRubro() -> " + err);
+        logError("Error -> rubros.db -> getRubro() -> " + err);
         reject(err);
       });
   });
@@ -98,7 +99,7 @@ exports.updateRubro = (id, rubroData) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> updateRubro() -> " + err);
+        logError("Error -> rubros.db -> updateRubro() -> " + err);
         reject(err);
       });
   });
@@ -112,7 +113,7 @@ exports.setBorradoRubro = (id, borrado) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> setBorradoRubro() -> " + err);
+        logError("Error -> rubros.db -> setBorradoRubro() -> " + err);
         reject(err);
       });
   });
@@ -126,7 +127,7 @@ exports.hardDeleteRubro = (id) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error -> rubros.db -> hardDeleteRubro() -> " + err);
+        logError("Error -> rubros.db -> hardDeleteRubro() -> " + err);
         reject(err);
       });
   });

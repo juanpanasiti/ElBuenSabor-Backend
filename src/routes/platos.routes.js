@@ -1,37 +1,38 @@
-const platosDomain = require("../services/platos.services");
+const platosService = require("../services/platos.services");
+const { logError } = require("../config/logger.config");
 exports.createPlato = (req, res) => {
     const platoData = req.body;
   
-    platosDomain
+    platosService
       .createPlato(platoData)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> createPlato " + err);
+        logError("Error -> platos.routes -> createPlato " + err);
         res.status(400).json(err);
       });
   }; //exports.createPlato
   
   exports.getPlatos = (req, res) => {
-    platosDomain
+    platosService
       .getPlatos()
       .then((platos) => {
         res.json(platos);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> getPlatos " + err);
+        logError("Error -> platos.routes -> getPlatos " + err);
       });
   }; //exports.getPlatos
   
   exports.getPlato = (req, res) => {
-    platosDomain
+    platosService
       .getPlatoById(req.params.id)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> getPlato " + err);
+        logError("Error -> platos.routes -> getPlato " + err);
   
         res.status(400).json(err);
       });
@@ -39,50 +40,50 @@ exports.createPlato = (req, res) => {
   
   exports.updatePlato = (req, res) => {
     const platoData = req.body;
-    platosDomain
+    platosService
       .updatePlato(req.params.id, platoData)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> updatePlato " + err);
+        logError("Error -> platos.routes -> updatePlato " + err);
   
         res.status(400).json(err);
       });
   }; //exports.updatePlato
   
   exports.softdeletePlato = (req, res) => {
-    platosDomain
+    platosService
       .setBorradoPlato(req.params.id, true)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> softdeletePlato -> " + err);
+        logError("Error -> platos.routes -> softdeletePlato -> " + err);
         res.json(err);
       });
   }; //exports.softdeletePlato
   
   exports.softundeletePlato = (req, res) => {
-    platosDomain
+    platosService
       .setBorradoPlato(req.params.id, false)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> softundeletePlato -> " + err);
+        logError("Error -> platos.routes -> softundeletePlato -> " + err);
         res.json(err);
       });
   }; //exports.softundeletePlato
   
   exports.hardDeletePlato = (req, res) => {
-    platosDomain
+    platosService
       .hardDeletePlato(req.params.id)
       .then((plato) => {
         res.json(plato);
       })
       .catch((err) => {
-        console.log("Error -> platos.routes -> hardDeletePlato -> " + err);
+        logError("Error -> platos.routes -> hardDeletePlato -> " + err);
         res.json(err);
       });
   }; //exports.hardDeletePlato

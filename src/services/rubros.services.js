@@ -1,4 +1,5 @@
 const rubrosDB = require("../data/db/rubros.db");
+const { logError } = require("../config/logger.config");
 
 exports.createRubro = (rubroData) => {
   return new Promise((resolve, reject) => {
@@ -8,7 +9,7 @@ exports.createRubro = (rubroData) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error en rubro.domain -> createRubro " + err);
+        logError("Error en rubro.domain -> createRubro " + err);
         reject(err);
       });
   });
@@ -22,6 +23,7 @@ exports.getRubrosPorPadre = (idPadre) => {
         resolve(rubros);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> getRubrosPorPadre -> " + err);
         reject(err);
       });
   });
@@ -35,6 +37,7 @@ exports.getRubros = (borrado) => {
         resolve(rubros);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> getRubros -> " + err);
         reject(err);
       });
   });
@@ -48,6 +51,7 @@ exports.getRubrosPorTipo = (esDeInsumo) => {
         resolve(rubros);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> getRubrosPorTipo -> " + err);
         reject(err);
       });
   });
@@ -61,6 +65,7 @@ exports.getRubro = (id) => {
         resolve(rubro);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> getRubro -> " + err);
         reject(err);
       });
   });
@@ -74,7 +79,7 @@ exports.updateRubro = (id, rubroData) => {
         resolve(rubro);
       })
       .catch((err) => {
-        console.log("Error en rubro.domain -> updateRubro " + err);
+        logError("Error -> rubro.domain -> updateRubro " + err);
         reject(err);
       });
   });
@@ -88,6 +93,7 @@ exports.setBorradoRubro = (id, borrado) => {
         resolve(rubro);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> setBorradoRubro -> " + err);
         reject(err);
       });
   });
@@ -101,6 +107,7 @@ exports.hardDeleteRubro = (id) => {
         resolve(rubro);
       })
       .catch((err) => {
+        logError("Error -> rubro.domain -> hardDeleteRubro -> " + err);
         reject(err);
       });
   });
