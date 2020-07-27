@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { logInfo, logError, logSuccess } = require("../../config/logger.config");
 require("../models/ArticuloReventa");
 
 //Registrar Schema
@@ -13,11 +14,11 @@ exports.saveReventa = (reventaData) => {
     reventa
       .save()
       .then((reventa) => {
-        console.log("Guardado artículo de reventa ID: " + reventa._id);
+        logSuccess("Guardado artículo de reventa ID: " + reventa._id);
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> saveReventa -> " + err);
+        logError("Error -> reventas.db -> saveReventa -> " + err);
         reject(err);
       });
   });
@@ -29,16 +30,34 @@ exports.getReventas = () => {
     Reventa.find({ borrado: false })
       .populate("rubro")
       .then((reventas) => {
-        console.log(`Encontrados ${reventas.length} reventas`);
+        logInfo(`Encontrados ${reventas.length} reventas`);
         resolve(reventas);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> getReventas -> " + err);
+        logError("Error -> reventas.db -> getReventas -> " + err);
         reject(err);
       });
   });
 }; //exports.getReventas
 
+exports.getReventasParaComprar = () => {
+  return new Promise((resolve, reject) => {
+    Reventa.find({
+      $where: function () {
+        return this.stockActual < this.stockMinimo;
+      },
+    })
+      .populate("rubro")
+      .then((reventas) => {
+        logInfo(`Encontrados ${reventas.length} reventas.`);
+        resolve(reventas);
+      })
+      .catch((error) => {
+        logError("Error -> reventas.db -> getReventasParaComprar -> " + error);
+        reject(error);
+      });
+  });
+}; //exports.getReventasParaComprar
 //Obtener uno
 exports.getReventaById = (reventaId) => {
   return new Promise((resolve, reject) => {
@@ -48,7 +67,7 @@ exports.getReventaById = (reventaId) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> getReventaById -> " + err);
+        logError("Error -> reventas.db -> getReventaById -> " + err);
         reject(err);
       });
   });
@@ -62,7 +81,7 @@ exports.updateReventa = (id, reventaData) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> updateReventa " + err);
+        logError("Error -> reventas.db -> updateReventa " + err);
         reject(err);
       });
   });
@@ -76,7 +95,7 @@ exports.setBorradoReventa = (id, borrado) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> setBorradoReventa -> " + err);
+        logError("Error -> reventas.db -> setBorradoReventa -> " + err);
         reject(err);
       });
   });
@@ -90,7 +109,7 @@ exports.hardDeleteReventa = (id) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.db -> hardDeleteReventa -> " + err);
+        logError("Error -> reventas.db -> hardDeleteReventa -> " + err);
         reject(err);
       });
   });

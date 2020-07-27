@@ -14,7 +14,7 @@ exports.saveInsumo = (insumoData) => {
     insumo
       .save()
       .then((insumo) => {
-        logSuccess("Insumo guardado");
+        logSuccess(`Insumo '${insumo.denominacion}' guardado.`);
         resolve(insumo);
       })
       .catch((err) => {
@@ -40,7 +40,24 @@ exports.getInsumos = () => {
   });
 }; //exports.getInsumos
 
-//Obtener borrados
+//Obtener insumos con stock menor al mínimo
+exports.getInsumosParaComprar = () => {
+  return new Promise((resolve, reject) => {
+    logInfo('Buscando Insumos para comprar')
+    Insumo.find({$where: function() {
+      return(this.stockActual < this.stockMinimo)
+    }})
+      .populate("rubro")
+      .then((insumos) => {
+        logInfo(`Encontrados ${insumos.length} insumos.`)
+        resolve(insumos);
+      })
+      .catch((error) => {
+        logError("Error -> insumos.db -> getInsumosParaComprar -> " + error);
+        reject(error);
+      });
+  });
+}; //getInsumosParaComprar
 
 //Obtener por rubros ???
 
@@ -50,6 +67,7 @@ exports.getInsumoById = (insumoId) => {
     Insumo.findById(insumoId)
       .populate("rubro")
       .then((insumo) => {
+        logInfo(`Encontrado el insumo '${insumo.denominacion}'`);
         resolve(insumo);
       })
       .catch((err) => {
@@ -64,6 +82,7 @@ exports.updateInsumo = (id, insumoData) => {
   return new Promise((resolve, reject) => {
     Insumo.findByIdAndUpdate(id, insumoData, { new: true })
       .then((insumo) => {
+        logSuccess(`Actualizado el insumo '${insumo.denominacion}'`);
         resolve(insumo);
       })
       .catch((err) => {

@@ -23,8 +23,20 @@ exports.getInsumos = (req, res) => {
     })
     .catch((err) => {
       logError("Error -> insumos.routes -> getInsumos " + err);
+      res.status(404).json(err);
     });
 }; //exports.getInsumos
+
+exports.getInsumosParaComprar = (req,res) => {
+  insumosService.getInsumosParaComprar()
+  .then((insumos) => {
+    res.json(insumos)
+  })
+  .catch((error) => {
+    logError("Error -> insumos.routes -> getInsumos " + error);
+    res.status(404).json(error);
+  })
+}//getInsumosParaComprar
 
 exports.getInsumo = (req, res) => {
   insumosService

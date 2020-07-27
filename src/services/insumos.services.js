@@ -29,6 +29,19 @@ exports.getInsumos = () => {
   });
 }; //exports.getInsumos
 
+exports.getInsumosParaComprar = () => {
+  return new Promise((resolve,reject) => {
+    insumosDB.getInsumosParaComprar()
+    .then((insumos) => {
+      resolve(insumos)
+    })
+    .catch((error) => {
+      logError("Error -> insumos.services -> getInsumosParaComprar -> " + error);
+      reject(error)
+    })
+  })
+}//getInsumosParaComprar
+
 exports.getInsumoById = (insumoId) => {
   return new Promise((resolve, reject) => {
     insumosDB.getInsumoById(insumoId)

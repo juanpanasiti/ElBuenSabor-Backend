@@ -1,4 +1,5 @@
 const reventasDB = require("../data/db/reventas.db");
+const { logError } = require("../config/logger.config");
 
 exports.createReventa = (reventaData) => {
   return new Promise((resolve, reject) => {
@@ -8,7 +9,7 @@ exports.createReventa = (reventaData) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> createReventa -> " + err);
+        logError("Error -> reventas.domain -> createReventa -> " + err);
         reject(err);
       });
   });
@@ -22,11 +23,24 @@ exports.getReventas = () => {
         resolve(reventas);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> getReventas -> " + err);
+        logError("Error -> reventas.domain -> getReventas -> " + err);
         reject(err);
       });
   });
 }; //exports.getReventas
+
+exports.getReventasParaComprar = () => {
+  return new Promise((resolve,reject) => {
+    reventasDB.getReventasParaComprar()
+    .then((reventas) => {
+      resolve(reventas)
+    })
+    .catch((error) => {
+      logError("Error -> reventas.services -> getReventasParaComprar -> " + error);
+      reject(error)
+    })
+  })
+}//getReventasParaComprar
 
 exports.getReventaById = (reventaId) => {
   return new Promise((resolve, reject) => {
@@ -36,7 +50,7 @@ exports.getReventaById = (reventaId) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> getReventaById ->" + err);
+        logError("Error -> reventas.domain -> getReventaById ->" + err);
         reject(err);
       });
   });
@@ -50,7 +64,7 @@ exports.updateReventa = (id, reventaData) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> updateReventa " + err);
+        logError("Error -> reventas.domain -> updateReventa " + err);
         reject(err);
       });
   });
@@ -64,7 +78,7 @@ exports.setBorradoReventa = (id, borrado) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> setBorradoReventa -> " + err);
+        logError("Error -> reventas.domain -> setBorradoReventa -> " + err);
         reject(err);
       });
   });
@@ -78,7 +92,7 @@ exports.hardDeleteReventa = (id) => {
         resolve(reventa);
       })
       .catch((err) => {
-        console.log("Error -> reventas.domain -> hardDeleteReventa -> " + err);
+        logError("Error -> reventas.domain -> hardDeleteReventa -> " + err);
         reject(err);
       });
   });
