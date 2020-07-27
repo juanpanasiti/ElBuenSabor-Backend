@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/DetalleIngrediente");
 const platosDB = require("../db/platos.db");
+const { logError, logInfo, logSuccess } = require("../../config/logger.config");
 
 //Registrar Schema
 const Ingrediente = mongoose.model("DetalleIngrediente");
@@ -19,7 +20,7 @@ exports.saveIngrediente = (ingredienteData) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.db -> saveIngrediente -> " + err);
+        logError("Error -> ingredientes.db -> saveIngrediente -> " + err);
         reject(err);
       });
   });
@@ -32,11 +33,11 @@ exports.getIngredientes = () => {
       .populate("plato")
       .populate("insumo")
       .then((ingredientes) => {
-        console.log(`Encontrados ${ingredientes.length} ingredientes`);
+        logInfo(`Encontrados ${ingredientes.length} ingredientes`);
         resolve(ingredientes);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.db -> getIngredientes -> " + err);
+        logError("Error -> ingredientes.db -> getIngredientes -> " + err);
         reject(err);
       });
   });
@@ -49,10 +50,11 @@ exports.getIngredienteById = (id) => {
       .populate("plato")
       .populate("insumo")
       .then((ingrediente) => {
+        logInfo(`Encontrado el ingrediente '${ingrediente.insumo.denominacion}' del plato '${ingrediente.plato.denominacion}'`)
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.db -> getIngredienteById -> " + err);
+        logError("Error -> ingredientes.db -> getIngredienteById -> " + err);
         reject(err);
       });
   });
@@ -66,7 +68,7 @@ exports.updateIngrediente = (id, ingredienteData) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.db -> updateIngrediente " + err);
+        logError("Error -> ingredientes.db -> updateIngrediente " + err);
         reject(err);
       });
   });
@@ -86,9 +88,7 @@ exports.setBorradoIngrediente = (id, borrado) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.db -> setBorradoIngrediente -> " + err
-        );
+        logError("Error -> ingredientes.db -> setBorradoIngrediente -> " + err);
         reject(err);
       });
   });
@@ -103,9 +103,7 @@ exports.hardDeleteIngrediente = (id) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.db -> hardDeleteIngrediente -> " + err
-        );
+        logError("Error -> ingredientes.db -> hardDeleteIngrediente -> " + err);
         reject(err);
       });
   });

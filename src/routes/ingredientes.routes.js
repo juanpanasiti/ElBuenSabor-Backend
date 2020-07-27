@@ -1,38 +1,39 @@
-const ingredientesDomain = require("../services/ingredientes.services");
+const ingredientesService = require("../services/ingredientes.services");
+const { logError } = require("../config/logger.config");
 
 exports.createIngrediente = (req, res) => {
   const ingredienteData = req.body;
 
-  ingredientesDomain
+  ingredientesService
     .createIngrediente(ingredienteData)
     .then((ingrediente) => {
       res.json(ingrediente);
     })
     .catch((err) => {
-      console.log("Error -> ingredientes.routes -> createIngrediente " + err);
+      logError("Error -> ingredientes.routes -> createIngrediente " + err);
       res.status(400).json(err);
     });
 }; //exports.createIngrediente
 
 exports.getIngredientes = (req, res) => {
-  ingredientesDomain
+  ingredientesService
     .getIngredientes()
     .then((ingredientes) => {
       res.json(ingredientes);
     })
     .catch((err) => {
-      console.log("Error -> ingredientes.routes -> getIngredientes " + err);
+      logError("Error -> ingredientes.routes -> getIngredientes " + err);
     });
 }; //exports.getIngredientes
 
 exports.getIngrediente = (req, res) => {
-  ingredientesDomain
+  ingredientesService
     .getIngredienteById(req.params.id)
     .then((ingrediente) => {
       res.json(ingrediente);
     })
     .catch((err) => {
-      console.log("Error -> ingredientes.routes -> getIngrediente " + err);
+      logError("Error -> ingredientes.routes -> getIngrediente " + err);
 
       res.status(400).json(err);
     });
@@ -40,26 +41,26 @@ exports.getIngrediente = (req, res) => {
 
 exports.updateIngrediente = (req, res) => {
   const ingredienteData = req.body;
-  ingredientesDomain
+  ingredientesService
     .updateIngrediente(req.params.id, ingredienteData)
     .then((ingrediente) => {
       res.json(ingrediente);
     })
     .catch((err) => {
-      console.log("Error -> ingredientes.routes -> updateIngrediente " + err);
+      logError("Error -> ingredientes.routes -> updateIngrediente " + err);
 
       res.status(400).json(err);
     });
 }; //exports.updateIngrediente
 
 exports.softdeleteIngrediente = (req, res) => {
-  ingredientesDomain
+  ingredientesService
     .setBorradoIngrediente(req.params.id, true)
     .then((ingrediente) => {
       res.json(ingrediente);
     })
     .catch((err) => {
-      console.log(
+      logError(
         "Error -> ingredientes.routes -> softdeleteIngrediente -> " + err
       );
       res.json(err);
@@ -67,13 +68,13 @@ exports.softdeleteIngrediente = (req, res) => {
 }; //exports.softdeleteIngrediente
 
 exports.softundeleteIngrediente = (req, res) => {
-  ingredientesDomain
+  ingredientesService
     .setBorradoIngrediente(req.params.id, false)
     .then((ingrediente) => {
       res.json(ingrediente);
     })
     .catch((err) => {
-      console.log(
+      logError(
         "Error -> ingredientes.routes -> softundeleteIngrediente -> " + err
       );
       res.json(err);
@@ -81,13 +82,13 @@ exports.softundeleteIngrediente = (req, res) => {
 }; //exports.softundeleteIngrediente
 
 exports.hardDeleteIngrediente = (req, res) => {
-    ingredientesDomain
+    ingredientesService
       .hardDeleteIngrediente(req.params.id)
       .then((ingrediente) => {
         res.json(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.routes -> hardDeleteIngrediente -> " + err);
+        logError("Error -> ingredientes.routes -> hardDeleteIngrediente -> " + err);
         res.json(err);
       });
   }; //exports.hardDeleteIngrediente

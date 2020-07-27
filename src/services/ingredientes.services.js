@@ -1,4 +1,5 @@
 const ingredientesDB = require("../data/db/ingredientes.db");
+const { logError } = require("../config/logger.config");
 
 exports.createIngrediente = (ingredienteData) => {
   return new Promise((resolve, reject) => {
@@ -8,9 +9,7 @@ exports.createIngrediente = (ingredienteData) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.domain -> createIngrediente -> " + err
-        );
+        logError("Error -> ingredientes.services -> createIngrediente -> " + err);
         reject(err);
       });
   });
@@ -24,9 +23,7 @@ exports.getIngredientes = () => {
         resolve(ingredientes);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.domain -> getIngredientes -> " + err
-        );
+        logError("Error -> ingredientes.services -> getIngredientes -> " + err);
         reject(err);
       });
   });
@@ -40,9 +37,7 @@ exports.getIngredienteById = (id) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.domain -> getIngredienteById ->" + err
-        );
+        logError("Error -> ingredientes.services -> getIngredienteById ->" + err);
         reject(err);
       });
   });
@@ -56,7 +51,7 @@ exports.updateIngrediente = (id, ingredienteData) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log("Error -> ingredientes.domain -> updateIngrediente " + err);
+        logError("Error -> ingredientes.services -> updateIngrediente " + err);
         reject(err);
       });
   });
@@ -70,9 +65,7 @@ exports.setBorradoIngrediente = (id, borrado) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.domain -> setBorradoIngrediente -> " + err
-        );
+        logError("Error -> ingredientes.services -> setBorradoIngrediente -> " + err);
         reject(err);
       });
   });
@@ -86,9 +79,7 @@ exports.hardDeleteIngrediente = (id) => {
         resolve(ingrediente);
       })
       .catch((err) => {
-        console.log(
-          "Error -> ingredientes.domain -> hardDeleteIngrediente -> " + err
-        );
+        logError("Error -> ingredientes.services -> hardDeleteIngrediente -> " + err);
         reject(err);
       });
   });
