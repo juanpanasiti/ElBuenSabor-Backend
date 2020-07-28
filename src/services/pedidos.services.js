@@ -1,6 +1,7 @@
 const pedidosDB = require("../data/db/pedidos.db");
 const platosDB = require("../data/db/platos.db");
 const reventasDB = require("../data/db/reventas.db");
+const insumosDB = require('../data/db/insumos.db')
 const detallePedidoService = require("./detallesPedidos.services");
 const {
   logInfo,
@@ -172,6 +173,11 @@ exports.updateEstadoPedido = (id, estado) => {
         pedidosDB
           .updatePedido(pedido._id, pedido)
           .then((pedido) => {
+            if(estado === estadoPedido()[4].toLowerCase()){
+              logWarning(`Pasa al estado '${estadoPedido()[4]}', se va a actualizar el stock.`)
+              actualizarStock(pedido)
+            }
+
             resolve(pedido);
           })
           .catch((error) => {
@@ -282,4 +288,17 @@ async function calcularCosto(pedidoDTO, pedidoData) {
   }
   //asigno el costo calculado al total del pedido
   pedidoDTO.total = costo;
+}
+
+///Actualizar stock de los artículos del pedido
+async function actualizarStock(pedido){
+  const detalle = await detallePedidoService.getDetalleById(pedido.detalle)
+  for (const platoDetalle of detalle.platos) {
+    const plato = await platosDB.getPlatoById(platoDetalle.item_id)
+    logInfo(`Actualizar stock de insumos del plato ${plato.denominacion}`)
+    for (const ingrediente of plato.ingredientes) {
+      logWarning(`${ingrediente.insumo} restar ${platoDetalle.cantidad*ingrediente.cantidad} (${ingrediente.cantidad})`)
+      insumosDB.updateStock(ingrediente.insumo,(platoDetalle.cantidad*ingrediente.cantidad),false)
+    }
+  }
 }
