@@ -1,4 +1,5 @@
 const platosDB = require("../data/db/platos.db");
+const { logError } = require("../config/logger.config");
 
 exports.createPlato = (platoData) => {
     return new Promise((resolve, reject) => {
@@ -8,7 +9,7 @@ exports.createPlato = (platoData) => {
           resolve(plato);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> createPlato -> " + err);
+          logError("Error -> platos.services -> createPlato -> " + err);
           reject(err);
         });
     });
@@ -22,7 +23,7 @@ exports.createPlato = (platoData) => {
           resolve(platos);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> getPlatos -> " + err);
+          logError("Error -> platos.services -> getPlatos -> " + err);
           reject(err);
         });
     });
@@ -36,7 +37,7 @@ exports.createPlato = (platoData) => {
           resolve(plato);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> getPlatoById ->" + err);
+          logError("Error -> platos.services -> getPlatoById ->" + err);
           reject(err);
         });
     });
@@ -50,7 +51,7 @@ exports.createPlato = (platoData) => {
           resolve(plato);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> updatePlato " + err);
+          logError("Error -> platos.services -> updatePlato " + err);
           reject(err);
         });
     });
@@ -64,7 +65,7 @@ exports.createPlato = (platoData) => {
           resolve(plato);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> setBorradoPlato -> " + err);
+          logError("Error -> platos.services -> setBorradoPlato -> " + err);
           reject(err);
         });
     });
@@ -78,7 +79,7 @@ exports.createPlato = (platoData) => {
           resolve(plato);
         })
         .catch((err) => {
-          console.log("Error -> platos.domain -> hardDeletePlato -> " + err);
+          logError("Error -> platos.services -> hardDeletePlato -> " + err);
           reject(err);
         });
     });
