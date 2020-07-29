@@ -34,8 +34,10 @@ exports.savePlato = (platoData) => {
 exports.getPlatos = () => {
   return new Promise((resolve, reject) => {
     Plato.find({ borrado: false })
+      .select("denominacion precioVenta imagenPath ingredientes _id rubro tiempoCocina")
       .populate({
         path: "ingredientes",
+        select: "_id insumo",
         populate: { path: "insumo", select: "_id denominacion unidadMedida" },
       })
       .populate("rubro", "_id denominacion")
@@ -54,8 +56,10 @@ exports.getPlatos = () => {
 exports.getPlatoById = (id) => {
   return new Promise((resolve, reject) => {
     Plato.findById(id)
+      .select("denominacion precioVenta imagenPath ingredientes _id rubro tiempoCocina")
       .populate({
         path: "ingredientes",
+        select: "_id insumo",
         populate: { path: "insumo", select: "_id denominacion unidadMedida" },
       })
       .populate("rubro", "_id denominacion")
