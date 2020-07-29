@@ -48,9 +48,9 @@ exports.getPlatoById = (id) => {
     Plato.findById(id)
       .populate({
         path: "ingredientes",
-        populate: 'insumo'
+        populate: {path: 'insumo', select: '_id denominacion unidadMedida'}
       })
-      .populate("rubro")
+      .populate("rubro", '_id denominacion')
       .then((plato) => {
         resolve(plato);
       })
