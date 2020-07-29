@@ -118,6 +118,7 @@ exports.getPedidosByEstado = (req, res) => {
     })
     .catch((err) => {
       logError("Error -> pedidos.routes -> getPedidosByEstado " + err);
+      res.status(400).json(err)
     });
 }; //exports.getPedidos
 
@@ -147,6 +148,7 @@ exports.updateEstadoPedido = (req, res) => {
       res.json(pedido);
     })
     .catch((err) => {
-      logError("Error -> pedidos.routes -> updateEstadoPedido " + err);
+      logError("Error -> pedidos.routes -> updateEstadoPedido -> " + err.message);
+      res.status(400).json(err)
     });
 }; //exports.updateEstadoPedido

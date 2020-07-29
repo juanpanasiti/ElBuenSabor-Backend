@@ -1,14 +1,9 @@
 const pedidosDB = require("../data/db/pedidos.db");
 const platosDB = require("../data/db/platos.db");
 const reventasDB = require("../data/db/reventas.db");
-const insumosDB = require('../data/db/insumos.db')
+const insumosDB = require("../data/db/insumos.db");
 const detallePedidoService = require("./detallesPedidos.services");
-const {
-  logInfo,
-  logWarning,
-  logError,
-  logSuccess,
-} = require("../config/logger.config");
+const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
 
@@ -169,24 +164,136 @@ exports.updateEstadoPedido = (id, estado) => {
     pedidosDB
       .getPedidoById(id)
       .then((pedido) => {
-        pedido.estado = estado;
-        pedidosDB
-          .updatePedido(pedido._id, pedido)
-          .then((pedido) => {
-            if(estado === estadoPedido()[4].toLowerCase()){
-              logWarning(`Pasa al estado '${estadoPedido()[4]}', se va a actualizar el stock.`)
-              actualizarStock(pedido)
-            }
+        const edoAnterior = pedido.estado;
+        const edoSiguiente = estado;
+        const edoCancelado = estadoPedido()[0].toLowerCase();
+        const edoPendiente = estadoPedido()[1].toLowerCase();
+        const edoAprobado = estadoPedido()[2].toLowerCase();
+        const edoEnProceso = estadoPedido()[3].toLowerCase();
+        const edoPreparado = estadoPedido()[4].toLowerCase();
+        const edoEnDelivery = estadoPedido()[5].toLowerCase();
+        const edoEntregado = estadoPedido()[6].toLowerCase();
 
-            resolve(pedido);
-          })
-          .catch((error) => {
-            logError(`${error}`);
-            reject(error);
+        let continuar = true;
+
+        //Un pedido 'cancelado' no puede cambiar de estado
+        if (edoAnterior === edoCancelado) {
+          continuar = false;
+          reject({
+            message: "Un pedido cancelado está en estado final y no se puede cambiar",
           });
-      })
+        }
+
+        //Un pedido 'Pendiente' solo puede pasar a 'aprobado' o 'cancelado'
+        if (
+          edoAnterior === edoPendiente &&
+          edoSiguiente !== edoAprobado &&
+          edoSiguiente !== edoCancelado
+        ) {
+          continuar = false;
+          reject({
+            message: "Un pedido pendiente sólo puede ser aprobado o cancelado",
+          });
+        }
+
+        //Un pedido 'aprobado' solo puede cambiar a 'en proceso' o 'cancelado'
+        if (
+          edoAnterior === edoAprobado &&
+          edoSiguiente !== edoEnProceso &&
+          edoSiguiente !== edoCancelado
+        ) {
+          
+          continuar = false;
+          reject({
+            message: "Un pedido aprobado sólo puede pasar a estar en proceso o cancelado",
+          });
+        }
+
+        //Un pedido 'en proceso' solo puede cambiar a 'preparado' o 'cancelado'
+        if (
+          edoAnterior === edoEnProceso &&
+          edoSiguiente !== edoPreparado &&
+          edoSiguiente !== edoCancelado
+        ) {
+          continuar = false;
+          reject({
+            message:
+              "Un pedido en proceso sólo puede pasar a estar preparado o cancelado",
+          });
+          
+        }
+
+        //Un pedido 'preparado', con envio por deliveri solo puede cambiar a 'en delivery' o 'cancelado'
+        if (
+          edoAnterior === edoPreparado &&
+          edoSiguiente !== edoEnDelivery &&
+          pedido.delivery &&
+          edoSiguiente !== edoCancelado
+        ) {
+          continuar = false;
+          reject({
+            message:
+              "Un pedido preparado con envió a domicilio sólo puede pasar a estar en delivery o cancelado",
+          });
+        }
+
+        //Un pedido 'preparado', retiro en local solo puede cambiar a 'entregado' o 'cancelado'
+        if (
+          edoAnterior === edoPreparado &&
+          edoSiguiente !== edoEntregado &&
+          !pedido.delivery &&
+          edoSiguiente !== edoCancelado
+        ) {
+          continuar = false;
+          reject({
+            message:
+              "Un pedido preparado con retiro en local sólo puede pasar a estar en delivery o cancelado",
+          });
+        }
+
+        //Un pedido 'en delivery' solo puede cambiar a 'entregado' o 'cancelado'
+        if (
+          edoAnterior === edoEnDelivery &&
+          edoSiguiente !== edoEntregado &&
+          edoSiguiente !== edoCancelado
+        ) {
+          continuar = false;
+          reject({
+            message:
+              "Un pedido en delivery sólo puede pasar a estar entregado o cancelado",
+          });
+        }
+
+        //Un pedido 'entregado' no puede cambiar de estado
+        if (edoAnterior === edoEntregado) {
+          continuar = false;
+          reject({
+            message: "Un pedido entregado está en estado final y no se puede cambiar",
+          });
+        }
+        if (continuar) {
+          pedido.estado = estado;
+          pedidosDB
+            .updatePedido(pedido._id, pedido)
+            .then((pedido) => {
+              if (estado === estadoPedido()[4].toLowerCase()) {
+                logWarning(
+                  `Pasa al estado '${estadoPedido()[4]}', se va a actualizar el stock.`
+                );
+                actualizarStock(pedido);
+              }
+  
+              resolve(pedido);
+            })
+            .catch((error) => {
+              logError(`Error interno: ${error}`);
+              reject(error);
+            });
+        }
+        
+      }) //then()
       .catch((error) => {
-        logError(`${error}`);
+        logError(`Error externo: ${error}`);
         reject(error);
       });
   });
@@ -291,14 +398,22 @@ async function calcularCosto(pedidoDTO, pedidoData) {
 }
 
 ///Actualizar stock de los artículos del pedido
-async function actualizarStock(pedido){
-  const detalle = await detallePedidoService.getDetalleById(pedido.detalle)
+async function actualizarStock(pedido) {
+  const detalle = await detallePedidoService.getDetalleById(pedido.detalle);
   for (const platoDetalle of detalle.platos) {
-    const plato = await platosDB.getPlatoById(platoDetalle.item_id)
-    logInfo(`Actualizar stock de insumos del plato ${plato.denominacion}`)
+    const plato = await platosDB.getPlatoById(platoDetalle.item_id);
+    logInfo(`Actualizar stock de insumos del plato ${plato.denominacion}`);
     for (const ingrediente of plato.ingredientes) {
-      logWarning(`${ingrediente.insumo} restar ${platoDetalle.cantidad*ingrediente.cantidad} (${ingrediente.cantidad})`)
-      insumosDB.updateStock(ingrediente.insumo,(platoDetalle.cantidad*ingrediente.cantidad),false)
+      logWarning(
+        `${ingrediente.insumo} restar ${platoDetalle.cantidad * ingrediente.cantidad} (${
+          ingrediente.cantidad
+        })`
+      );
+      insumosDB.updateStock(
+        ingrediente.insumo,
+        platoDetalle.cantidad * ingrediente.cantidad,
+        false
+      );
     }
   }
 }
