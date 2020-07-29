@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const utils = require("../../config/logger.config");
-const { logError, logSuccess, logInfo, logWarning } = require("../../config/logger.config");
+const {
+  logError,
+  logSuccess,
+  logInfo,
+  logWarning,
+} = require("../../config/logger.config");
 require("../models/Plato");
 
 //Registrar Schema
@@ -29,8 +34,11 @@ exports.savePlato = (platoData) => {
 exports.getPlatos = () => {
   return new Promise((resolve, reject) => {
     Plato.find({ borrado: false })
-      .populate("ingredientes")
-      .populate("rubro")
+      .populate({
+        path: "ingredientes",
+        populate: { path: "insumo", select: "_id denominacion unidadMedida" },
+      })
+      .populate("rubro", "_id denominacion")
       .then((platos) => {
         logInfo(`Encontrados ${platos.length} platos`);
         resolve(platos);
@@ -48,9 +56,9 @@ exports.getPlatoById = (id) => {
     Plato.findById(id)
       .populate({
         path: "ingredientes",
-        populate: {path: 'insumo', select: '_id denominacion unidadMedida'}
+        populate: { path: "insumo", select: "_id denominacion unidadMedida" },
       })
-      .populate("rubro", '_id denominacion')
+      .populate("rubro", "_id denominacion")
       .then((plato) => {
         resolve(plato);
       })
@@ -108,8 +116,8 @@ exports.hardDeletePlato = (id) => {
 exports.addIngrediente = (ingredienteId, platoId) => {
   return new Promise((resolve, reject) => {
     this.getPlatoById(platoId)
-    .then((plato) => {
-        logWarning(plato)
+      .then((plato) => {
+        logWarning(plato);
         plato.ingredientes.push(ingredienteId);
         logSuccess("Agregado ingrediente a " + plato.denominacion);
         this.updatePlato(platoId, plato)
@@ -131,10 +139,7 @@ exports.removeIngrediente = (ingredienteId, platoId) => {
   return new Promise((resolve, reject) => {
     this.getPlatoById(platoId)
       .then((plato) => {
-        const ingredientes = utils.removeItemFromList(
-          plato.ingredientes,
-          ingredienteId
-        );        
+        const ingredientes = utils.removeItemFromList(plato.ingredientes, ingredienteId);
         plato.ingredientes = ingredientes;
         this.updatePlato(platoId, plato)
           .then((platoEd) => {
