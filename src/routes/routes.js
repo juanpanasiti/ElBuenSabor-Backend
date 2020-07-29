@@ -47,7 +47,7 @@ exports.assignRoutes = (app) => {
   app.delete(URL_INSUMOS + '/harddelete/:id', insumosRoutes.hardDeleteInsumo) // Borrado físico
 
   //Detalle Ingredientes
-  app.post(URL_INGREDIENTES + "/", ingredientesRoutes.createIngrediente); //Crear insumo
+  //app.post(URL_INGREDIENTES + "/", ingredientesRoutes.createIngrediente); //Crear insumo
   app.get(URL_INGREDIENTES + '/', ingredientesRoutes.getIngredientes) //Obtener todos los insumos no borrados
   app.get(URL_INGREDIENTES + '/:id', ingredientesRoutes.getIngrediente) // Obtener insumo por ID
   app.put(URL_INGREDIENTES + '/:id', ingredientesRoutes.updateIngrediente) // Actualizar insumo
@@ -65,10 +65,11 @@ exports.assignRoutes = (app) => {
   app.delete(URL_DOMICILIOS + '/harddelete/:id', domiciliosRoutes.hardDeleteDomicilio) // Borrado físico
   
   //Platos
-  app.post(URL_PLATOS + "/", platosRoutes.createPlato); //Crear insumo
-  app.get(URL_PLATOS + '/', platosRoutes.getPlatos) //Obtener todos los insumos no borrados
-  app.get(URL_PLATOS + '/:id', platosRoutes.getPlato) // Obtener insumo por ID
-  app.put(URL_PLATOS + '/:id', platosRoutes.updatePlato) // Actualizar insumo
+  app.post(URL_PLATOS + "/", platosRoutes.createPlato); //Crear plato
+  app.get(URL_PLATOS + '/', platosRoutes.getPlatos) //Obtener todos los platos no borrados
+  app.get(URL_PLATOS + '/:id', platosRoutes.getPlato) // Obtener platos por ID
+  app.put(URL_PLATOS + '/:id/agregar-ingredientes', platosRoutes.addIngredientes)
+  app.put(URL_PLATOS + '/:id', platosRoutes.updatePlato) // Actualizar plato
   app.put(URL_PLATOS + '/softdelete/:id', platosRoutes.softdeletePlato) // Borrado lógico
   app.put(URL_PLATOS + '/softundelete/:id', platosRoutes.softundeletePlato) // Restaurado lógico
   app.delete(URL_PLATOS + '/harddelete/:id', platosRoutes.hardDeletePlato) // Borrado físico

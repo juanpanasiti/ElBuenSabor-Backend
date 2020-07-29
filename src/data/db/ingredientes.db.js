@@ -15,8 +15,7 @@ exports.saveIngrediente = (ingredienteData) => {
     ingrediente
       .save()
       .then((ingrediente) => {
-        //Agregar el ID del ingrediente a los ingredites del plato
-        platosDB.addIngrediente(ingrediente._id, ingrediente.plato);
+        logInfo(`Agregado ingrediente en cantidad ${ingrediente.cantidad}`)
         resolve(ingrediente);
       })
       .catch((err) => {

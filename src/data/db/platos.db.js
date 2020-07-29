@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const utils = require("../../config/logger.config");
-const { logError, logSuccess, logInfo } = require("../../config/logger.config");
+const { logError, logSuccess, logInfo, logWarning } = require("../../config/logger.config");
 require("../models/Plato");
 
 //Registrar Schema
@@ -46,7 +46,10 @@ exports.getPlatos = () => {
 exports.getPlatoById = (id) => {
   return new Promise((resolve, reject) => {
     Plato.findById(id)
-      .populate("ingredientes")
+      .populate({
+        path: "ingredientes",
+        populate: 'insumo'
+      })
       .populate("rubro")
       .then((plato) => {
         resolve(plato);
@@ -105,7 +108,8 @@ exports.hardDeletePlato = (id) => {
 exports.addIngrediente = (ingredienteId, platoId) => {
   return new Promise((resolve, reject) => {
     this.getPlatoById(platoId)
-      .then((plato) => {
+    .then((plato) => {
+        logWarning(plato)
         plato.ingredientes.push(ingredienteId);
         logSuccess("Agregado ingrediente a " + plato.denominacion);
         this.updatePlato(platoId, plato)
