@@ -57,7 +57,38 @@ exports.getPedidos = () => {
 exports.getPedidoById = (pedidoId) => {
   return new Promise((resolve, reject) => {
     Pedido.findById(pedidoId)
-      .populate("detalle")
+      .select("fecha estado minutosDemora delivery total factura numero formaPago")
+      //.populate("detalle")
+      .populate({
+        path: 'usuario',
+        select: 'nombre apellido telefono'
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado",
+        populate: { 
+          path: "platos",
+          select: "-borrado",
+          populate: {
+            path: 'item_id',
+            select: 'precioVenta denominacion'
+          }
+        }
+        
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado",
+        populate: { 
+          path: "reventas",
+          select: "-borrado",
+          populate: {
+            path: 'item_id',
+            select: 'precioVenta denominacion'
+          }
+        }
+        
+      })
       .then((pedido) => {
         resolve(pedido);
       })
@@ -182,9 +213,7 @@ exports.getPedidosPendientesAnteriores = (fecha) => {
         resolve(pedidos);
       })
       .catch((err) => {
-        logError(
-          "Error -> pedidos.db -> getPedidosPendientesAnteriores -> " + err
-        );
+        logError("Error -> pedidos.db -> getPedidosPendientesAnteriores -> " + err);
         reject(err);
       });
   });

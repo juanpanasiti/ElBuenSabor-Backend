@@ -59,7 +59,27 @@ exports.getInsumosParaComprar = () => {
   });
 }; //getInsumosParaComprar
 
-//Obtener por rubros ???
+//Obtener por rubro
+exports.getInsumosPorRubro = (rubroId) => {
+  return new Promise((resolve, reject) => {
+    logInfo(`Buscando con rubro ${rubroId}`)
+    Insumo.find({ borrado: false, rubro: rubroId})
+    .select('-borrado -__v')
+      .populate({
+        path: "rubro",
+        select: "_id denominacion imagenPath",
+        populate: { path: "insumoPadre", select: "_id denominacion imagenPath" },
+      })
+      .then((insumos) => {
+        logInfo(`Encontrados ${insumos.length} insumos`);
+        resolve(insumos);
+      })
+      .catch((err) => {
+        logError("Error -> insumos.db -> getInsumos -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getInsumos
 
 //Obtener uno
 exports.getInsumoById = (insumoId) => {

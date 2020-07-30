@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const utils = require("../../tools/utils.tools");
-const {logSuccess,logInfo, logError, logWarning} = require('../../config/logger.config')
+const {
+  logSuccess,
+  logInfo,
+  logError,
+  logWarning,
+} = require("../../config/logger.config");
 require("../models/Usuario");
 
 //Registrar Schema
@@ -28,10 +33,16 @@ exports.saveUsuario = (usuarioData) => {
 //Obtener todos los usuarios, incluidos los borrados
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
-    logInfo('Listando todos los usuarios')
-    Usuario.find({})
-      .populate("roles")
-      .populate("domicilios")
+    Usuario.find({ borrado: false })
+      .select("nombre apellido fechaNacimiento telefono roles domicilios email")
+      .populate({
+        path: "roles",
+        select: "nombreRol",
+      })
+      .populate({
+        path: "domicilios",
+        select: "alias calle numero localidad piso departamento",
+      })
       .then((usuarios) => {
         logSuccess(`Encontrados ${usuarios.length} usuarios`);
         resolve(usuarios);
@@ -46,19 +57,26 @@ exports.getUsuarios = () => {
 //Obtener usuario por ID
 exports.getUsuario = (id) => {
   return new Promise((resolve, reject) => {
-    logInfo(`Buscando al usuario con ID ${id}`)
+    logInfo(`Buscando al usuario con ID ${id}`);
     Usuario.findById(id)
-      .populate("roles")
-      .populate("domicilios")
+      .select("nombre apellido fechaNacimiento telefono roles domicilios email")
+      .populate({
+        path: "roles",
+        select: "nombreRol",
+      })
+      .populate({
+        path: "domicilios",
+        select: "alias calle numero localidad piso departamento",
+      })
       .then((usuario) => {
         if (usuario) {
           logSuccess(`Encontrado usuario con email ${usuario.email}`);
         } else {
           const error = {
             message: "No se encontró ningún usuario con el ID " + id,
-            code: 404
-          }
-          reject(error)
+            code: 404,
+          };
+          reject(error);
         }
         resolve(usuario);
       })
@@ -71,16 +89,18 @@ exports.getUsuario = (id) => {
 
 //Obtener usuario por email
 exports.getUsuarioByEmail = (email) => {
-  logInfo(`Buscando al usuario con email ${email}`)
+  logInfo(`Buscando al usuario con email ${email}`);
   return new Promise((resolve, reject) => {
     Usuario.findOne({ email: email })
       .populate("roles")
       .populate("domicilios")
       .then((usuario) => {
-        if(usuario){
+        if (usuario) {
           logSuccess("Encontrado usuario " + usuario.email);
-        }else {
-          logWarning(`No se encontró el usuario ${email}, se lo registrará como nuevo usuario.`)
+        } else {
+          logWarning(
+            `No se encontró el usuario ${email}, se lo registrará como nuevo usuario.`
+          );
         }
         resolve(usuario);
       })
@@ -93,11 +113,11 @@ exports.getUsuarioByEmail = (email) => {
 
 //Actualizar un usuario
 exports.updateUsuario = (id, usuarioData) => {
-  logInfo(`Actualizando datos del usuario ${id}`)
+  logInfo(`Actualizando datos del usuario ${id}`);
   return new Promise((resolve, reject) => {
     Usuario.findByIdAndUpdate(id, usuarioData, { new: true })
       .then((usuario) => {
-        logSuccess(`Actualizados los datos del usuario ${usuario}`)
+        logSuccess(`Actualizados los datos del usuario ${usuario}`);
         resolve(usuario);
       })
       .catch((err) => {
@@ -108,11 +128,11 @@ exports.updateUsuario = (id, usuarioData) => {
 }; //exports.updateUsuario
 
 exports.setBorradoUsuario = (id, borrado) => {
-  logInfo(`Settear el estado de borrado del usuario ${id} en ${borrado}`)
+  logInfo(`Settear el estado de borrado del usuario ${id} en ${borrado}`);
   return new Promise((resolve, reject) => {
     Usuario.findByIdAndUpdate(id, { borrado: borrado }, { new: true })
       .then((usuario) => {
-        logSuccess(`Estado de borrado setteado exitosamente a ${borrado}`)
+        logSuccess(`Estado de borrado setteado exitosamente a ${borrado}`);
         resolve(usuario);
       })
       .catch((err) => {
@@ -124,10 +144,10 @@ exports.setBorradoUsuario = (id, borrado) => {
 
 exports.hardDeleteUsuario = (id) => {
   return new Promise((resolve, reject) => {
-    logWarning(`Se borrará permanentemente el usuario con ID ${id}`)
+    logWarning(`Se borrará permanentemente el usuario con ID ${id}`);
     Usuario.findByIdAndDelete({ _id: id })
       .then((usuario) => {
-        logSuccess(`Se eliminó exitosamente el usuario ${usuario}`)
+        logSuccess(`Se eliminó exitosamente el usuario ${usuario}`);
         resolve(usuario);
       })
       .catch((err) => {
@@ -140,7 +160,7 @@ exports.hardDeleteUsuario = (id) => {
 //Métodos para implementar relaciones con Roles y Domicilios
 //Agregar ID de rol a la lista de roles del usuario
 exports.addRol = (rolId, usuarioId) => {
-  logInfo(`Agregar nuevo rol al usuario ${usuarioId}`)
+  logInfo(`Agregar nuevo rol al usuario ${usuarioId}`);
   return new Promise((resolve, reject) => {
     this.getUsuario(usuarioId)
       .then((usuario) => {
@@ -205,10 +225,7 @@ exports.removeDomicilio = (domicilioId, usuarioId) => {
   return new Promise((resolve, reject) => {
     this.getUsuario(usuarioId)
       .then((usuario) => {
-        const domicilios = utils.removeItemFromList(
-          usuario.domicilios,
-          domicilioId
-        );
+        const domicilios = utils.removeItemFromList(usuario.domicilios, domicilioId);
         usuario.domicilios = domicilios;
         this.updateUsuario(usuarioId, usuario)
           .then((usuarioEd) => {

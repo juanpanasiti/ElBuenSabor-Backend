@@ -1,5 +1,5 @@
 const insumosService = require("../services/insumos.services");
-const { logError } = require("../config/logger.config");
+const { logError, logWarning } = require("../config/logger.config");
 
 exports.createInsumo = (req, res) => {
   const insumoData = req.body;
@@ -33,7 +33,19 @@ exports.getInsumosParaComprar = (req,res) => {
     res.json(insumos)
   })
   .catch((error) => {
-    logError("Error -> insumos.routes -> getInsumos " + error);
+    logError("Error -> insumos.routes -> getInsumosParaComprar " + error);
+    res.status(404).json(error);
+  })
+}//getInsumosParaComprar
+
+exports.getInsumosPorRubro = (req,res) => {
+  logWarning(req.params.rubroId)
+  insumosService.getInsumosPorRubro(req.params.rubroId)
+  .then((insumos) => {
+    res.json(insumos)
+  })
+  .catch((error) => {
+    logError("Error -> insumos.routes -> getInsumosPorRubro " + error);
     res.status(404).json(error);
   })
 }//getInsumosParaComprar

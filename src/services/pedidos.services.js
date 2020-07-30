@@ -3,6 +3,7 @@ const platosDB = require("../data/db/platos.db");
 const reventasDB = require("../data/db/reventas.db");
 const insumosDB = require("../data/db/insumos.db");
 const detallePedidoService = require("./detallesPedidos.services");
+const facturaService = require('./facturas.services')
 const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
@@ -265,25 +266,39 @@ exports.updateEstadoPedido = (id, estado) => {
         }
 
         //Un pedido 'entregado' no puede cambiar de estado
-        if (edoAnterior === edoEntregado) {
-          continuar = false;
-          reject({
-            message: "Un pedido entregado está en estado final y no se puede cambiar",
-          });
-        }
+        // if (edoAnterior === edoEntregado) {
+        //   continuar = false;
+        //   reject({
+        //     message: "Un pedido entregado está en estado final y no se puede cambiar",
+        //   });
+        // }
         if (continuar) {
           pedido.estado = estado;
           pedidosDB
             .updatePedido(pedido._id, pedido)
             .then((pedido) => {
-              if (estado === estadoPedido()[4].toLowerCase()) {
+              if (estado === edoPreparado) {
                 logWarning(
-                  `Pasa al estado '${estadoPedido()[4]}', se va a actualizar el stock.`
+                  `Pasa al estado '${edoPreparado}', se va a actualizar el stock.`
                 );
                 actualizarStock(pedido);
+              } else if ( estado === edoEntregado) {
+                logWarning(
+                  `Pasa al estado '${edoEntregado}', se va a generar la factura.`
+                );
+                return this.facturarPedido(pedido._id)
               }
-  
               resolve(pedido);
+            })
+            .then((facturaUrl) => {
+              logInfo("ARCHIVO: " + facturaUrl.filename)
+              pedido.factura = facturaUrl.filename.toString()
+              logError(pedido.factura)
+              return this.updatePedido(pedido._id,pedido)
+            })
+            .then((pedido) => {
+              logInfo(pedido)
+              resolve(pedido)
             })
             .catch((error) => {
               logError(`Error interno: ${error}`);
@@ -298,6 +313,22 @@ exports.updateEstadoPedido = (id, estado) => {
       });
   });
 }; //exports.updatePedido
+
+exports.facturarPedido = (id) => {
+  return new Promise((resolve,reject) => {
+    pedidosDB.getPedidoById(id)
+    .then((pedido) => {
+      return facturaService.crearFactura(pedido)
+    })
+    .then((factura) => {
+      resolve(factura)
+    })
+    .catch((error) => {
+      logError(`Error al facturar ${error}`)
+      reject(error)
+    })
+  })
+}
 
 ///////////funciones
 async function calcularDemora(pedidoDTO, platosPedido) {

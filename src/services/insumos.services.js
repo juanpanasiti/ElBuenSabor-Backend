@@ -29,14 +29,14 @@ exports.getInsumos = () => {
   });
 }; //exports.getInsumos
 
-exports.getInsumosParaComprar = () => {
+exports.getInsumosPorRubro = (rubroId) => {
   return new Promise((resolve,reject) => {
-    insumosDB.getInsumosParaComprar()
+    insumosDB.getInsumosPorRubro(rubroId)
     .then((insumos) => {
       resolve(insumos)
     })
     .catch((error) => {
-      logError("Error -> insumos.services -> getInsumosParaComprar -> " + error);
+      logError("Error -> insumos.services -> getInsumosPorRubro -> " + error);
       reject(error)
     })
   })

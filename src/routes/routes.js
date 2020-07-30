@@ -40,6 +40,7 @@ exports.assignRoutes = (app) => {
   app.post(URL_INSUMOS + "/", insumosRoutes.createInsumo); //Crear insumo
   app.get(URL_INSUMOS + '/', insumosRoutes.getInsumos) //Obtener todos los insumos no borrados
   app.get(URL_INSUMOS + '/comprar', insumosRoutes.getInsumosParaComprar) //
+  app.get(URL_INSUMOS + '/rubro/:rubroId', insumosRoutes.getInsumosPorRubro) //
   app.get(URL_INSUMOS + '/:id', insumosRoutes.getInsumo) // Obtener insumo por ID
   app.put(URL_INSUMOS + '/:id', insumosRoutes.updateInsumo) // Actualizar insumo
   app.put(URL_INSUMOS + '/softdelete/:id', insumosRoutes.softdeleteInsumo) // Borrado lógico
@@ -111,6 +112,7 @@ exports.assignRoutes = (app) => {
 
   //Pedidos
   app.post(URL_PEDIDOS + '/', pedidosRoutes.createPedido)
+  app.get(URL_PEDIDOS + '/:id', pedidosRoutes.getPedido)
   //Obtener por estados
   app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)
   app.get(URL_PEDIDOS + '/estado/pendientes', pedidosRoutes.getPedidosByEstado)
@@ -127,7 +129,7 @@ exports.assignRoutes = (app) => {
   app.put(URL_PEDIDOS + '/enviar/:id', pedidosRoutes.updateEstadoPedido)
   app.put(URL_PEDIDOS + '/entregar/:id', pedidosRoutes.updateEstadoPedido)
   //
-  app.put(URL_PEDIDOS + '/facturar')
+  app.get(URL_PEDIDOS + '/:id/facturar', pedidosRoutes.facturarPedido)
   app.put(URL_PEDIDOS + '/agregar-item')
   //Otras consultas
   app.put(URL_PEDIDOS + '/:email')

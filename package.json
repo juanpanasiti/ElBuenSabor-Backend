@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "html-pdf": "^2.2.0",
     "mongoose": "^5.9.18"
   },
   "devDependencies": {

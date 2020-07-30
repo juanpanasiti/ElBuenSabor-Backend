@@ -10,9 +10,9 @@ exports.createPedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> createPedido " + err);
-      res.status(400).json(err);
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> createPedido " + error);
+      res.status(400).json(error);
     });
 }; //exports.createPedido
 
@@ -22,8 +22,8 @@ exports.createPedido = (req, res) => {
 //     .then((pedidos) => {
 //       res.json(pedidos);
 //     })
-//     .catch((err) => {
-//       utils.logError("Error -> pedidos.routes -> getPedidos " + err);
+//     .catch((error) => {
+//       utils.logError("Error -> pedidos.routes -> getPedidos " + error);
 //     });
 // }; //exports.getPedidos
 
@@ -33,10 +33,10 @@ exports.getPedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> getPedido " + err);
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> getPedido " + error);
 
-      res.status(400).json(err);
+      res.status(400).json(error);
     });
 }; //getPedido
 
@@ -47,10 +47,10 @@ exports.getPedido = (req, res) => {
 //     .then((pedido) => {
 //       res.json(pedido);
 //     })
-//     .catch((err) => {
-//       utils.logError("Error -> pedido.routes -> updatePedido " + err);
+//     .catch((error) => {
+//       utils.logError("Error -> pedido.routes -> updatePedido " + error);
 
-//       res.status(400).json(err);
+//       res.status(400).json(error);
 //     });
 // }; //exports.updatePedido
 
@@ -60,9 +60,9 @@ exports.softdeletePedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> softdeletePedido -> " + err);
-      res.json(err);
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> softdeletePedido -> " + error);
+      res.json(error);
     });
 }; //exports.softdeletePedido
 
@@ -72,9 +72,9 @@ exports.softundeletePedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> softundeletePedido -> " + err);
-      res.json(err);
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> softundeletePedido -> " + error);
+      res.json(error);
     });
 }; //exports.softundeletePedido
 
@@ -84,9 +84,9 @@ exports.hardDeletePedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      utils.logError("Error -> pedidos.routes -> hardDeletePedido -> " + err);
-      res.json(err);
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> hardDeletePedido -> " + error);
+      res.json(error);
     });
 }; //exports.hardDeletePedido
 
@@ -116,9 +116,9 @@ exports.getPedidosByEstado = (req, res) => {
     .then((pedidos) => {
       res.json(pedidos);
     })
-    .catch((err) => {
-      logError("Error -> pedidos.routes -> getPedidosByEstado " + err);
-      res.status(400).json(err)
+    .catch((error) => {
+      logError("Error -> pedidos.routes -> getPedidosByEstado " + error);
+      res.status(400).json(error)
     });
 }; //exports.getPedidos
 
@@ -147,8 +147,19 @@ exports.updateEstadoPedido = (req, res) => {
     .then((pedido) => {
       res.json(pedido);
     })
-    .catch((err) => {
-      logError("Error -> pedidos.routes -> updateEstadoPedido -> " + err.message);
-      res.status(400).json(err)
+    .catch((error) => {
+      logError("Error -> pedidos.routes -> updateEstadoPedido -> " + error.message);
+      res.status(400).json(error)
     });
 }; //exports.updateEstadoPedido
+
+exports.facturarPedido = (req,res) => {
+  pedidosService.facturarPedido(req.params.id)
+  .then((factura) => {
+    res.json(factura)
+  })
+  .catch((error) => {
+    logError("Error -> pedidos.routes -> facturarPedido -> " + error.message);
+    res.status(400).json(error)
+  });
+}//facturarPedido

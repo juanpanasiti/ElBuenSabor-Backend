@@ -11,10 +11,9 @@ const rubroSchema = new mongoose.Schema({
     default: false,
   },
   rubroPadre: {
-    //Era String, lo cambie para probar si solucionamos error al guardar "" para los rubros raíz
     type: mongoose.Schema.Types.ObjectId,
     ref: "Rubro",
-    default: null, //Un rubro raíz debe tener el campo en null o no
+    default: null, //Un rubro raíz debe tener el campo en null
   },
   imagenPath: {
     type: String,

@@ -42,8 +42,7 @@ const pedidoSchema = new mongoose.Schema({
     default:null,
   },
   factura: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Factura",
+    type: String,
     default: null,
   },
   borrado: {
