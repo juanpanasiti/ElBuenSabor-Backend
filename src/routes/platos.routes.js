@@ -25,6 +25,17 @@ exports.createPlato = (req, res) => {
       logError("Error -> platos.routes -> getPlatos " + err);
     });
   }; //exports.getPlatos
+
+  exports.getPlatos = (req, res) => {
+    platosService
+    .getPlatos()
+    .then((platos) => {
+      res.json(platos);
+    })
+    .catch((err) => {
+      logError("Error -> platos.routes -> getPlatos " + err);
+    });
+  }; //exports.getPlatos
   
   exports.getPlato = (req, res) => {
     platosService
@@ -38,6 +49,19 @@ exports.createPlato = (req, res) => {
       res.status(400).json(err);
     });
   }; //getPlato
+
+  exports.getPlatosPorRubro = (req, res) => {
+    platosService
+    .getPlatosPorRubro(req.params.rubroId)
+    .then((plato) => {
+      res.json(plato);
+    })
+    .catch((err) => {
+      logError("Error -> platos.routes -> getPlatosPorRubro " + err);
+      
+      res.status(400).json(err);
+    });
+  }; //getPlatosPorRubro
   
   exports.updatePlato = (req, res) => {
     const platoData = req.body;

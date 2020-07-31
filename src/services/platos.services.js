@@ -31,6 +31,20 @@ exports.getPlatos = () => {
   });
 }; //exports.getPlatos
 
+exports.getPlatosPorRubro = (rubroId) => {
+  return new Promise((resolve, reject) => {
+    platosDB
+      .getPlatosPorRubro(rubroId)
+      .then((platos) => {
+        resolve(platos);
+      })
+      .catch((error) => {
+        logError("Error -> platos.services -> getPlatosPorRubro -> " + error);
+        reject(error);
+      });
+  });
+}; //exports.getPlatosPorRubro
+
 exports.getPlatoById = (platoId) => {
   return new Promise((resolve, reject) => {
     platosDB

@@ -30,6 +30,7 @@ exports.assignRoutes = (app) => {
   app.post(URL_REVENTA + "/", reventasRoutes.createReventa); //Crear insumo
   app.get(URL_REVENTA + '/', reventasRoutes.getReventas) //Obtener todos los insumos no borrados
   app.get(URL_REVENTA + '/comprar', reventasRoutes.getReventasParaComprar) //
+  app.get(URL_REVENTA + '/rubro/:rubroId') //
   app.get(URL_REVENTA + '/:id', reventasRoutes.getReventa) // Obtener insumo por ID
   app.put(URL_REVENTA + '/:id', reventasRoutes.updateReventa) // Actualizar insumo
   app.put(URL_REVENTA + '/softdelete/:id', reventasRoutes.softdeleteReventa) // Borrado lógico
@@ -69,6 +70,7 @@ exports.assignRoutes = (app) => {
   app.post(URL_PLATOS + "/", platosRoutes.createPlato); //Crear plato
   app.get(URL_PLATOS + '/', platosRoutes.getPlatos) //Obtener todos los platos no borrados
   app.get(URL_PLATOS + '/:id', platosRoutes.getPlato) // Obtener platos por ID
+  app.get(URL_PLATOS + '/rubro/:rubroId', platosRoutes.getPlatosPorRubro) //
   app.put(URL_PLATOS + '/:id/agregar-ingredientes', platosRoutes.addIngredientes)
   app.put(URL_PLATOS + '/:id', platosRoutes.updatePlato) // Actualizar plato
   app.put(URL_PLATOS + '/softdelete/:id', platosRoutes.softdeletePlato) // Borrado lógico

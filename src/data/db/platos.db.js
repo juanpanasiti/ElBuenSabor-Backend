@@ -31,6 +31,28 @@ exports.savePlato = (platoData) => {
 }; //exports.savePlato
 
 //Obtener no borrados
+exports.getPlatosPorRubro = (rubroId) => {
+  return new Promise((resolve, reject) => {
+    Plato.find({ borrado: false, rubro: rubroId })
+      .select("denominacion precioVenta imagenPath ingredientes rubro")
+      .populate({
+        path: "ingredientes",
+        select: "insumo",
+        populate: { path: "insumo", select: "denominacion unidadMedida" },
+      })
+      .populate("rubro", "_id denominacion")
+      .then((platos) => {
+        logInfo(`Encontrados ${platos.length} platos`);
+        resolve(platos);
+      })
+      .catch((err) => {
+        logError("Error -> platos.db -> getPlatosPorRubro -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getPlatos
+
+//Obtener no borrados
 exports.getPlatos = () => {
   return new Promise((resolve, reject) => {
     Plato.find({ borrado: false })
@@ -72,6 +94,8 @@ exports.getPlatoById = (id) => {
       });
   });
 }; //exports.getPlatoById
+
+
 
 //Actualizar uno
 exports.updatePlato = (id, platoData) => {
