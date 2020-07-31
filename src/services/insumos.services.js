@@ -29,6 +29,19 @@ exports.getInsumos = () => {
   });
 }; //exports.getInsumos
 
+exports.getInsumosParaComprar = () => {
+  return new Promise((resolve,reject) => {
+    insumosDB.getInsumosParaComprar()
+    .then((insumos) => {
+      resolve(insumos)
+    })
+    .catch((error) => {
+      logError("Error -> insumos.services -> getInsumosParaComprar -> " + error);
+      reject(error)
+    })
+  })
+}//getInsumosParaComprar
+
 exports.getInsumosPorRubro = (rubroId) => {
   return new Promise((resolve,reject) => {
     insumosDB.getInsumosPorRubro(rubroId)
@@ -40,7 +53,7 @@ exports.getInsumosPorRubro = (rubroId) => {
       reject(error)
     })
   })
-}//getInsumosParaComprar
+}//getInsumosPorRubro
 
 exports.getInsumoById = (insumoId) => {
   return new Promise((resolve, reject) => {
