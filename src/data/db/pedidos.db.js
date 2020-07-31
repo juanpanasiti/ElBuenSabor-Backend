@@ -41,7 +41,39 @@ exports.savePedido = (pedidoData) => {
 exports.getPedidos = () => {
   return new Promise((resolve, reject) => {
     Pedido.find({ borrado: false })
-      .populate("detalle")
+      .select("fecha estado minutosDemora delivery total factura numero formaPago")
+      .populate({
+        path: "usuario",
+        select: "nombre apellido telefono",
+      })
+      .populate({
+        path: "domicilio",
+        select: "-__v -borrado -usuario",
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado",
+        populate: {
+          path: "platos",
+          select: "-borrado -__v",
+          populate: {
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado -__v",
+        populate: {
+          path: "reventas",
+          select: "-borrado",
+          populate: {
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
+      })
       .then((pedidos) => {
         logSuccess(`Encontrados ${pedidos.length} pedidos`);
         resolve(pedidos);
@@ -58,36 +90,37 @@ exports.getPedidoById = (pedidoId) => {
   return new Promise((resolve, reject) => {
     Pedido.findById(pedidoId)
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
-      //.populate("detalle")
       .populate({
-        path: 'usuario',
-        select: 'nombre apellido telefono'
+        path: "usuario",
+        select: "nombre apellido telefono",
+      })
+      .populate({
+        path: "domicilio",
+        select: "-__v -borrado -usuario",
       })
       .populate({
         path: "detalle",
         select: "-borrado",
-        populate: { 
+        populate: {
           path: "platos",
           select: "-borrado",
           populate: {
-            path: 'item_id',
-            select: 'precioVenta denominacion'
-          }
-        }
-        
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
       })
       .populate({
         path: "detalle",
         select: "-borrado",
-        populate: { 
+        populate: {
           path: "reventas",
           select: "-borrado",
           populate: {
-            path: 'item_id',
-            select: 'precioVenta denominacion'
-          }
-        }
-        
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
       })
       .then((pedido) => {
         resolve(pedido);
@@ -190,7 +223,39 @@ exports.removeDetalle = (detalleId, pedidoId) => {
 exports.getPedidosByEstado = (estado) => {
   return new Promise((resolve, reject) => {
     Pedido.find({ estado: estado })
-      .populate("detalle")
+      .select("fecha estado minutosDemora delivery total factura numero formaPago")
+      .populate({
+        path: "usuario",
+        select: "nombre apellido telefono",
+      })
+      .populate({
+        path: "domicilio",
+        select: "-__v -borrado -usuario",
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado",
+        populate: {
+          path: "platos",
+          select: "-borrado",
+          populate: {
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
+      })
+      .populate({
+        path: "detalle",
+        select: "-borrado",
+        populate: {
+          path: "reventas",
+          select: "-borrado",
+          populate: {
+            path: "item_id",
+            select: "precioVenta denominacion",
+          },
+        },
+      })
       .then((pedidos) => {
         logSuccess(`Encontrados ${pedidos.length} pedidos ${estado}`);
         resolve(pedidos);

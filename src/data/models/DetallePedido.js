@@ -17,10 +17,6 @@ const detallePedidoSchema = new mongoose.Schema({
       cantidad: {
         type: Number,
         default: 1
-      },
-      monto: {
-        type: Number,
-        default: 0
       }
     }
   ],
@@ -34,10 +30,6 @@ const detallePedidoSchema = new mongoose.Schema({
       cantidad: {
         type: Number,
         default: 1
-      },
-      monto: {
-        type: Number,
-        default: 0
       }
     }
   ],

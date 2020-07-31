@@ -8,6 +8,7 @@ exports.newPedidoDTO = () => {
         total: null,
         formaPago: null,
         usuario: null,
+        domicilio: null,
         detalle: null,
         factura: null
     }

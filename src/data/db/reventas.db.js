@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { logInfo, logError, logSuccess } = require("../../config/logger.config");
+const { logInfo, logError, logSuccess, logWarning } = require("../../config/logger.config");
 require("../models/ArticuloReventa");
 
 //Registrar Schema
@@ -114,3 +114,28 @@ exports.hardDeleteReventa = (id) => {
       });
   });
 }; //exports.hardDeleteReventa
+
+//Sumar o restar una cantidad al stock
+exports.updateStock = (id,cantidad,esIngreso) => {
+  return new Promise((resolve,reject) => {
+    Reventa.findById(id)
+    .then((reventa) => {
+      if(esIngreso){
+        logWarning("Se va a agregar stock")
+        reventa.stockActual += cantidad
+      } else {
+        logWarning("Se va a restar stock")
+        reventa.stockActual -= cantidad
+      }
+      return this.updateReventa(reventa._id,reventa)
+    })
+    .then((reventaActualizada) => {
+      logSuccess(`Stock actualizado del art. reventa ${reventaActualizada.denominacion}`)
+      resolve(reventaActualizada)
+    })
+    .catch((error) => {
+      logError("Error -> reventas.db -> updateStock -> " + error);
+        reject(error);
+    })
+  })
+}

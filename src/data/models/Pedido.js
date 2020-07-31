@@ -36,6 +36,11 @@ const pedidoSchema = new mongoose.Schema({
     ref: "Usuario",
     required: true,
   },
+  domicilio: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Domicilio",
+    default:null,
+  },
   detalle: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "DetallePedido",

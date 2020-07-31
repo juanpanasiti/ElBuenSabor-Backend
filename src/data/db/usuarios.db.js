@@ -92,8 +92,14 @@ exports.getUsuarioByEmail = (email) => {
   logInfo(`Buscando al usuario con email ${email}`);
   return new Promise((resolve, reject) => {
     Usuario.findOne({ email: email })
-      .populate("roles")
-      .populate("domicilios")
+      .populate({
+        path: "roles",
+        select: "nombreRol",
+      })
+      .populate({
+        path: "domicilios",
+        select: "alias calle numero localidad piso departamento",
+      })
       .then((usuario) => {
         if (usuario) {
           logSuccess("Encontrado usuario " + usuario.email);

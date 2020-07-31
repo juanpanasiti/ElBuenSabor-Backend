@@ -16,6 +16,7 @@ exports.createPedido = async (pedidoData) => {
   pedidoDTO.delivery = pedidoData.delivery;
   pedidoDTO.formaPago = pedidoData.formaPago;
   pedidoDTO.usuario = pedidoData.usuario;
+  pedidoDTO.domicilio = pedidoData.domicilio
 
   //Calcular demora del pedido
   await calcularDemora(pedidoDTO, pedidoData.platos);
@@ -286,16 +287,16 @@ exports.updateEstadoPedido = (id, estado) => {
                 logWarning(
                   `Pasa al estado '${edoEntregado}', se va a generar la factura.`
                 );
-                return this.facturarPedido(pedido._id)
+                this.facturarPedido(pedido._id)
+                .then((facturaUrl) => {
+                  logInfo("ARCHIVO: " + facturaUrl.filename)
+                  pedido.factura = facturaUrl.filename.toString()
+                  return this.updatePedido(pedido._id,pedido)
+                })
               }
               resolve(pedido);
             })
-            .then((facturaUrl) => {
-              logInfo("ARCHIVO: " + facturaUrl.filename)
-              pedido.factura = facturaUrl.filename.toString()
-              logError(pedido.factura)
-              return this.updatePedido(pedido._id,pedido)
-            })
+            
             .then((pedido) => {
               logInfo(pedido)
               resolve(pedido)
@@ -431,20 +432,22 @@ async function calcularCosto(pedidoDTO, pedidoData) {
 ///Actualizar stock de los artículos del pedido
 async function actualizarStock(pedido) {
   const detalle = await detallePedidoService.getDetalleById(pedido.detalle);
+
+  //Actualizar stock de ingredientes
   for (const platoDetalle of detalle.platos) {
     const plato = await platosDB.getPlatoById(platoDetalle.item_id);
     logInfo(`Actualizar stock de insumos del plato ${plato.denominacion}`);
     for (const ingrediente of plato.ingredientes) {
-      logWarning(
-        `${ingrediente.insumo} restar ${platoDetalle.cantidad * ingrediente.cantidad} (${
-          ingrediente.cantidad
-        })`
-      );
       insumosDB.updateStock(
         ingrediente.insumo,
         platoDetalle.cantidad * ingrediente.cantidad,
         false
       );
     }
+  }//for-platos
+
+  //Actualizar stock de reventas
+  for (const reventaDetalle of detalle.reventas) {
+    reventasDB.updateStock(reventaDetalle.item_id,reventaDetalle.cantidad,false)
   }
 }

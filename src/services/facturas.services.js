@@ -1,13 +1,12 @@
 const pdf = require("html-pdf");
-const { logError, logSuccess, logWarning } = require("../config/logger.config");
-const { getFacturaHTML, getSimpleFacturaHTML } = require("../data/static/modelo.factura");
+const { logError, logSuccess } = require("../config/logger.config");
+const { getSimpleFacturaHTML } = require("../data/static/modelo.factura");
 const carpetaFacturas = "public/facturas";
 
 exports.crearFactura = (pedido) => {
-  logWarning(pedido);
   const content = getSimpleFacturaHTML(pedido);
   const options = {
-    format: "A5",
+    format: "Letter",
     footer: {
       height: "10mm",
     },
