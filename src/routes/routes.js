@@ -114,6 +114,7 @@ exports.assignRoutes = (app) => {
 
   //Pedidos
   app.post(URL_PEDIDOS + '/', pedidosRoutes.createPedido)
+  app.get(URL_PEDIDOS + '/usuario/:usuarioId', pedidosRoutes.getPedidosUsuario)
   app.get(URL_PEDIDOS + '/:id', pedidosRoutes.getPedido)
   //Obtener por estados
   app.get(URL_PEDIDOS + '/estado/cancelados', pedidosRoutes.getPedidosByEstado)

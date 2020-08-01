@@ -38,9 +38,9 @@ exports.savePedido = (pedidoData) => {
 }; //exports.savePedido
 
 //Obtener no borrados
-exports.getPedidos = () => {
+exports.getPedidosUsuario = (usuarioId) => {
   return new Promise((resolve, reject) => {
-    Pedido.find({ borrado: false })
+    Pedido.find({ borrado: false , usuario: usuarioId})
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
       .populate({
         path: "usuario",

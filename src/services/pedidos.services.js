@@ -69,10 +69,10 @@ exports.createPedido = async (pedidoData) => {
   });
 }; //exports.createPedido
 
-exports.getPedidos = () => {
+exports.getPedidosUsuario = (usuarioId) => {
   return new Promise((resolve, reject) => {
     pedidosDB
-      .getPedidos()
+      .getPedidosUsuario(usuarioId)
       .then((pedidos) => {
         resolve(pedidos);
       })

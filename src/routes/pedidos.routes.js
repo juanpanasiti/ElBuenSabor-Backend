@@ -16,16 +16,16 @@ exports.createPedido = (req, res) => {
     });
 }; //exports.createPedido
 
-// exports.getPedidos = (req, res) => {
-//   pedidosService
-//     .getPedidos()
-//     .then((pedidos) => {
-//       res.json(pedidos);
-//     })
-//     .catch((error) => {
-//       utils.logError("Error -> pedidos.routes -> getPedidos " + error);
-//     });
-// }; //exports.getPedidos
+exports.getPedidosUsuario = (req, res) => {
+  pedidosService
+    .getPedidosUsuario(req.params.usuarioId)
+    .then((pedidos) => {
+      res.json(pedidos);
+    })
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> getPedidosUsuario " + error);
+    });
+}; //exports.getPedidos
 
 exports.getPedido = (req, res) => {
   pedidosService
