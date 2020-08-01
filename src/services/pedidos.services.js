@@ -4,6 +4,7 @@ const reventasDB = require("../data/db/reventas.db");
 const insumosDB = require("../data/db/insumos.db");
 const detallePedidoService = require("./detallesPedidos.services");
 const facturaService = require('./facturas.services')
+const usuarioService = require('./usuarios.services')
 const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
@@ -340,6 +341,7 @@ exports.facturarPedido = (id) => {
 ///////////funciones
 async function calcularDemora(pedidoDTO, platosPedido) {
   let demora = 0;
+  let cocineros = 1;
   //10 minutos si va por delivery, 0 si se retira en local
   let promise = new Promise((resolve, reject) => {
     resolve(pedidoDTO.delivery ? 10 : 0);
@@ -376,7 +378,6 @@ async function calcularDemora(pedidoDTO, platosPedido) {
         for (const pedido of pedidos) {
           demoraCola += pedido.minutosDemora;
         } //for()
-        logWarning(demoraCola);
         resolve(demoraCola);
       })
       .catch((error) => {
@@ -385,7 +386,24 @@ async function calcularDemora(pedidoDTO, platosPedido) {
       });
   }); //promise
   demora += await promise;
-
+  //dividir por cantidad de cocineros
+  promise = new Promise((resolve, reject) => {
+    usuarioService.getUsuarioByRol('Cocinero')
+      .then((cocineros) => {
+        logInfo(`Hay ${cocineros.length} cocineros`)
+        resolve(cocineros.length)
+      })
+      .catch((error) => {
+        logError(error);
+        reject(1);
+      });
+  }); //promise
+  cocineros = await promise
+  cocineros = cocineros === 0 ? 1 : cocineros//evito problema al dividir por cero
+  logInfo(`demora antes ${demora}`)
+  demora = demora/cocineros
+  logInfo(`demora despues ${demora}`)
+  
   //asigno la demora calculada a minutosDemora
   pedidoDTO.minutosDemora = demora;
 } //calcularDemora()
