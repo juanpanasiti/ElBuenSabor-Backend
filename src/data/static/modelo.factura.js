@@ -1,8 +1,7 @@
-const { logInfo } = require("../../config/logger.config");
-
 
 exports.getSimpleFacturaHTML = (pedido) => {
   const numFactura = pedido.numero;
+  const formaPago = pedido.formaPago
   const domicilio = `${pedido.domicilio.calle} ${pedido.domicilio.numero} - ${pedido.domicilio.localidad}, Mendoza`;
   const d = new Date(pedido.fecha);
   const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
@@ -21,6 +20,7 @@ exports.getSimpleFacturaHTML = (pedido) => {
 <p><b>Fecha:</b> ${fecha}</p>
 <p><b>Cliente:</b> ${nombreCliente}</p>
 <p><b>Domicilio:</b> ${domicilio}</p>
+<p><b>Forma de Pago:</b> ${formaPago}</p>
 <hr>
 `;
   const items = [];

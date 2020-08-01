@@ -18,11 +18,17 @@ exports.createPedido = async (pedidoData) => {
   pedidoDTO.usuario = pedidoData.usuario;
   pedidoDTO.domicilio = pedidoData.domicilio
 
+  //Si el pedido es con delivery y el pago es distinto de efectivo, rechazar
+  if(pedidoDTO.delivery && pedidoDTO.formaPago.toLowerCase() !== 'efectivo'){
+    logWarning("Envios por delivery solo aceptan pago en efectivo")
+    return Promise.reject({messasge: "Envios con delivery solo aceptan pago en efectivo."})
+  }
   //Calcular demora del pedido
   await calcularDemora(pedidoDTO, pedidoData.platos);
 
   //Calcular costo del pedido
   await calcularCosto(pedidoDTO, pedidoData);
+
 
   //logInfo(pedidoDTO)
   return new Promise((resolve, reject) => {
