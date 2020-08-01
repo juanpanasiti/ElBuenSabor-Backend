@@ -3,8 +3,8 @@ const platosDB = require("../data/db/platos.db");
 const reventasDB = require("../data/db/reventas.db");
 const insumosDB = require("../data/db/insumos.db");
 const detallePedidoService = require("./detallesPedidos.services");
-const facturaService = require('./facturas.services')
-const usuarioService = require('./usuarios.services')
+const facturaService = require("./facturas.services");
+const usuarioService = require("./usuarios.services");
 const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
@@ -17,19 +17,20 @@ exports.createPedido = async (pedidoData) => {
   pedidoDTO.delivery = pedidoData.delivery;
   pedidoDTO.formaPago = pedidoData.formaPago;
   pedidoDTO.usuario = pedidoData.usuario;
-  pedidoDTO.domicilio = pedidoData.domicilio
+  pedidoDTO.domicilio = pedidoData.domicilio;
 
   //Si el pedido es con delivery y el pago es distinto de efectivo, rechazar
-  if(pedidoDTO.delivery && pedidoDTO.formaPago.toLowerCase() !== 'efectivo'){
-    logWarning("Envios por delivery solo aceptan pago en efectivo")
-    return Promise.reject({messasge: "Envios con delivery solo aceptan pago en efectivo."})
+  if (pedidoDTO.delivery && pedidoDTO.formaPago.toLowerCase() !== "efectivo") {
+    logWarning("Envios por delivery solo aceptan pago en efectivo");
+    return Promise.reject({
+      messasge: "Envios con delivery solo aceptan pago en efectivo.",
+    });
   }
   //Calcular demora del pedido
   await calcularDemora(pedidoDTO, pedidoData.platos);
 
   //Calcular costo del pedido
   await calcularCosto(pedidoDTO, pedidoData);
-
 
   //logInfo(pedidoDTO)
   return new Promise((resolve, reject) => {
@@ -78,6 +79,28 @@ exports.getPedidosUsuario = (usuarioId) => {
       })
       .catch((err) => {
         console.log("Error -> pedidos.domain -> getPedidos -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getPedidos
+
+exports.downloadFactura = (pedidoId) => {
+  return new Promise((resolve, reject) => {
+    pedidosDB
+      .getPedidoById(pedidoId)
+      .then((pedido) => {
+        if (pedido.factura) {
+          logInfo(`Factura localizada en: ${pedido.factura}`);
+          resolve(pedido.factura);
+        } else {
+          logError(
+            "No hay una factura generada o no se guardó la ruta: " + pedido.factura
+          );
+          reject({ message: "No existe factura generada." });
+        }
+      })
+      .catch((err) => {
+        console.log("Error -> pedidos.domain -> getPedidoById ->" + err);
         reject(err);
       });
   });
@@ -211,7 +234,6 @@ exports.updateEstadoPedido = (id, estado) => {
           edoSiguiente !== edoEnProceso &&
           edoSiguiente !== edoCancelado
         ) {
-          
           continuar = false;
           reject({
             message: "Un pedido aprobado sólo puede pasar a estar en proceso o cancelado",
@@ -229,7 +251,6 @@ exports.updateEstadoPedido = (id, estado) => {
             message:
               "Un pedido en proceso sólo puede pasar a estar preparado o cancelado",
           });
-          
         }
 
         //Un pedido 'preparado', con envio por deliveri solo puede cambiar a 'en delivery' o 'cancelado'
@@ -290,30 +311,28 @@ exports.updateEstadoPedido = (id, estado) => {
                   `Pasa al estado '${edoPreparado}', se va a actualizar el stock.`
                 );
                 actualizarStock(pedido);
-              } else if ( estado === edoEntregado) {
+              } else if (estado === edoEntregado) {
                 logWarning(
                   `Pasa al estado '${edoEntregado}', se va a generar la factura.`
                 );
-                this.facturarPedido(pedido._id)
-                .then((facturaUrl) => {
-                  logInfo("ARCHIVO: " + facturaUrl.filename)
-                  pedido.factura = facturaUrl.filename.toString()
-                  return this.updatePedido(pedido._id,pedido)
-                })
+                this.facturarPedido(pedido._id).then((facturaUrl) => {
+                  logInfo("ARCHIVO: " + facturaUrl.filename);
+                  pedido.factura = facturaUrl.filename.toString();
+                  return this.updatePedido(pedido._id, pedido);
+                });
               }
               resolve(pedido);
             })
-            
+
             .then((pedido) => {
-              logInfo(pedido)
-              resolve(pedido)
+              logInfo(pedido);
+              resolve(pedido);
             })
             .catch((error) => {
               logError(`Error interno: ${error}`);
               reject(error);
             });
         }
-        
       }) //then()
       .catch((error) => {
         logError(`Error externo: ${error}`);
@@ -323,20 +342,21 @@ exports.updateEstadoPedido = (id, estado) => {
 }; //exports.updatePedido
 
 exports.facturarPedido = (id) => {
-  return new Promise((resolve,reject) => {
-    pedidosDB.getPedidoById(id)
-    .then((pedido) => {
-      return facturaService.crearFactura(pedido)
-    })
-    .then((factura) => {
-      resolve(factura)
-    })
-    .catch((error) => {
-      logError(`Error al facturar ${error}`)
-      reject(error)
-    })
-  })
-}
+  return new Promise((resolve, reject) => {
+    pedidosDB
+      .getPedidoById(id)
+      .then((pedido) => {
+        return facturaService.crearFactura(pedido);
+      })
+      .then((factura) => {
+        resolve(factura);
+      })
+      .catch((error) => {
+        logError(`Error al facturar ${error}`);
+        reject(error);
+      });
+  });
+};
 
 ///////////funciones
 async function calcularDemora(pedidoDTO, platosPedido) {
@@ -388,22 +408,23 @@ async function calcularDemora(pedidoDTO, platosPedido) {
   demora += await promise;
   //dividir por cantidad de cocineros
   promise = new Promise((resolve, reject) => {
-    usuarioService.getUsuarioByRol('Cocinero')
+    usuarioService
+      .getUsuarioByRol("Cocinero")
       .then((cocineros) => {
-        logInfo(`Hay ${cocineros.length} cocineros`)
-        resolve(cocineros.length)
+        logInfo(`Hay ${cocineros.length} cocineros`);
+        resolve(cocineros.length);
       })
       .catch((error) => {
         logError(error);
         reject(1);
       });
   }); //promise
-  cocineros = await promise
-  cocineros = cocineros === 0 ? 1 : cocineros//evito problema al dividir por cero
-  logInfo(`demora antes ${demora}`)
-  demora = demora/cocineros
-  logInfo(`demora despues ${demora}`)
-  
+  cocineros = await promise;
+  cocineros = cocineros === 0 ? 1 : cocineros; //evito problema al dividir por cero
+  logInfo(`demora antes ${demora}`);
+  demora = demora / cocineros;
+  logInfo(`demora despues ${demora}`);
+
   //asigno la demora calculada a minutosDemora
   pedidoDTO.minutosDemora = demora;
 } //calcularDemora()
@@ -468,10 +489,10 @@ async function actualizarStock(pedido) {
         false
       );
     }
-  }//for-platos
+  } //for-platos
 
   //Actualizar stock de reventas
   for (const reventaDetalle of detalle.reventas) {
-    reventasDB.updateStock(reventaDetalle.item_id,reventaDetalle.cantidad,false)
+    reventasDB.updateStock(reventaDetalle.item_id, reventaDetalle.cantidad, false);
   }
 }

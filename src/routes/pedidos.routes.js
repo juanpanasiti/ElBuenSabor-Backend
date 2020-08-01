@@ -25,7 +25,18 @@ exports.getPedidosUsuario = (req, res) => {
     .catch((error) => {
       utils.logError("Error -> pedidos.routes -> getPedidosUsuario " + error);
     });
-}; //exports.getPedidos
+}; //exports.getPedidosUsuario
+
+exports.downloadFactura = (req, res) => {
+  pedidosService
+    .downloadFactura(req.params.pedidoId)
+    .then((facturaUrl) => {
+      res.download(facturaUrl);
+    })
+    .catch((error) => {
+      utils.logError("Error -> pedidos.routes -> downloadFactura " + error);
+    });
+}; //exports.downloadFactura
 
 exports.getPedido = (req, res) => {
   pedidosService
