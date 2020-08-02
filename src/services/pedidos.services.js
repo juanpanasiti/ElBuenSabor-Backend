@@ -8,6 +8,9 @@ const usuarioService = require("./usuarios.services");
 const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
 const { newPedidoDTO } = require("../data/dto/pedido.dto");
 const { estadoPedido } = require("../data/static/models.options.statics");
+const nodeoutlook = require("nodejs-nodemailer-outlook");
+const { emailEBS, pass} = require('../config/mailer.config')
+
 
 exports.createPedido = async (pedidoData) => {
   const pedidoDTO = newPedidoDTO();
@@ -343,12 +346,16 @@ exports.updateEstadoPedido = (id, estado) => {
 
 exports.facturarPedido = (id) => {
   return new Promise((resolve, reject) => {
+    let pedidoRealizado
     pedidosDB
       .getPedidoById(id)
       .then((pedido) => {
+        pedidoRealizado = pedido
         return facturaService.crearFactura(pedido);
       })
       .then((factura) => {
+        //Enviar mail
+        enviarEmail(pedidoRealizado);
         resolve(factura);
       })
       .catch((error) => {
@@ -495,4 +502,31 @@ async function actualizarStock(pedido) {
   for (const reventaDetalle of detalle.reventas) {
     reventasDB.updateStock(reventaDetalle.item_id, reventaDetalle.cantidad, false);
   }
-}
+} //actualizarStock()
+
+const enviarEmail = (pedido) => {
+  nodeoutlook.sendEmail({
+    auth: {
+      user: emailEBS,
+      pass: pass,
+    },
+    from: "elbuensabor.mza@outlook.com",
+    to: pedido.usuario.email,
+    subject: "Te enviamos la factura de tu pedido",
+    html: `
+    <h1>Gracias por tu compra</h1>
+    <h3>${pedido.usuario.nombre}, te adjuntamos la factura de tu pedido</h3>
+    <p>Te recordamos que también podés descargarla desde la web.</p>
+    `,
+    text: "This is text version!",
+    replyTo: "juanpanasiti@gmail.com",
+    attachments: [
+      {
+        filename: "factura.pdf",
+        path: pedido.factura,
+      }
+    ],
+    onError: (e) => logError(e),
+    onSuccess: (i) => logSuccess(i),
+  });
+};

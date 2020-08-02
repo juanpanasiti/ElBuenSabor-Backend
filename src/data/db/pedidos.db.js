@@ -44,7 +44,7 @@ exports.getPedidosUsuario = (usuarioId) => {
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
       .populate({
         path: "usuario",
-        select: "nombre apellido telefono",
+        select: "nombre apellido telefono email",
       })
       .populate({
         path: "domicilio",
@@ -92,7 +92,7 @@ exports.getPedidoById = (pedidoId) => {
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
       .populate({
         path: "usuario",
-        select: "nombre apellido telefono",
+        select: "nombre apellido telefono email",
       })
       .populate({
         path: "domicilio",
@@ -226,7 +226,7 @@ exports.getPedidosByEstado = (estado) => {
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
       .populate({
         path: "usuario",
-        select: "nombre apellido telefono",
+        select: "nombre apellido telefono email",
       })
       .populate({
         path: "domicilio",
