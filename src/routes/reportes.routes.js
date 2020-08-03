@@ -30,7 +30,17 @@ exports.getRecaudaciones = (req,res) => {
 }//getRecaudaciones
 
 exports.getRankingPlatos = (req,res) => {
-    res.status(400).json({message: "Aun no funciona"})
+    const desde = new Date(req.body.fecha_desde)
+    const hasta = new Date(req.body.fecha_hasta)
+
+    reportesService.getRankingPlatos(desde,hasta)
+    .then((reporte) => {
+        res.status(200).json(reporte)
+    })
+    .catch((error) => {
+        logError(`Error -> reportes.routes -> getRankingPlatos -> ${error}`)
+        res.status(400).json(error)
+    })
 }//getRankingPlatos
 
 exports.getPedidosPorCliente = (req,res) => {
@@ -65,7 +75,15 @@ exports.getExcelRecaudaciones = (req,res) => {
 }//getExcelRecaudaciones
 
 exports.getExcelRankingPlatos = (req,res) => {
-    res.status(400).json({message: "Aun no funciona"})
+    const desde = new Date(req.body.fecha_desde)
+    const hasta = new Date(req.body.fecha_hasta)
+    reportesService.getExcelRankingPlatos(desde,hasta)
+    .then((reporte) => {
+        res.status(200).download(reporte)
+    })
+    .catch((error) => {
+        res.status(400).json({error: `Error al crear el excel ${error}`})
+    })
 }//getExcelRankingPlatos
 
 exports.getExcelPedidosPorCliente = (req,res) => {

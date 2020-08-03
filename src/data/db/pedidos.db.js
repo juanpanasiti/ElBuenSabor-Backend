@@ -295,8 +295,16 @@ exports.getPedidosPorCondicion = (condicion) => {
     Pedido.find(condicion)
     .select('fecha total')
     .populate({
-      path: 'detalle',
-      select: 'subtotal'
+      path: "detalle",
+      select: "-borrado",
+      populate: {
+        path: "platos",
+        select: "-borrado",
+        populate: {
+          path: "item_id",
+          select: "precioVenta denominacion",
+        },
+      },
     })
     .then((pedidos) => {
       resolve(pedidos);

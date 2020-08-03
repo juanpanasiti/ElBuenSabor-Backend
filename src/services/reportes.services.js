@@ -4,7 +4,7 @@ const reventasDB = require("../data/db/reventas.db");
 const pedidosDB = require("../data/db/pedidos.db");
 const carpetaReportes = "public/";
 const xl = require("excel4node");
-const { logInfo, logWarning, logError, logSuccess } = require("../config/logger.config");
+const { logError } = require("../config/logger.config");
 const { estadoPedido } = require("../data/static/models.options.statics");
 
 //////////////////////////////////////////////////////
@@ -76,9 +76,57 @@ exports.getRecaudaciones = (desde, hasta) => {
   }
 }; //getRecaudaciones
 
-exports.getRankingPlatos = (desde,hasta) => {
-
-}
+exports.getRankingPlatos = (desde, hasta) => {
+  if (desde > hasta) {
+    logError("La fecha desde no puede ser posterior a la fecha hasta");
+    return Promise.reject({
+      error: "La fecha desde no puede ser posterior a la fecha hasta",
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      const condicion = {
+        fecha: { $gte: desde, $lte: hasta },
+      };
+      pedidosDB
+        .getPedidosPorCondicion(condicion)
+        .then((pedidos) => {
+          const reporte = [];
+          for (const pedido of pedidos) {
+            for (const plato of pedido.detalle.platos) {
+              let encontrado = false;
+              for (const item of reporte) {
+                if (item.platoId === plato.item_id._id) {
+                  encontrado = true;
+                  item.cantidad += plato.cantidad;
+                } 
+              } //for-of reporte
+              if (!encontrado) {
+                reporte.push({
+                  plato: plato.item_id.denominacion,
+                  platoId: plato.item_id._id,
+                  cantidad: plato.cantidad,
+                });
+              } 
+            } //for-of platos
+          } //for-of pedidos
+          reporte.sort((a,b) => {
+            if(a.cantidad > b.cantidad){
+                return -1
+            }
+            if(a.cantidad < b.cantidad){
+                return 1
+            } 
+            return 0
+          })
+          resolve(reporte);
+        })
+        .catch((error) => {
+          logError(`Error -> reportes.services -> getRecaudaciones -> ${error}`);
+          return Promise.reject(error);
+        });
+    });//new Promise
+  }//if-else
+};//getRankingPlatos
 
 //Reportes para DESCARGAR
 exports.getExcelArticulosParaComprar = async () => {
@@ -181,6 +229,7 @@ exports.getExcelRecaudaciones = async (desde, hasta) => {
   fila++;
   hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
   hoja.cell(fila, 2).date(hasta).style(estiloFecha);
+  fila++;
 
   //Cabecera tabla
   hoja.cell(fila, 1).string("Fecha").style(estiloCabecera);
@@ -220,3 +269,70 @@ exports.getExcelRecaudaciones = async (desde, hasta) => {
     }
   });
 }; //getExcelRecaudaciones
+
+exports.getExcelRankingPlatos = async (desde, hasta) => {
+    const libro = new xl.Workbook();
+    const hoja = libro.addWorksheet("Reporte Ranking Platos");
+    let fila = 1;
+    const pedidos = await this.getRankingPlatos(desde, hasta);
+  
+    //Estilos para docs de excel
+    const estiloTitulo = libro.createStyle({
+      font: {
+        color: "#FF0800",
+        size: 14,
+      },
+    });
+    const estiloCabecera = libro.createStyle({
+      font: {
+        color: "#0008FF",
+        size: 12,
+      },
+    });
+    const estiloTexto = libro.createStyle({
+      font: {
+        color: "#000000",
+        size: 10,
+      },
+    });
+    
+    const estiloFecha = libro.createStyle({
+      dateFormat: "d/m/yy hh:mm:ss",
+    });
+  
+    //Armar libro
+    hoja.cell(fila, 1).string("Ranking de platos más pedidos").style(estiloTitulo);
+    fila++;
+    hoja.cell(fila, 1).string("Desde:").style(estiloCabecera);
+    hoja.cell(fila, 2).date(desde).style(estiloFecha);
+    fila++;
+    hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
+    hoja.cell(fila, 2).date(hasta).style(estiloFecha);
+    fila++;
+  
+    //Cabecera tabla
+    hoja.cell(fila, 1).string("Plato").style(estiloCabecera);
+    hoja.cell(fila, 2).string("Cant.").style(estiloCabecera);
+    fila++;
+    for (const pedido of pedidos) {
+      hoja.cell(fila, 1).string(pedido.plato).style(estiloTexto);
+      hoja.cell(fila, 2).number(pedido.cantidad).style(estiloTexto)
+      fila++;
+    } //for-of pedidos
+  
+    //Generar excel
+    return new Promise((resolve, reject) => {
+      try {
+        libro.write(carpetaReportes + "reporteRanking.xlsx", (err, stats) => {
+          if (err) {
+            logError(err);
+            reject(err);
+          } else {
+            resolve(carpetaReportes + "reporteRanking.xlsx");
+          }
+        });
+      } catch (error) {
+        reject("ERROR try-catch");
+      }
+    });
+  }; //getExcelRankingPlatos
