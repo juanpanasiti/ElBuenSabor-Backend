@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 require("../models/Pedido");
-const { logSuccess, logError, logInfo } = require("../../config/logger.config");
+const {
+  logSuccess,
+  logError,
+  logInfo,
+  logWarning,
+} = require("../../config/logger.config");
+const { populate } = require("../models/Plato");
 
 //Registrar Schema
 const Pedido = mongoose.model("Pedido");
@@ -40,7 +46,7 @@ exports.savePedido = (pedidoData) => {
 //Obtener no borrados
 exports.getPedidosUsuario = (usuarioId) => {
   return new Promise((resolve, reject) => {
-    Pedido.find({ borrado: false , usuario: usuarioId})
+    Pedido.find({ borrado: false, usuario: usuarioId })
       .select("fecha estado minutosDemora delivery total factura numero formaPago")
       .populate({
         path: "usuario",
@@ -282,4 +288,22 @@ exports.getPedidosPendientesAnteriores = (fecha) => {
         reject(err);
       });
   });
-};
+}; //getPedidosPendientesAnteriores
+
+exports.getPedidosPorCondicion = (condicion) => {
+  return new Promise((resolve, reject) => {
+    Pedido.find(condicion)
+    .select('fecha total')
+    .populate({
+      path: 'detalle',
+      select: 'subtotal'
+    })
+    .then((pedidos) => {
+      resolve(pedidos);
+    })
+    .catch((error) => {
+      logError("Error -> pedidos.db -> getPedidosPorCondicion -> " + error);
+      reject(error);
+    });
+  })
+}; //getPedidosPorCondicion

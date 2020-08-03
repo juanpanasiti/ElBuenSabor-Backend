@@ -9,6 +9,7 @@ const URL_ROLES = URL_BASE + "/roles";
 const URL_RUBROS = URL_BASE + "/rubros";
 const URL_USUARIOS = URL_BASE + "/usuarios";
 const URL_PEDIDOS = URL_BASE + "/pedidos";
+const URL_REPORTES = URL_BASE + "/reportes";
 const URL_OPCIONES = URL_BASE + "/opciones";
 
 //implementaciones de los endpoints
@@ -21,6 +22,7 @@ const rolesRoutes = require("./roles.routes");
 const rubrosRoutes = require("./rubro.routes");
 const usuariosRoutes = require("./usuarios.routes");
 const pedidosRoutes = require("./pedidos.routes");
+const reportesRoutes = require('./reportes.routes')
 const opcionesRoutes = require('./opciones.routes')
 
 
@@ -137,6 +139,19 @@ exports.assignRoutes = (app) => {
   app.put(URL_PEDIDOS + '/agregar-item')
   //Otras consultas
   app.put(URL_PEDIDOS + '/:email')
+
+  //Reportes
+  //Ver
+  app.get(URL_REPORTES + '/stock', reportesRoutes.getArticulosParaComprar) // Reporte
+  app.get(URL_REPORTES + '/recaudaciones', reportesRoutes.getRecaudaciones) // Reporte
+  app.get(URL_REPORTES + '/ranking', reportesRoutes.getRankingPlatos) // Reporte
+  app.get(URL_REPORTES + '/pedidos-cliente', reportesRoutes.getPedidosPorCliente) // Reporte
+  //Descargar
+  app.get(URL_REPORTES + '/descargar/stock', reportesRoutes.getExcelArticulosParaComprar) // Descargar Reporte
+  app.get(URL_REPORTES + '/descargar/recaudaciones', reportesRoutes.getExcelRecaudaciones) // Descargar Reporte
+  app.get(URL_REPORTES + '/descargar/ranking', reportesRoutes.getExcelRankingPlatos) // Descargar Reporte
+  app.get(URL_REPORTES + '/descargar/pedidos-cliente', reportesRoutes.getExcelPedidosPorCliente) // Descargar Reporte
+
 
 
 

@@ -6,3 +6,4 @@
 
 # Archivos generados
 /public/facturas
+*.xlsx
