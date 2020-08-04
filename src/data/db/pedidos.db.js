@@ -293,7 +293,7 @@ exports.getPedidosPendientesAnteriores = (fecha) => {
 exports.getPedidosPorCondicion = (condicion) => {
   return new Promise((resolve, reject) => {
     Pedido.find(condicion)
-    .select('fecha total')
+    .select('fecha total estado')
     .populate({
       path: "detalle",
       select: "-borrado",
@@ -305,6 +305,10 @@ exports.getPedidosPorCondicion = (condicion) => {
           select: "precioVenta denominacion",
         },
       },
+    })
+    .populate({
+      path: "usuario",
+      select: "nombre apellido email"
     })
     .then((pedidos) => {
       resolve(pedidos);

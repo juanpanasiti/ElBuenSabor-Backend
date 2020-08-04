@@ -44,7 +44,17 @@ exports.getRankingPlatos = (req,res) => {
 }//getRankingPlatos
 
 exports.getPedidosPorCliente = (req,res) => {
-    res.status(400).json({message: "Aun no funciona"})
+    const desde = new Date(req.body.fecha_desde)
+    const hasta = new Date(req.body.fecha_hasta)
+
+    reportesService.getPedidosPorCliente(desde,hasta)
+    .then((reporte) => {
+        res.status(200).json(reporte)
+    })
+    .catch((error) => {
+        logError(`Error -> reportes.routes -> getRankingPlatos -> ${error}`)
+        res.status(400).json(error)
+    })
 }//getPedidosPorCliente
 
 
@@ -87,5 +97,13 @@ exports.getExcelRankingPlatos = (req,res) => {
 }//getExcelRankingPlatos
 
 exports.getExcelPedidosPorCliente = (req,res) => {
-    res.status(400).json({message: "Aun no funciona"})
+    const desde = new Date(req.body.fecha_desde)
+    const hasta = new Date(req.body.fecha_hasta)
+    reportesService.getExcelPedidosPorCliente(desde,hasta)
+    .then((reporte) => {
+        res.status(200).download(reporte)
+    })
+    .catch((error) => {
+        res.status(400).json({error: `Error al crear el excel ${error}`})
+    })
 }//getExcelPedidosPorCliente
