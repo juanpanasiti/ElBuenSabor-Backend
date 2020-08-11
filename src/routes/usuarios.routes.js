@@ -22,7 +22,7 @@ exports.getUsuarioByEmail = (req, res) => {
     })
     .catch((err) => {
       logError("Error -> usuarios.routes -> getUsuarioByEmail -> " + err);
-      res.json(err);
+      res.status(400).json(err);
     });
 }; //exports.getUsuarioByEmail
 
@@ -35,7 +35,7 @@ exports.checkUsuarioByEmail = (req, res) => {
     })
     .catch((err) => {
       logError("Error -> usuarios.routes -> checkUsuarioByEmail -> " + err);
-      res.json(err);
+      res.status(400).json(err);
     });
 }; //exports.checkUsuarioByEmail
 
