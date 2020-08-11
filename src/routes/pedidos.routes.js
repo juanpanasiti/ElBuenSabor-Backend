@@ -11,7 +11,7 @@ exports.createPedido = (req, res) => {
       res.json(pedido);
     })
     .catch((error) => {
-      utils.logError("Error -> pedidos.routes -> createPedido " + error);
+      utils.logError("Error -> pedidos.routes -> createPedido " + error.message);
       res.status(400).json(error);
     });
 }; //exports.createPedido

@@ -82,8 +82,8 @@ exports.getPlatoById = (id) => {
       .select("denominacion precioVenta imagenPath ingredientes _id rubro tiempoCocina")
       .populate({
         path: "ingredientes",
-        select: "_id insumo",
-        populate: { path: "insumo", select: "_id denominacion unidadMedida" },
+        select: "_id insumo cantidad",
+        populate: { path: "insumo", select: "_id denominacion unidadMedida stockActual" },
       })
       .populate("rubro", "_id denominacion")
       .then((plato) => {

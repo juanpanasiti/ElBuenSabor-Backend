@@ -29,6 +29,10 @@ exports.createPedido = async (pedidoData) => {
       messasge: "Envios con delivery solo aceptan pago en efectivo.",
     });
   }
+  //Verificar ingredientes para el pedido
+  if(!(await verificarIngredientes(pedidoData.platos))){
+    return Promise.reject({message: "No hay ingredientes suficientes para realizar el pedido"})
+  }
   //Calcular demora del pedido
   await calcularDemora(pedidoDTO, pedidoData.platos);
 
@@ -530,3 +534,52 @@ const enviarEmail = (pedido) => {
     onSuccess: (i) => logSuccess(i),
   });
 };
+const verificarIngredientes = async (platos) => {
+  const insumosNecesarios = []
+  for (const plato of platos) {
+    promise = new Promise((resolve, reject) => {
+      platosDB
+        .getPlatoById(plato.item_id)
+        .then((plato) => {
+          resolve(plato.ingredientes);
+        })
+        .catch((error) => {
+          logError(error);
+          reject([]);
+        });
+    }); //promise
+
+    for (const ingrediente of (await promise)) {
+      let encontrado = false
+      for (const insumo of insumosNecesarios) {
+        if(insumo._id === ingrediente.insumo._id){
+          insumo.necesario += ingrediente.cantidad * plato.cantidad
+          encontrado = true
+        }//if()
+      }//for-insumo
+
+      if(!encontrado){
+        insumosNecesarios.push({
+          _id: ingrediente.insumo._id,
+          necesario: ingrediente.cantidad * plato.cantidad,
+          stock: ingrediente.insumo.stockActual
+        })
+      }//if no encontrado
+    }//for-ingredientes
+  }//for-platos
+
+  //Verificar cantidades necesarias
+  let valido = true
+  for (const insumo of insumosNecesarios) {
+    if(insumo.necesario > insumo.stock){
+      valido = false
+      logInfo(insumo)
+    }
+  }
+  if (valido) {
+    logInfo("Pedido valido")
+  } else {
+    logWarning("Faltan ingredientes para el pedido")
+  }
+  return valido 
+}

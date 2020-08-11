@@ -22,24 +22,25 @@ exports.getPlatos = () => {
     platosDB
       .getPlatos()
       .then((platos) => {
-        const platosValidos = [];
-        for (const plato of platos) {
-          let valido = true;
-          if (plato.ingredientes.length) {
-            //Solo mostrar platos con ingredientes
-            //sino significa que el plato no está completamente cargado
-            for (const ingrediente of plato.ingredientes) {
-              if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
-                valido = false;
-                break;
-              }
-            } //for-ingredientes
-          } //if
-          if (valido) {
-            platosValidos.push(plato);
-          }
-        } //for-platos
-        logWarning(platosValidos.length);
+        const platosValidos = platos;
+        // const platosValidos = [];
+        // for (const plato of platos) {
+        //   let valido = true;
+        //   if (plato.ingredientes.length) {
+        //     //Solo mostrar platos con ingredientes
+        //     //sino significa que el plato no está completamente cargado
+        //     for (const ingrediente of plato.ingredientes) {
+        //       if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
+        //         valido = false;
+        //         break;
+        //       }
+        //     } //for-ingredientes
+        //   } //if
+        //   if (valido) {
+        //     platosValidos.push(plato);
+        //   }
+        // } //for-platos
+        // logWarning(platosValidos.length);
         resolve(platosValidos);
       })
       .catch((error) => {
@@ -54,24 +55,25 @@ exports.getPlatosPorRubro = (rubroId) => {
     platosDB
       .getPlatosPorRubro(rubroId)
       .then((platos) => {
-        const platosValidos = [];
-        for (const plato of platos) {
-          let valido = true;
-          if (plato.ingredientes.length) {
-            //Solo mostrar platos con ingredientes
-            //sino significa que el plato no está completamente cargado
-            for (const ingrediente of plato.ingredientes) {
-              if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
-                valido = false;
-                break;
-              }
-            } //for-ingredientes
-          } //if
-          if (valido) {
-            platosValidos.push(plato);
-          }
-        } //for-platos
-        logWarning(platosValidos.length);
+        const platosValidos = platos;
+        // const platosValidos = [];
+        // for (const plato of platos) {
+        //   let valido = true;
+        //   if (plato.ingredientes.length) {
+        //     //Solo mostrar platos con ingredientes
+        //     //sino significa que el plato no está completamente cargado
+        //     for (const ingrediente of plato.ingredientes) {
+        //       if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
+        //         valido = false;
+        //         break;
+        //       }
+        //     } //for-ingredientes
+        //   } //if
+        //   if (valido) {
+        //     platosValidos.push(plato);
+        //   }
+        // } //for-platos
+        // logWarning(platosValidos.length);
         resolve(platosValidos);
       })
       .catch((error) => {
