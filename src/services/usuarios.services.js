@@ -16,29 +16,35 @@ exports.getUsuarios = () => {
   });
 }; //exports.getUsuarios
 
-exports.getUsuarioByEmail = (email) => {
+exports.getUsuarioByEmail = (email, crear) => {
   return new Promise((resolve, reject) => {
     usuariosDB
       .getUsuarioByEmail(email)
       .then((usuario) => {
+        logWarning(usuario)
         if (!usuario) {
-          logWarning(
-            `El usuario ${email} no se encuentra registrado, por lo que se lo cargará en el sistema.`
-          );
-          return usuariosDB
-            .saveUsuario({ email: email })
-            .then((nuevoUsuario) => {
-              usuario = nuevoUsuario;
-              //return usuario
-              resolve(usuario);
-            })
-            .catch((err) => {
-              logError(
-                "Error -> usuarios.services -> getUsuarioByEmail -> save -> " +
-                  err
-              );
-              reject(err);
-            });
+          if(crear){
+            logWarning(
+              `El usuario ${email} no se encuentra registrado, por lo que se lo cargará en el sistema.`
+            );
+            return usuariosDB
+              .saveUsuario({ email: email })
+              .then((nuevoUsuario) => {
+                usuario = nuevoUsuario;
+                //return usuario
+                resolve(usuario);
+              })
+              .catch((err) => {
+                logError(
+                  "Error -> usuarios.services -> getUsuarioByEmail -> save -> " +
+                    err
+                );
+                reject(err);
+              });
+
+          }else {
+            reject({message: `No se encontró el usuario con el email ${email}`})
+          }
         }
         resolve(usuario);
       })

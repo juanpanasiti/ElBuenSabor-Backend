@@ -14,8 +14,9 @@ exports.getUsuarios = (req, res) => {
 }; //exports.getUsuarios
 
 exports.getUsuarioByEmail = (req, res) => {
+  const crear = false
   usuariosService
-    .getUsuarioByEmail(req.params.email)
+    .getUsuarioByEmail(req.params.email,crear)
     .then((usuario) => {
       res.json(usuario);
     })
@@ -24,6 +25,19 @@ exports.getUsuarioByEmail = (req, res) => {
       res.json(err);
     });
 }; //exports.getUsuarioByEmail
+
+exports.checkUsuarioByEmail = (req, res) => {
+  const crear = true
+  usuariosService
+    .getUsuarioByEmail(req.params.email,crear)
+    .then((usuario) => {
+      res.json(usuario);
+    })
+    .catch((err) => {
+      logError("Error -> usuarios.routes -> checkUsuarioByEmail -> " + err);
+      res.json(err);
+    });
+}; //exports.checkUsuarioByEmail
 
 exports.getUsuarioById = (req, res) => {
   usuariosService
