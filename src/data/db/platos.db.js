@@ -7,6 +7,7 @@ const {
   logWarning,
 } = require("../../config/logger.config");
 require("../models/Plato");
+const ingredienteDB = require('./ingredientes.db')
 
 //Registrar Schema
 const Plato = mongoose.model("Plato");
@@ -37,7 +38,7 @@ exports.getPlatosPorRubro = (rubroId) => {
       .select("denominacion precioVenta imagenPath ingredientes rubro")
       .populate({
         path: "ingredientes",
-        select: "insumo",
+        select: "insumo cantidad",
         populate: { path: "insumo", select: "denominacion unidadMedida" },
       })
       .populate("rubro", "_id denominacion")
@@ -59,8 +60,8 @@ exports.getPlatos = () => {
       .select("denominacion precioVenta imagenPath ingredientes _id rubro tiempoCocina")
       .populate({
         path: "ingredientes",
-        select: "_id insumo",
-        populate: { path: "insumo", select: "_id denominacion unidadMedida" },
+        select: "insumo cantidad",
+        populate: { path: "insumo", select: "_id denominacion unidadMedida stockActual" },
       })
       .populate("rubro", "_id denominacion")
       .then((platos) => {

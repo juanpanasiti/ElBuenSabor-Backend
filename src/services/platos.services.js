@@ -22,7 +22,25 @@ exports.getPlatos = () => {
     platosDB
       .getPlatos()
       .then((platos) => {
-        resolve(platos);
+        const platosValidos = [];
+        for (const plato of platos) {
+          let valido = true;
+          if (plato.ingredientes.length) {
+            //Solo mostrar platos con ingredientes
+            //sino significa que el plato no está completamente cargado
+            for (const ingrediente of plato.ingredientes) {
+              if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
+                valido = false;
+                break;
+              }
+            } //for-ingredientes
+          } //if
+          if (valido) {
+            platosValidos.push(plato);
+          }
+        } //for-platos
+        logWarning(platosValidos.length);
+        resolve(platosValidos);
       })
       .catch((error) => {
         logError("Error -> platos.services -> getPlatos -> " + error);
@@ -36,7 +54,25 @@ exports.getPlatosPorRubro = (rubroId) => {
     platosDB
       .getPlatosPorRubro(rubroId)
       .then((platos) => {
-        resolve(platos);
+        const platosValidos = [];
+        for (const plato of platos) {
+          let valido = true;
+          if (plato.ingredientes.length) {
+            //Solo mostrar platos con ingredientes
+            //sino significa que el plato no está completamente cargado
+            for (const ingrediente of plato.ingredientes) {
+              if (ingrediente.insumo.stockActual < ingrediente.cantidad) {
+                valido = false;
+                break;
+              }
+            } //for-ingredientes
+          } //if
+          if (valido) {
+            platosValidos.push(plato);
+          }
+        } //for-platos
+        logWarning(platosValidos.length);
+        resolve(platosValidos);
       })
       .catch((error) => {
         logError("Error -> platos.services -> getPlatosPorRubro -> " + error);
@@ -84,7 +120,6 @@ exports.addIngredientes = async (platoId, ingredientesData) => {
     await addIngrediente(ingredienteDTO);
   }
   return new Promise((resolve, reject) => {
-
     platosDB
       .getPlatoById(platoId)
       .then((plato) => {
