@@ -1,5 +1,5 @@
 const usuariosService = require("../services/usuarios.services");
-const {logSuccess, logError, logInfo, logWarning} = require('../config/logger.config')
+const { logSuccess, logError, logInfo, logWarning } = require("../config/logger.config");
 
 exports.getUsuarios = (req, res) => {
   usuariosService
@@ -14,9 +14,9 @@ exports.getUsuarios = (req, res) => {
 }; //exports.getUsuarios
 
 exports.getUsuarioByEmail = (req, res) => {
-  const crear = false
+  const crear = false;
   usuariosService
-    .getUsuarioByEmail(req.params.email,crear)
+    .getUsuarioByEmail(req.params.email, crear)
     .then((usuario) => {
       res.json(usuario);
     })
@@ -27,9 +27,9 @@ exports.getUsuarioByEmail = (req, res) => {
 }; //exports.getUsuarioByEmail
 
 exports.checkUsuarioByEmail = (req, res) => {
-  const crear = true
+  const crear = true;
   usuariosService
-    .getUsuarioByEmail(req.params.email,crear)
+    .getUsuarioByEmail(req.params.email, crear)
     .then((usuario) => {
       res.json(usuario);
     })
@@ -50,6 +50,18 @@ exports.getUsuarioById = (req, res) => {
       res.status(err.code).json(err);
     });
 }; //exports.getUsuarioById
+
+exports.getEmpleados = (req, res) => {
+  usuariosService
+    .getEmpleados()
+    .then((usuarios) => {
+      res.json(usuarios);
+    })
+    .catch((err) => {
+      logError("Error -> usuarios.routes -> getEmpleados -> " + err.message);
+      res.status(err.code).json(err);
+    });
+}; //getEmpleados
 
 exports.updateUsuario = (req, res) => {
   const usuarioData = req.body;
@@ -117,7 +129,7 @@ exports.getUsuariosByRol = (req, res) => {
     .getUsuarioByRol(req.params.rol)
     .then((usuarios) => {
       logError(usuarios.length);
-      
+
       res.json(usuarios);
     })
     .catch((err) => {

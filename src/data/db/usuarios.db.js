@@ -117,6 +117,22 @@ exports.getUsuarioByEmail = (email) => {
   });
 }; //exports.getUsuarioByEmail
 
+exports.getEmpleados = () => {
+  return new Promise((resolve,reject) => {
+    Usuario.find({$where: function() {
+      return(this.roles.length > 0)
+    }})
+    .then((empleados) => {
+      logSuccess(`Encontrados ${empleados.length} empleados`);
+      resolve(empleados);
+    })
+    .catch((err) => {
+      logError("Error -> usuarios.db -> getEmpleados -> " + err);
+      reject(err);
+    });
+  })
+}//getEmpleados
+
 //Actualizar un usuario
 exports.updateUsuario = (id, usuarioData) => {
   logInfo(`Actualizando datos del usuario ${id}`);

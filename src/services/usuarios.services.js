@@ -69,6 +69,19 @@ exports.getUsuarioById = (id) => {
   });
 }; //exports.getUsuarioById
 
+exports.getEmpleados = () => {
+  return new Promise((resolve,reject) => {
+    usuariosDB.getEmpleados()
+    .then((usuarios) => {
+      resolve(usuarios);
+    })
+    .catch((err) => {
+      logError("Error -> usuarios.services -> getEmpleados -> " + err.message);
+      reject(err);
+    });
+  })
+}//getEmpleados
+
 exports.updateUsuario = (id, usuarioData) => {
   return new Promise((resolve, reject) => {
     usuariosDB

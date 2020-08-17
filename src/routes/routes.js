@@ -107,8 +107,8 @@ exports.assignRoutes = (app) => {
   app.get(URL_USUARIOS + "/", usuariosRoutes.getUsuarios); //Obtener todos los usuarios (borrados o no)
   app.get(URL_USUARIOS + "/buscar/:email", usuariosRoutes.getUsuarioByEmail); //Obtener usuario por email
   app.get(URL_USUARIOS + "/check/:email", usuariosRoutes.checkUsuarioByEmail); //Obtener usuario por email
+  app.get(URL_USUARIOS + "/empleados", usuariosRoutes.getEmpleados); //Obtener usuario por ID
   app.get(URL_USUARIOS + "/:id", usuariosRoutes.getUsuarioById); //Obtener usuario por ID
-  // app.get(URL_USUARIOS + "/empleados", usuariosRoutes.getEmpleados); //Obtener usuario por ID
   // app.get(URL_USUARIOS + "/clientes", usuariosRoutes.getClientes); //Obtener usuario por ID
   app.put(URL_USUARIOS + "/:id", usuariosRoutes.updateUsuario); //Actualizar usuario
   app.put(URL_USUARIOS + "/softdelete/:id", usuariosRoutes.softdeleteUsuario); //Borrado lógido de un usuario
