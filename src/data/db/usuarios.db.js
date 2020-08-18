@@ -122,6 +122,11 @@ exports.getEmpleados = () => {
     Usuario.find({$where: function() {
       return(this.roles.length > 0)
     }})
+    .select('nombre apellido fechaNacimiento telefono roles domicilios email _id')
+    .populate({
+      path: 'roles',
+      select: 'nombreRol _id'
+    })
     .then((empleados) => {
       logSuccess(`Encontrados ${empleados.length} empleados`);
       resolve(empleados);
