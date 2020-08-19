@@ -1,5 +1,5 @@
 const reportesService = require('../services/reportes.services')
-const { logError, logWarning } = require('../config/logger.config')
+const { logError, logWarning, logInfo } = require('../config/logger.config')
 
 //Reportes para MOSTRAR
 exports.getArticulosParaComprar = (req,res) => {
@@ -61,6 +61,7 @@ exports.getPedidosPorCliente = (req,res) => {
 
 //Reportes para DESCARGAR
 exports.getExcelArticulosParaComprar = (req,res) => {
+    logInfo("Generando excel de reporte de stock")
     reportesService.getExcelArticulosParaComprar()
     .then((reporte) => {
         res.status(200).download(reporte)

@@ -187,6 +187,32 @@ exports.getExcelArticulosParaComprar = async () => {
   let col = 1;
   const articulosPC = await this.getArticulosParaComprar();
 
+  //Estilos para docs de excel
+  const estiloTitulo = libro.createStyle({
+    font: {
+      color: "#FF0800",
+      size: 14,
+    },
+  });
+  const estiloCabecera = libro.createStyle({
+    font: {
+      color: "#0008FF",
+      size: 12,
+    },
+  });
+  const estiloTexto = libro.createStyle({
+    font: {
+      color: "#000000",
+      size: 10,
+    },
+  });
+  const estiloMoneda = libro.createStyle({
+    numberFormat: "$#,##0.00; ($#,##0.00); -",
+  });
+  const estiloFecha = libro.createStyle({
+    dateFormat: "d/m/yy hh:mm:ss",
+  });
+
   //Armar libro
   hoja.cell(fila, col).string("Artículos con nivel de stock crítico").style(estiloTitulo);
   fila++;
