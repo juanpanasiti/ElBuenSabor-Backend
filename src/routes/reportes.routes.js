@@ -46,7 +46,8 @@ exports.getRankingPlatos = (req,res) => {
 exports.getPedidosPorCliente = (req,res) => {
     const desde = new Date(req.body.fecha_desde)
     const hasta = new Date(req.body.fecha_hasta)
-
+    logWarning("BODY:")
+    logWarning(req.body)
     reportesService.getPedidosPorCliente(desde,hasta)
     .then((reporte) => {
         res.status(200).json(reporte)

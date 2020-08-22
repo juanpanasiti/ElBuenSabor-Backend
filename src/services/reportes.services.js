@@ -4,7 +4,7 @@ const reventasDB = require("../data/db/reventas.db");
 const pedidosDB = require("../data/db/pedidos.db");
 const carpetaReportes = "public/";
 const xl = require("excel4node");
-const { logError, logWarning } = require("../config/logger.config");
+const { logError, logWarning, logInfo } = require("../config/logger.config");
 const { estadoPedido } = require("../data/static/models.options.statics");
 
 //////////////////////////////////////////////////////
@@ -147,6 +147,7 @@ exports.getPedidosPorCliente = async (desde, hasta) => {
           for (const pedido of pedidos) {
             let encontrado = false;
             for (const item of reporte) {
+              logInfo(pedido)
               if (item.usuarioId === pedido.usuario._id) {
                 logWarning("Repetido!!");
                 encontrado = true;
@@ -172,7 +173,7 @@ exports.getPedidosPorCliente = async (desde, hasta) => {
           resolve(reporte);
         })
         .catch((error) => {
-          logError(`Error -> reportes.services -> getRecaudaciones -> ${error}`);
+          logError(`Error -> reportes.services -> getPedidosPorCliente -> ${error}`);
           return Promise.reject(error);
         });
     }); //new Promise
