@@ -7,7 +7,7 @@ const {
   logWarning,
 } = require("../../config/logger.config");
 require("../models/Plato");
-const ingredienteDB = require('./ingredientes.db')
+const ingredienteDB = require("./ingredientes.db");
 
 //Registrar Schema
 const Plato = mongoose.model("Plato");
@@ -61,7 +61,14 @@ exports.getPlatos = () => {
       .populate({
         path: "ingredientes",
         select: "insumo cantidad",
-        populate: { path: "insumo", select: "_id denominacion unidadMedida stockActual" },
+        populate: {
+          path: "insumo",
+          select: "_id denominacion unidadMedida stockActual rubro",
+          populate: {
+            path: 'rubro',
+            select: '_id denominacion'
+          }
+        },
       })
       .populate("rubro", "_id denominacion")
       .then((platos) => {
@@ -95,8 +102,6 @@ exports.getPlatoById = (id) => {
       });
   });
 }; //exports.getPlatoById
-
-
 
 //Actualizar uno
 exports.updatePlato = (id, platoData) => {
