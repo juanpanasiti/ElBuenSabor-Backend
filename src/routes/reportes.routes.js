@@ -14,10 +14,8 @@ exports.getArticulosParaComprar = (req,res) => {
 }//getArticulosParaComprar
 
 exports.getRecaudaciones = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    //const desde = req.body.fecha_desde
-    const hasta = new Date(req.body.fecha_hasta)
-    //const hasta = req.body.fecha_hasta
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
 
     reportesService.getRecaudaciones(desde,hasta)
     .then((reporte) => {
@@ -30,8 +28,8 @@ exports.getRecaudaciones = (req,res) => {
 }//getRecaudaciones
 
 exports.getRankingPlatos = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    const hasta = new Date(req.body.fecha_hasta)
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
 
     reportesService.getRankingPlatos(desde,hasta)
     .then((reporte) => {
@@ -44,10 +42,9 @@ exports.getRankingPlatos = (req,res) => {
 }//getRankingPlatos
 
 exports.getPedidosPorCliente = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    const hasta = new Date(req.body.fecha_hasta)
-    logWarning("BODY:")
-    logWarning(req.body)
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
+
     reportesService.getPedidosPorCliente(desde,hasta)
     .then((reporte) => {
         res.status(200).json(reporte)
@@ -73,10 +70,8 @@ exports.getExcelArticulosParaComprar = (req,res) => {
 }//getExcelArticulosParaComprar
 
 exports.getExcelRecaudaciones = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    //const desde = req.body.fecha_desde
-    const hasta = new Date(req.body.fecha_hasta)
-    //const hasta = req.body.fecha_hasta
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
     reportesService.getExcelRecaudaciones(desde,hasta)
     .then((reporte) => {
         res.status(200).download(reporte)
@@ -87,8 +82,8 @@ exports.getExcelRecaudaciones = (req,res) => {
 }//getExcelRecaudaciones
 
 exports.getExcelRankingPlatos = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    const hasta = new Date(req.body.fecha_hasta)
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
     reportesService.getExcelRankingPlatos(desde,hasta)
     .then((reporte) => {
         res.status(200).download(reporte)
@@ -99,8 +94,8 @@ exports.getExcelRankingPlatos = (req,res) => {
 }//getExcelRankingPlatos
 
 exports.getExcelPedidosPorCliente = (req,res) => {
-    const desde = new Date(req.body.fecha_desde)
-    const hasta = new Date(req.body.fecha_hasta)
+    const desde = new Date(req.query.fecha_desde)
+    const hasta = new Date(req.query.fecha_hasta)
     reportesService.getExcelPedidosPorCliente(desde,hasta)
     .then((reporte) => {
         res.status(200).download(reporte)
