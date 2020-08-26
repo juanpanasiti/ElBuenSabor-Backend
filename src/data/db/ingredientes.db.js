@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("../models/DetalleIngrediente");
 const platosDB = require("../db/platos.db");
-const { logError, logInfo, logSuccess } = require("../../config/logger.config");
+const { logError, logInfo, logSuccess, logWarning } = require("../../config/logger.config");
 
 //Registrar Schema
 const Ingrediente = mongoose.model("DetalleIngrediente");
@@ -70,6 +70,7 @@ exports.getIngredienteById = (id) => {
 
 //Actualizar uno
 exports.updateIngrediente = (id, ingredienteData) => {
+  logWarning("Actualizando ingrediente")
   return new Promise((resolve, reject) => {
     Ingrediente.findByIdAndUpdate(id, ingredienteData, { new: true })
       .then((ingrediente) => {
