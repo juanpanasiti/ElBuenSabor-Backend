@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const utils = require("../../config/logger.config");
+const utils = require("../../tools/utils.tools");
 const {
   logError,
   logSuccess,
@@ -89,7 +89,7 @@ exports.getPlatoById = (id) => {
       .select("denominacion precioVenta imagenPath ingredientes _id rubro tiempoCocina")
       .populate({
         path: "ingredientes",
-        select: "_id insumo cantidad",
+        select: "_id insumo cantidad borrado",
         populate: { path: "insumo", select: "_id denominacion unidadMedida stockActual" },
       })
       .populate("rubro", "_id denominacion")
@@ -171,6 +171,7 @@ exports.addIngrediente = (ingredienteId, platoId) => {
 //Remover ID de ingrediente de la lista de ingredientes del plato
 exports.removeIngrediente = (ingredienteId, platoId) => {
   return new Promise((resolve, reject) => {
+    logWarning("Ingrediente removido")
     this.getPlatoById(platoId)
       .then((plato) => {
         const ingredientes = utils.removeItemFromList(plato.ingredientes, ingredienteId);

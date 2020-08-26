@@ -46,8 +46,17 @@ exports.getIngredientes = () => {
 exports.getIngredienteById = (id) => {
   return new Promise((resolve, reject) => {
     Ingrediente.findById(id)
-      .populate("plato")
-      .populate("insumo")
+    .select('_id insumo plato cantindad borrado')
+      .populate({
+        path: "plato",
+        select: "_id precioVenta imagenPath borrado denominacion tiempoCocina rubro",
+        populate: { path: "rubro", select: "_id denominacion" },
+      })
+      .populate({
+        path: "insumo",
+        select: "_id stockActual borrado denominacion unidadMedida rubro",
+        populate: { path: "rubro", select: "_id denominacion" },
+      })
       .then((ingrediente) => {
         logInfo(`Encontrado el ingrediente '${ingrediente.insumo.denominacion}' del plato '${ingrediente.plato.denominacion}'`)
         resolve(ingrediente);
