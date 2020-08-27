@@ -10,8 +10,8 @@ exports.Rubro = Rubro;
 //Guardar
 exports.saveRubro = (rubroData) => {
   return new Promise((resolve, reject) => {
-    if(rubroData.rubroPadre === ""){
-      rubroData.rubroPadre = null
+    if (rubroData.rubroPadre === "") {
+      rubroData.rubroPadre = null;
     }
     const rubro = new Rubro(rubroData);
     rubro
@@ -47,6 +47,7 @@ exports.getRubrosPorPadre = (idPadre) => {
 exports.getRubros = (estaBorrado) => {
   return new Promise((resolve, reject) => {
     Rubro.find({ borrado: estaBorrado })
+      .sort("esRubroInsumo denominacion")
       .populate("rubroPadre")
       .then((rubros) => {
         logSuccess(`Encontrados ${rubros.length} rubros`);
@@ -63,7 +64,12 @@ exports.getRubros = (estaBorrado) => {
 exports.getRubrosPorTipo = (esDeInsumo) => {
   return new Promise((resolve, reject) => {
     Rubro.find({ esRubroInsumo: esDeInsumo, borrado: false })
-      .populate("rubroPadre")
+      .select("_id rubroPadre imagenPath denominacion")
+      .sort("denominacion")
+      .populate({
+        path: "rubroPadre",
+        select: "_id denominacion",
+      })
       .then((rubros) => {
         logSuccess(`Encontrados ${rubros.length} rubros`);
         resolve(rubros);
