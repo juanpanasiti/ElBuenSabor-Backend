@@ -37,6 +37,19 @@ exports.getReventasParaComprar = (req,res) => {
   })
 }//getReventasParaComprar
 
+exports.getReventasPorRubro = (req, res) => {
+  reventasService
+  .getReventasPorRubro(req.params.rubroId)
+  .then((reventas) => {
+    res.json(reventas);
+  })
+  .catch((err) => {
+    logError("Error -> reventas.routes -> getReventasPorRubro " + err);
+    
+    res.status(400).json(err);
+  });
+}; //getReventasPorRubro
+
 exports.getReventa = (req, res) => {
   reventasService
     .getReventaById(req.params.id)

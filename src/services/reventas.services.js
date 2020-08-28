@@ -30,17 +30,33 @@ exports.getReventas = () => {
 }; //exports.getReventas
 
 exports.getReventasParaComprar = () => {
-  return new Promise((resolve,reject) => {
-    reventasDB.getReventasParaComprar()
-    .then((reventas) => {
-      resolve(reventas)
-    })
-    .catch((error) => {
-      logError("Error -> reventas.services -> getReventasParaComprar -> " + error);
-      reject(error)
-    })
-  })
-}//getReventasParaComprar
+  return new Promise((resolve, reject) => {
+    reventasDB
+      .getReventasParaComprar()
+      .then((reventas) => {
+        resolve(reventas);
+      })
+      .catch((error) => {
+        logError("Error -> reventas.services -> getReventasParaComprar -> " + error);
+        reject(error);
+      });
+  });
+}; //getReventasParaComprar
+
+exports.getReventasPorRubro = (rubroId) => {
+  return new Promise((resolve, reject) => {
+    reventasDB
+      .getReventasPorRubro(rubroId)
+      .then((reventas) => {
+        
+        resolve(reventas);
+      })
+      .catch((error) => {
+        logError("Error -> reventas.services -> getReventasPorRubro -> " + error);
+        reject(error);
+      });
+  });
+}; //exports.getReventasPorRubro
 
 exports.getReventaById = (reventaId) => {
   return new Promise((resolve, reject) => {

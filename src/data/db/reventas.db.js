@@ -58,6 +58,23 @@ exports.getReventasParaComprar = () => {
       });
   });
 }; //exports.getReventasParaComprar
+
+exports.getReventasParaComprar = (rubroId) => {
+  return new Promise((resolve, reject) => {
+    Reventa.find({ borrado: false, rubro: rubroId })
+      .select("denominacion precioVenta imagenPath ingredientes rubro")
+      .populate("rubro", "_id denominacion")
+      .then((reventas) => {
+        logInfo(`Encontradas ${reventas.length} reventas`);
+        resolve(reventas);
+      })
+      .catch((err) => {
+        logError("Error -> reventas.db -> getReventasParaComprar -> " + err);
+        reject(err);
+      });
+  });
+}; //exports.getReventasParaComprar
+
 //Obtener uno
 exports.getReventaById = (reventaId) => {
   return new Promise((resolve, reject) => {
