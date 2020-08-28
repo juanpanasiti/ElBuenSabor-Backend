@@ -96,6 +96,7 @@ exports.assignRoutes = (app) => {
   app.get(URL_RUBROS + "/borrados", rubrosRoutes.getRubrosBorrados); //Obtener rubros borrados
   app.get(URL_RUBROS + "/deInsumo", rubrosRoutes.getRubrosInsumo); //obtener rubros de insumos
   app.get(URL_RUBROS + "/deCatalogo", rubrosRoutes.getRubrosCatalogo); //obtener rubros de catalogo
+  app.get(URL_RUBROS + '/:id/articulos', rubrosRoutes.getArticulos)//Obtener articulos de un rubro
   app.get(URL_RUBROS + "/:id", rubrosRoutes.getRubro); //obtener un rubro
   app.put(URL_RUBROS + "/:id", rubrosRoutes.updateRubro); //actualizar un rubro
   app.put(URL_RUBROS + "/softdelete/:id", rubrosRoutes.softDeleteRubro); //borrado lógico de un rubro

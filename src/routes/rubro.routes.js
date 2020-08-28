@@ -81,6 +81,19 @@ exports.getRubrosCatalogo = (req, res) => {
         });
 }; //exports.getRubrosInsumo
 
+//Obtener todos los artículos de un rubro
+exports.getArticulos = (req,res) => {
+    rubrosService.getArticulos(req.params.id)
+    .then((articulos) => {
+        res.status(200).json(articulos)
+    })
+    .catch((error) => {
+        console.log("Error en rubro.routes -> getArticulos " + error);
+            
+            res.status(400).json(error);
+    })
+}
+
 exports.getRubro = (req, res) => {
     rubrosService
         .getRubro(req.params.id)
