@@ -2,12 +2,15 @@
 exports.getSimpleFacturaHTML = (pedido) => {
   const numFactura = pedido.numero;
   const formaPago = pedido.formaPago
-  const domicilio = `${pedido.domicilio.calle} ${pedido.domicilio.numero} - ${pedido.domicilio.localidad}, Mendoza`;
+  let domicilio = 'Retira en local'
   const d = new Date(pedido.fecha);
   const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
   const mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
   const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
   const fecha = `${da}-${mo}-${ye}`;
+  if(pedido.domicilio){
+    domicilio = `${pedido.domicilio.calle} ${pedido.domicilio.numero} - ${pedido.domicilio.localidad}, Mendoza`;
+  }
 
   const nombreCliente = `${pedido.usuario.nombre} ${pedido.usuario.apellido} `;
   const encabezadoFactura = `
