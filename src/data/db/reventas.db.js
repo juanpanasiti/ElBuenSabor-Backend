@@ -59,7 +59,7 @@ exports.getReventasParaComprar = () => {
   });
 }; //exports.getReventasParaComprar
 
-exports.getReventasParaComprar = (rubroId) => {
+exports.getReventasPorRubro = (rubroId) => {
   return new Promise((resolve, reject) => {
     Reventa.find({ borrado: false, rubro: rubroId })
       .select("denominacion precioVenta imagenPath ingredientes rubro")
@@ -69,11 +69,11 @@ exports.getReventasParaComprar = (rubroId) => {
         resolve(reventas);
       })
       .catch((err) => {
-        logError("Error -> reventas.db -> getReventasParaComprar -> " + err);
+        logError("Error -> reventas.db -> getReventasPorRubro -> " + err);
         reject(err);
       });
   });
-}; //exports.getReventasParaComprar
+}; //exports.getReventasPorRubro
 
 //Obtener uno
 exports.getReventaById = (reventaId) => {
