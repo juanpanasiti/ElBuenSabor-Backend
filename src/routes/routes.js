@@ -32,7 +32,7 @@ exports.assignRoutes = (app) => {
   app.post(URL_REVENTA + "/", reventasRoutes.createReventa); //Crear insumo
   app.get(URL_REVENTA + '/', reventasRoutes.getReventas) //Obtener todos los insumos no borrados
   app.get(URL_REVENTA + '/comprar', reventasRoutes.getReventasParaComprar) //
-  app.get(URL_REVENTA + '/rubro/:rubroId') //
+  app.get(URL_REVENTA + '/rubro/:rubroId', reventasRoutes.getReventasPorRubro) // Obtener reventas por rubro
   app.get(URL_REVENTA + '/:id', reventasRoutes.getReventa) // Obtener insumo por ID
   app.put(URL_REVENTA + '/:id', reventasRoutes.updateReventa) // Actualizar insumo
   app.put(URL_REVENTA + '/softdelete/:id', reventasRoutes.softdeleteReventa) // Borrado lógico
