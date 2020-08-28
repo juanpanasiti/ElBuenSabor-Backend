@@ -21,6 +21,10 @@ const UsuarioSchema = mongoose.Schema({
     type: Number,
     default: "",
   },
+  imagenPath: {
+    type: String,
+    default: null
+  },
   borrado: {
     type: Boolean,
     default: false,

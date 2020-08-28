@@ -34,7 +34,7 @@ exports.saveUsuario = (usuarioData) => {
 exports.getUsuarios = () => {
   return new Promise((resolve, reject) => {
     Usuario.find({ borrado: false })
-      .select("nombre apellido fechaNacimiento telefono roles domicilios email")
+      .select("nombre apellido fechaNacimiento telefono roles domicilios email imagenPath")
       .populate({
         path: "roles",
         select: "nombreRol",
@@ -59,7 +59,7 @@ exports.getUsuario = (id) => {
   return new Promise((resolve, reject) => {
     logInfo(`Buscando al usuario con ID ${id}`);
     Usuario.findById(id)
-      .select("nombre apellido fechaNacimiento telefono roles domicilios email")
+      .select("nombre apellido fechaNacimiento telefono roles domicilios email imagenPath")
       .populate({
         path: "roles",
         select: "nombreRol",
