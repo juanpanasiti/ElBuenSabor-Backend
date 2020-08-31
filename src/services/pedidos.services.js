@@ -332,7 +332,6 @@ exports.updateEstadoPedido = (id, estado) => {
             })
 
             .then((pedido) => {
-              logInfo(pedido);
               resolve(pedido);
             })
             .catch((error) => {
@@ -372,7 +371,16 @@ exports.facturarPedido = (id) => {
 ///////////funciones
 async function calcularDemora(pedidoDTO, platosPedido) {
   let demora = 0;
-  let cocineros = 1;
+  let cocineros = await usuarioService.getUsuarioByRol('Cocinero')
+  .then((cocineros) => {
+    return cocineros.length
+  })
+  .catch((error) => {
+    return 1
+  })
+  if(cocineros < 1 || !cocineros){
+    cocineros = 1
+  }
   //10 minutos si va por delivery, 0 si se retira en local
   let promise = new Promise((resolve, reject) => {
     resolve(pedidoDTO.delivery ? 10 : 0);
