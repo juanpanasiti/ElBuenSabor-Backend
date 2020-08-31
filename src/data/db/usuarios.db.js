@@ -122,7 +122,7 @@ exports.getEmpleados = () => {
     Usuario.find({$where: function() {
       return(this.roles.length > 0)
     }})
-    .select('nombre apellido fechaNacimiento telefono roles domicilios email _id')
+    .select('nombre apellido fechaNacimiento telefono roles domicilios email _id imagenPath')
     .populate({
       path: 'roles',
       select: 'nombreRol _id'
