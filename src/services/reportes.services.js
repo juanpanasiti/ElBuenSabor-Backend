@@ -59,12 +59,24 @@ exports.getRecaudaciones = (desde, hasta) => {
         .then((pedidos) => {
           const reporte = [];
           for (const pedido of pedidos) {
-            reporte.push({
-              fecha: pedido.fecha,
-              subtotal: pedido.detalle.subtotal,
-              descuento: pedido.detalle.subtotal - pedido.total,
-              total: pedido.total,
-            });
+            let encontrado = false;
+            for (const item of reporte) {
+              if (item.fecha.toString().slice(0,10) === pedido.fecha.toString().slice(0,10)) {
+                encontrado = true;
+                (item.subtotal += pedido.detalle.subtotal),
+                  (item.descuento += pedido.detalle.subtotal - pedido.total),
+                  (item.total += pedido.total);
+                break;
+              } //if
+            } //for-of-item-reporte
+            if (!encontrado) {
+              reporte.push({
+                fecha: pedido.fecha,
+                subtotal: pedido.detalle.subtotal,
+                descuento: pedido.detalle.subtotal - pedido.total,
+                total: pedido.total,
+              });
+            }
           }
           resolve(reporte);
         })
@@ -147,7 +159,7 @@ exports.getPedidosPorCliente = async (desde, hasta) => {
           for (const pedido of pedidos) {
             let encontrado = false;
             for (const item of reporte) {
-              logInfo(pedido)
+              logInfo(pedido);
               if (item.usuarioId === pedido.usuario._id) {
                 logWarning("Repetido!!");
                 encontrado = true;
@@ -349,146 +361,149 @@ exports.getExcelRecaudaciones = async (desde, hasta) => {
 }; //getExcelRecaudaciones
 
 exports.getExcelRankingPlatos = async (desde, hasta) => {
-    const libro = new xl.Workbook();
-    const hoja = libro.addWorksheet("Reporte Ranking Platos");
-    let fila = 1;
-    const pedidos = await this.getRankingPlatos(desde, hasta);
-  
-    //Estilos para docs de excel
-    const estiloTitulo = libro.createStyle({
-      font: {
-        color: "#FF0800",
-        size: 14,
-      },
-    });
-    const estiloCabecera = libro.createStyle({
-      font: {
-        color: "#0008FF",
-        size: 12,
-      },
-    });
-    const estiloTexto = libro.createStyle({
-      font: {
-        color: "#000000",
-        size: 10,
-      },
-    });
-  
-    const estiloFecha = libro.createStyle({
-      dateFormat: "d/m/yy hh:mm:ss",
-    });
-  
-    //Armar libro
-    hoja.cell(fila, 1).string("Ranking de platos más pedidos").style(estiloTitulo);
-    fila++;
-    hoja.cell(fila, 1).string("Desde:").style(estiloCabecera);
-    hoja.cell(fila, 2).date(desde).style(estiloFecha);
-    fila++;
-    hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
-    hoja.cell(fila, 2).date(hasta).style(estiloFecha);
-    fila++;
-  
-    //Cabecera tabla
-    hoja.cell(fila, 1).string("Plato").style(estiloCabecera);
-    hoja.cell(fila, 2).string("Cant.").style(estiloCabecera);
-    fila++;
-    for (const pedido of pedidos) {
-      hoja.cell(fila, 1).string(pedido.plato).style(estiloTexto);
-      hoja.cell(fila, 2).number(pedido.cantidad).style(estiloTexto);
-      fila++;
-    } //for-of pedidos
-  
-    //Generar excel
-    return new Promise((resolve, reject) => {
-      try {
-        libro.write(carpetaReportes + "reporteRanking.xlsx", (err, stats) => {
-          if (err) {
-            logError(err);
-            reject(err);
-          } else {
-            resolve(carpetaReportes + "reporteRanking.xlsx");
-          }
-        });
-      } catch (error) {
-        reject("ERROR try-catch");
-      }
-    });
-  }; //getExcelRankingPlatos
-  
-  exports.getExcelPedidosPorCliente = async (desde, hasta) => {
-    const libro = new xl.Workbook();
-    const hoja = libro.addWorksheet("Reporte Ranking Platos");
-    let fila = 1;
-    const pedidos = await this.getPedidosPorCliente(desde, hasta);
-  
-    //Estilos para docs de excel
-    const estiloTitulo = libro.createStyle({
-      font: {
-        color: "#FF0800",
-        size: 14,
-      },
-    });
-    const estiloCabecera = libro.createStyle({
-      font: {
-        color: "#0008FF",
-        size: 12,
-      },
-    });
-    const estiloTexto = libro.createStyle({
-      font: {
-        color: "#000000",
-        size: 10,
-      },
-    });
-  
-    const estiloFecha = libro.createStyle({
-      dateFormat: "d/m/yy hh:mm:ss",
-    });
+  const libro = new xl.Workbook();
+  const hoja = libro.addWorksheet("Reporte Ranking Platos");
+  let fila = 1;
+  const pedidos = await this.getRankingPlatos(desde, hasta);
 
-    const estiloMoneda = libro.createStyle({
-        numberFormat: "$#,##0.00; ($#,##0.00); -",
+  //Estilos para docs de excel
+  const estiloTitulo = libro.createStyle({
+    font: {
+      color: "#FF0800",
+      size: 14,
+    },
+  });
+  const estiloCabecera = libro.createStyle({
+    font: {
+      color: "#0008FF",
+      size: 12,
+    },
+  });
+  const estiloTexto = libro.createStyle({
+    font: {
+      color: "#000000",
+      size: 10,
+    },
+  });
+
+  const estiloFecha = libro.createStyle({
+    dateFormat: "d/m/yy hh:mm:ss",
+  });
+
+  //Armar libro
+  hoja.cell(fila, 1).string("Ranking de platos más pedidos").style(estiloTitulo);
+  fila++;
+  hoja.cell(fila, 1).string("Desde:").style(estiloCabecera);
+  hoja.cell(fila, 2).date(desde).style(estiloFecha);
+  fila++;
+  hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
+  hoja.cell(fila, 2).date(hasta).style(estiloFecha);
+  fila++;
+
+  //Cabecera tabla
+  hoja.cell(fila, 1).string("Plato").style(estiloCabecera);
+  hoja.cell(fila, 2).string("Cant.").style(estiloCabecera);
+  fila++;
+  for (const pedido of pedidos) {
+    hoja.cell(fila, 1).string(pedido.plato).style(estiloTexto);
+    hoja.cell(fila, 2).number(pedido.cantidad).style(estiloTexto);
+    fila++;
+  } //for-of pedidos
+
+  //Generar excel
+  return new Promise((resolve, reject) => {
+    try {
+      libro.write(carpetaReportes + "reporteRanking.xlsx", (err, stats) => {
+        if (err) {
+          logError(err);
+          reject(err);
+        } else {
+          resolve(carpetaReportes + "reporteRanking.xlsx");
+        }
       });
-  
-    //Armar libro
-    hoja.cell(fila, 1).string("Pedidos realizados por Cliente").style(estiloTitulo);
+    } catch (error) {
+      reject("ERROR try-catch");
+    }
+  });
+}; //getExcelRankingPlatos
+
+exports.getExcelPedidosPorCliente = async (desde, hasta) => {
+  const libro = new xl.Workbook();
+  const hoja = libro.addWorksheet("Reporte Ranking Platos");
+  let fila = 1;
+  const pedidos = await this.getPedidosPorCliente(desde, hasta);
+
+  //Estilos para docs de excel
+  const estiloTitulo = libro.createStyle({
+    font: {
+      color: "#FF0800",
+      size: 14,
+    },
+  });
+  const estiloCabecera = libro.createStyle({
+    font: {
+      color: "#0008FF",
+      size: 12,
+    },
+  });
+  const estiloTexto = libro.createStyle({
+    font: {
+      color: "#000000",
+      size: 10,
+    },
+  });
+
+  const estiloFecha = libro.createStyle({
+    dateFormat: "d/m/yy hh:mm:ss",
+  });
+
+  const estiloMoneda = libro.createStyle({
+    numberFormat: "$#,##0.00; ($#,##0.00); -",
+  });
+
+  //Armar libro
+  hoja.cell(fila, 1).string("Pedidos realizados por Cliente").style(estiloTitulo);
+  fila++;
+  hoja.cell(fila, 1).string("Desde:").style(estiloCabecera);
+  hoja.cell(fila, 2).date(desde).style(estiloFecha);
+  fila++;
+  hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
+  hoja.cell(fila, 2).date(hasta).style(estiloFecha);
+  fila++;
+
+  //Cabecera tabla
+  hoja.cell(fila, 1).string("Cliente").style(estiloCabecera);
+  hoja.cell(fila, 2).string("Email").style(estiloCabecera);
+  hoja.cell(fila, 3).string("P. Realizados").style(estiloCabecera);
+  hoja.cell(fila, 4).string("P. Entregados").style(estiloCabecera);
+  hoja.cell(fila, 5).string("Total Facturado").style(estiloCabecera);
+  fila++;
+  for (const pedido of pedidos) {
+    hoja.cell(fila, 1).string(pedido.nombre).style(estiloTexto);
+    hoja.cell(fila, 2).string(pedido.email).style(estiloTexto);
+    hoja.cell(fila, 3).number(pedido.pedidosRealizados).style(estiloTexto);
+    hoja.cell(fila, 4).number(pedido.pedidosEntregados).style(estiloTexto);
+    hoja
+      .cell(fila, 5)
+      .number(pedido.totalFacturado)
+      .style(estiloTexto)
+      .style(estiloMoneda);
     fila++;
-    hoja.cell(fila, 1).string("Desde:").style(estiloCabecera);
-    hoja.cell(fila, 2).date(desde).style(estiloFecha);
-    fila++;
-    hoja.cell(fila, 1).string("Hasta:").style(estiloCabecera);
-    hoja.cell(fila, 2).date(hasta).style(estiloFecha);
-    fila++;
-  
-    //Cabecera tabla
-    hoja.cell(fila, 1).string("Cliente").style(estiloCabecera);
-    hoja.cell(fila, 2).string("Email").style(estiloCabecera);
-    hoja.cell(fila, 3).string("P. Realizados").style(estiloCabecera);
-    hoja.cell(fila, 4).string("P. Entregados").style(estiloCabecera);
-    hoja.cell(fila, 5).string("Total Facturado").style(estiloCabecera);
-    fila++;
-    for (const pedido of pedidos) {
-      hoja.cell(fila, 1).string(pedido.nombre).style(estiloTexto);
-      hoja.cell(fila, 2).string(pedido.email).style(estiloTexto);
-      hoja.cell(fila, 3).number(pedido.pedidosRealizados).style(estiloTexto);
-      hoja.cell(fila, 4).number(pedido.pedidosEntregados).style(estiloTexto);
-      hoja.cell(fila, 5).number(pedido.totalFacturado).style(estiloTexto).style(estiloMoneda);
-      fila++;
-    } //for-of pedidos
-  
-    //Generar excel
-    return new Promise((resolve, reject) => {
-      try {
-        libro.write(carpetaReportes + "reportePedidosCliente.xlsx", (err, stats) => {
-          if (err) {
-            logError(err);
-            reject(err);
-          } else {
-            resolve(carpetaReportes + "reportePedidosCliente.xlsx");
-          }
-        });
-      } catch (error) {
-        reject("ERROR try-catch");
-      }
-    });
-  }; //getExcelPedidosPorCliente
-  
+  } //for-of pedidos
+
+  //Generar excel
+  return new Promise((resolve, reject) => {
+    try {
+      libro.write(carpetaReportes + "reportePedidosCliente.xlsx", (err, stats) => {
+        if (err) {
+          logError(err);
+          reject(err);
+        } else {
+          resolve(carpetaReportes + "reportePedidosCliente.xlsx");
+        }
+      });
+    } catch (error) {
+      reject("ERROR try-catch");
+    }
+  });
+}; //getExcelPedidosPorCliente

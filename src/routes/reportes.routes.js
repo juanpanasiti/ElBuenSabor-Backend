@@ -1,5 +1,5 @@
 const reportesService = require('../services/reportes.services')
-const { logError, logWarning, logInfo } = require('../config/logger.config')
+const { logError, logInfo } = require('../config/logger.config')
 
 //Reportes para MOSTRAR
 exports.getArticulosParaComprar = (req,res) => {
@@ -16,7 +16,6 @@ exports.getArticulosParaComprar = (req,res) => {
 exports.getRecaudaciones = (req,res) => {
     const desde = new Date(req.query.fecha_desde)
     const hasta = new Date(req.query.fecha_hasta)
-
     reportesService.getRecaudaciones(desde,hasta)
     .then((reporte) => {
         res.status(200).json(reporte)
@@ -59,7 +58,6 @@ exports.getPedidosPorCliente = (req,res) => {
 
 //Reportes para DESCARGAR
 exports.getExcelArticulosParaComprar = (req,res) => {
-    logInfo("Generando excel de reporte de stock")
     reportesService.getExcelArticulosParaComprar()
     .then((reporte) => {
         res.status(200).download(reporte)
